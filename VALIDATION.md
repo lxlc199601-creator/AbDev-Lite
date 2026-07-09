@@ -1,4 +1,4 @@
-# AbDev-Lite MVP v0.5 Validation
+# AbDev-Lite MVP v0.6 Validation
 
 ## Validation Date
 
@@ -51,6 +51,7 @@ Expected Excel sheets:
 - `Chain_Risk_Scores`
 - `Humanness_Results`
 - `Antibody_Summary`
+- `Candidate_Ranking`
 
 Expected HTML sections:
 
@@ -63,6 +64,7 @@ Expected HTML sections:
 - Liability Region Map Table
 - Humanness Summary
 - Humanness Results Table
+- Candidate Prioritization
 - Chain-Level Risk Table
 - Method Summary
 - Limitations and Disclaimer
@@ -83,6 +85,12 @@ Expected HTML sections:
 - Humanness risk classification
 - Human germline summary
 - Combined developability + humanness flag
+- Candidate prioritization
+- Rule-based final priority score
+- A/B/C/D priority class
+- Decision label
+- Review reason
+- Next-step recommendation
 - Antibody-level summary aggregation
 - Excel report generation
 - Jinja2-based offline HTML report generation
@@ -92,6 +100,7 @@ Expected HTML sections:
 - Streamlit preview of `Liability_Region_Map`
 - Streamlit optional humanness/germline upload component
 - Streamlit preview of `Humanness_Results`
+- Streamlit preview of `Candidate_Ranking`
 - Streamlit Excel download button
 - Streamlit HTML download button
 
@@ -102,6 +111,9 @@ Expected HTML sections:
 - It does not perform 3D structure prediction.
 - It imports optional external humanness/germline assessment results, but does not run BioPhi, IgBLAST, Sapiens, or OASis directly.
 - Human-likeness assessment is not equivalent to clinical immunogenicity prediction.
+- Candidate ranking is rule-based and intended for triage only.
+- Candidate ranking does not predict experimental success.
+- Candidate ranking does not replace binding, expression, stability, or immunogenicity assays.
 - It does not perform automatic humanization design.
 - It does not provide humanization mutation suggestions.
 - It does not predict antigen binding.
@@ -128,6 +140,12 @@ Expected HTML sections:
 - [ ] Excel file is generated
 - [ ] HTML report is generated
 - [ ] Excel contains expected sheets
+- [ ] Candidate_Ranking sheet is generated
+- [ ] final_priority_score is generated
+- [ ] final_priority_class is generated
+- [ ] decision_label is generated
+- [ ] review_reason is generated
+- [ ] next_step_recommendation is generated
 - [ ] Humanness_Results sheet is generated
 - [ ] Humanness_Results sheet is generated with headers when no humanness file is uploaded
 - [ ] Antibody_Summary contains humanness fields
@@ -139,6 +157,7 @@ Expected HTML sections:
 - [ ] HTML report shows Numbering Summary
 - [ ] HTML report shows Region-Level Liability Summary
 - [ ] HTML report shows Humanness Summary
+- [ ] HTML report shows Candidate Prioritization section
 - [ ] HTML report handles missing humanness file gracefully
 - [ ] Antibody_Summary preview is visible
 - [ ] Liability_Sites preview is visible
@@ -146,7 +165,12 @@ Expected HTML sections:
 - [ ] Streamlit shows Liability_Region_Map preview
 - [ ] Streamlit shows optional humanness upload component
 - [ ] Streamlit shows Humanness_Results preview
+- [ ] Streamlit shows Candidate Ranking preview
 - [ ] Combined developability + humanness flag is generated
+- [ ] App runs with humanness file
+- [ ] App runs without humanness file
+- [ ] v0.5 humanness functions still work
+- [ ] v0.4 numbering functions still work
 - [ ] Download Excel button works
 - [ ] Download HTML button works
 - [ ] Report disclaimer is visible

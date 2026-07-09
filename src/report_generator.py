@@ -12,7 +12,7 @@ from .utils import ensure_output_dir
 
 
 REPORT_TITLE = "AbDev-Lite: Antibody Variable-Region Developability Screening Report"
-REPORT_VERSION = "MVP v0.5"
+REPORT_VERSION = "MVP v0.6"
 ANALYSIS_SCOPE = (
     "This MVP focuses on sequence-level developability screening of antibody variable regions including VH, VL, "
     "VHH, and scFv-derived variable domains."
@@ -20,10 +20,15 @@ ANALYSIS_SCOPE = (
 REPORT_DISCLAIMER = (
     "This MVP performs sequence-level antibody variable-region developability screening with optional IMGT-based "
     "computational numbering, CDR/FR region assignment, and optional imported humanness/germline assessment. "
-    "It does not perform 3D structure prediction, humanization design, antigen-binding prediction, structural "
-    "paratope prediction, or experimental validation. Human-likeness assessment is not equivalent to clinical "
-    "immunogenicity prediction. Results should be interpreted as computational screening signals, not definitive "
-    "developability conclusions."
+    "It also provides rule-based candidate prioritization for triage support. It does not perform 3D structure "
+    "prediction, humanization design, antigen-binding prediction, structural paratope prediction, or experimental "
+    "validation. Human-likeness assessment is not equivalent to clinical immunogenicity prediction. Results should "
+    "be interpreted as computational screening signals, not definitive developability conclusions."
+)
+PRIORITIZATION_DISCLAIMER = (
+    "Candidate prioritization is based on rule-based computational scoring from sequence-level developability, "
+    "CDR/FR mapping, and optional imported humanness metrics. It should be used for triage and reporting support "
+    "only, not as a definitive experimental or clinical developability conclusion."
 )
 HYDROPHOBIC_PATCH_NOTICE = (
     "Hydrophobic patch detection is only a sequence-level proxy and does not represent true structural surface patch "
@@ -60,6 +65,7 @@ SHEET_ORDER = [
     "Chain_Risk_Scores",
     "Humanness_Results",
     "Antibody_Summary",
+    "Candidate_Ranking",
 ]
 
 
@@ -91,10 +97,36 @@ def _safe_records(df: pd.DataFrame, columns: list[str] | None = None, limit: int
 
 
 def _series_value_counts(df: pd.DataFrame, column: str, labels: list[str]) -> dict[str, int]:
+    counts_by_label = {label: 0 for label in labels}
     if df.empty or column not in df.columns:
-        return {label: 0 for label in labels}
+        return counts_by_label
     counts = df[column].astype(str).value_counts()
-    return {label: int(counts.get(label, 0)) for label in labels}
+    for label in labels:
+        counts_by_label[label] = int(counts.get(label, 0))
+    return counts_by_label
+
+
+def _priority_counts(candidate_ranking_df: pd.DataFrame | None) -> dict[str, int]:
+    priority_counts = {"A": 0, "B": 0, "C": 0, "D": 0}
+    ranking = _df(candidate_ranking_df)
+    if not ranking.empty and "final_priority_class" in ranking.columns:
+        observed_counts = ranking["final_priority_class"].astype(str).value_counts().to_dict()
+        for key in priority_counts:
+            priority_counts[key] = int(observed_counts.get(key, 0))
+    return priority_counts
+
+
+def _summary_with_ranking(antibody_summary_df: pd.DataFrame, candidate_ranking_df: pd.DataFrame) -> pd.DataFrame:
+    summary = _df(antibody_summary_df).copy()
+    ranking = _df(candidate_ranking_df)
+    if summary.empty or ranking.empty or "antibody_id" not in summary.columns or "antibody_id" not in ranking.columns:
+        return summary
+    ranking_columns = ["antibody_id", "final_priority_class", "final_priority_score", "decision_label"]
+    for column in ranking_columns:
+        if column not in ranking.columns:
+            ranking[column] = ""
+    summary = summary.drop(columns=[column for column in ranking_columns[1:] if column in summary.columns])
+    return summary.merge(ranking[ranking_columns], on="antibody_id", how="left")
 
 
 def _contains_bsab(*frames: pd.DataFrame) -> bool:
@@ -116,6 +148,7 @@ def _build_results(
     chain_scores_df: pd.DataFrame | None = None,
     humanness_df: pd.DataFrame | None = None,
     antibody_summary_df: pd.DataFrame | None = None,
+    candidate_ranking_df: pd.DataFrame | None = None,
 ) -> dict[str, pd.DataFrame]:
     return {
         "Input_Cleaned": _df(input_cleaned_df),
@@ -128,6 +161,7 @@ def _build_results(
         "Chain_Risk_Scores": _df(chain_scores_df),
         "Humanness_Results": _df(humanness_df),
         "Antibody_Summary": _df(antibody_summary_df),
+        "Candidate_Ranking": _df(candidate_ranking_df),
     }
 
 
@@ -143,6 +177,7 @@ def generate_excel_report(
     antibody_summary_df: pd.DataFrame | None = None,
     output_path: str | Path = "outputs/abdev_lite_results.xlsx",
     humanness_df: pd.DataFrame | None = None,
+    candidate_ranking_df: pd.DataFrame | None = None,
 ) -> Path:
     """Write all result tables to a multi-sheet Excel workbook."""
     output_path = Path(output_path)
@@ -158,6 +193,7 @@ def generate_excel_report(
         chain_scores_df,
         humanness_df,
         antibody_summary_df,
+        candidate_ranking_df,
     )
     with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
         for sheet in SHEET_ORDER:
@@ -180,6 +216,7 @@ def write_excel(results: dict[str, pd.DataFrame], output_dir: str | Path = "outp
         results.get("Antibody_Summary"),
         output_path,
         humanness_df=results.get("Humanness_Results"),
+        candidate_ranking_df=results.get("Candidate_Ranking"),
     )
 
 
@@ -198,6 +235,7 @@ def generate_html_report(
     analysis_time: datetime | str | None = None,
     template_dir: str | Path = "templates",
     humanness_df: pd.DataFrame | None = None,
+    candidate_ranking_df: pd.DataFrame | None = None,
 ) -> Path:
     """Render the HTML report with Jinja2."""
     output_path = Path(output_path)
@@ -213,6 +251,8 @@ def generate_html_report(
     chain_scores_df = _df(chain_scores_df)
     humanness_df = _df(humanness_df)
     antibody_summary_df = _df(antibody_summary_df)
+    candidate_ranking_df = _df(candidate_ranking_df)
+    summary_display_df = _summary_with_ranking(antibody_summary_df, candidate_ranking_df)
 
     risk_counts = _series_value_counts(antibody_summary_df, "max_chain_risk_class", ["Low", "Medium", "High"])
     total_antibodies = (
@@ -289,6 +329,7 @@ def generate_html_report(
         "humanness_risk_class",
         ["Low", "Medium", "High", "Unknown"],
     )
+    priority_counts = _priority_counts(candidate_ranking_df)
     common_germlines = (
         "; ".join(
             f"{germline} ({count})"
@@ -341,7 +382,20 @@ def generate_html_report(
             "unknown_humanness_risk_chain_count": humanness_counts["Unknown"],
             "most_common_closest_human_germlines": common_germlines,
         },
-        "summary_rows": _safe_records(antibody_summary_df),
+        "priority_counts": priority_counts,
+        "candidate_ranking_rows": _safe_records(
+            candidate_ranking_df,
+            [
+                "antibody_id",
+                "molecule_format",
+                "final_priority_score",
+                "final_priority_class",
+                "decision_label",
+                "review_reason",
+                "next_step_recommendation",
+            ],
+        ),
+        "summary_rows": _safe_records(summary_display_df),
         "liability_rows": _safe_records(
             liability_df,
             [
@@ -413,6 +467,7 @@ def generate_html_report(
         ),
         "has_bsab": _contains_bsab(input_cleaned_df, qc_df, antibody_summary_df),
         "disclaimer": REPORT_DISCLAIMER,
+        "prioritization_disclaimer": PRIORITIZATION_DISCLAIMER,
         "numbering_notice": NUMBERING_NOTICE,
         "full_length_notice": FULL_LENGTH_NOTICE,
         "hydrophobic_patch_notice": HYDROPHOBIC_PATCH_NOTICE,
@@ -448,6 +503,7 @@ def write_html_report(
         upload_filename,
         template_dir=template_dir,
         humanness_df=results.get("Humanness_Results"),
+        candidate_ranking_df=results.get("Candidate_Ranking"),
     )
 
 

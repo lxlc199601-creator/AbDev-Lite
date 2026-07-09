@@ -1,6 +1,6 @@
 # AbDev-Lite
 
-AbDev-Lite is a local lightweight Streamlit MVP for antibody variable-region developability screening. Version `MVP v0.5` analyzes sequence-level signals for VH, VL, VHH, and scFv-derived variable domains, adds optional IMGT numbering through AbNumber/ANARCI, maps liability motifs to FR/CDR regions, imports optional external humanness/germline results, then exports both Excel results and an offline HTML report.
+AbDev-Lite is a local lightweight Streamlit MVP for antibody variable-region developability screening. Version `MVP v0.6` analyzes sequence-level signals for VH, VL, VHH, and scFv-derived variable domains, adds optional IMGT numbering through AbNumber/ANARCI, maps liability motifs to FR/CDR regions, imports optional external humanness/germline results, ranks candidates with a rule-based decision matrix, then exports both Excel results and an offline HTML report.
 
 The project is intentionally local and lightweight. It does not call external webpages, BioPhi, IgBLAST, Sapiens, OASis, TAP, IgFold, AlphaFold, ColabFold, or deep learning structure models.
 
@@ -20,6 +20,12 @@ The project is intentionally local and lightweight. It does not call external we
 - Humanness risk classification
 - Human germline summary
 - Combined developability + humanness flag
+- Candidate prioritization
+- Rule-based final priority score
+- A/B/C/D priority class
+- Decision label
+- Review reason
+- Next-step recommendation
 - Region-level report
 - Chain-level risk scoring
 - Antibody-level summary
@@ -43,7 +49,7 @@ Upload a CSV or XLSX file with these required columns:
 
 ## Optional Humanness/Germline Import
 
-AbDev-Lite v0.5 can import an optional external humanness/germline assessment file in CSV or XLSX format. This file is not required. If it is not provided, AbDev-Lite runs the original sequence-level developability workflow and still generates the `Humanness_Results` sheet with empty headers.
+AbDev-Lite v0.6 can import an optional external humanness/germline assessment file in CSV or XLSX format. This file is not required. If it is not provided, AbDev-Lite runs the original sequence-level developability workflow and still generates the `Humanness_Results` sheet with empty headers.
 
 Recommended humanness/germline columns:
 
@@ -64,9 +70,9 @@ Recommended humanness/germline columns:
 | cdr_identity | Optional 0-100 CDR identity value |
 | humanness_notes | User or tool notes |
 
-BioPhi/OASis/Sapiens and IgBLAST can be used outside AbDev-Lite to generate results for import, and may be connected through optional adapters in a later version. They are not mandatory dependencies in v0.5. AbDev-Lite does not automatically open websites, upload sequences to third-party platforms, or call these tools.
+BioPhi/OASis/Sapiens and IgBLAST can be used outside AbDev-Lite to generate results for import, and may be connected through optional adapters in a later version. They are not mandatory dependencies in v0.6. AbDev-Lite does not automatically open websites, upload sequences to third-party platforms, or call these tools.
 
-Humanness risk classes are conservative screening labels derived from imported percentile, framework identity, human germline identity, and closest-species fields. Human-likeness assessment is not equivalent to clinical immunogenicity prediction. v0.5 does not perform automatic humanization mutation design and does not modify user input sequences.
+Humanness risk classes are conservative screening labels derived from imported percentile, framework identity, human germline identity, and closest-species fields. Human-likeness assessment is not equivalent to clinical immunogenicity prediction. v0.6 does not perform automatic humanization mutation design and does not modify user input sequences.
 
 ## Output Files
 
@@ -87,6 +93,7 @@ The Excel workbook contains:
 - `Chain_Risk_Scores`
 - `Humanness_Results`
 - `Antibody_Summary`
+- `Candidate_Ranking`
 
 The HTML report can be opened offline in a browser and includes:
 
@@ -99,6 +106,7 @@ The HTML report can be opened offline in a browser and includes:
 - Liability Region Map Table
 - Humanness Summary
 - Humanness Results Table
+- Candidate Prioritization
 - Chain-Level Risk Table
 - Method Summary
 - Limitations and Disclaimer
@@ -142,11 +150,11 @@ data/example_input.xlsx
 data/example_humanness_results.xlsx
 ```
 
-Use `example_input.xlsx` alone for a quick compatibility smoke test. Use `example_humanness_results.xlsx` as the optional humanness/germline upload to test v0.5 import and merge behavior.
+Use `example_input.xlsx` alone for a quick compatibility smoke test. Use `example_humanness_results.xlsx` as the optional humanness/germline upload to test v0.6 import, merge, and candidate ranking behavior.
 
 ## Methodology
 
-AbDev-Lite v0.5 performs:
+AbDev-Lite v0.6 performs:
 
 - Input sequence cleaning
 - Basic sequence QC
@@ -161,13 +169,15 @@ AbDev-Lite v0.5 performs:
 - Conservative humanness risk classification
 - Human germline summary
 - Combined developability + humanness flag
+- Rule-based candidate prioritization from developability, CDR/FR liability mapping, and optional imported humanness metrics
+- Final priority score, A/B/C/D priority class, decision label, review reason, and next-step recommendation
 - Antibody-level aggregation
 
 Liability scanning currently covers sequence-level proxies such as deamidation motifs, isomerization motifs, oxidation-prone residues, N-glycosylation motifs, cysteine-count warnings, clipping motifs, acid-sensitive motifs, hydrophobic-segment proxies, and low-complexity repeats.
 
 ## Current Limitations
 
-This MVP performs sequence-level antibody variable-region developability screening with optional IMGT-based computational CDR/FR mapping and optional imported humanness/germline result aggregation. IMGT-based CDR/FR mapping should not be treated as experimental validation. Human-likeness assessment is not equivalent to clinical immunogenicity prediction. It does not perform 3D structure prediction, structural paratope prediction, humanization design, humanization mutation recommendation, antigen-binding prediction, or experimental validation. Results should be interpreted as computational screening signals, not definitive developability conclusions.
+This MVP performs sequence-level antibody variable-region developability screening with optional IMGT-based computational CDR/FR mapping, optional imported humanness/germline result aggregation, and rule-based candidate ranking. IMGT-based CDR/FR mapping should not be treated as experimental validation. Human-likeness assessment is not equivalent to clinical immunogenicity prediction. Candidate ranking is rule-based and intended for triage only. Ranking does not predict experimental success and does not replace binding, expression, stability, or immunogenicity assays. It does not perform 3D structure prediction, structural paratope prediction, humanization design, humanization mutation recommendation, antigen-binding prediction, or experimental validation. Results should be interpreted as computational screening signals, not definitive developability conclusions.
 
 Additional limitations:
 
@@ -178,7 +188,7 @@ Additional limitations:
 - scFv and unusual sequences may fail direct numbering; the rest of the analysis will continue.
 - Structural paratope prediction is not included in this version.
 - BioPhi, OASis, Sapiens, and IgBLAST are not required dependencies.
-- Automatic humanization design may be considered in a later version, but is not implemented in v0.5.
+- Automatic humanization design may be considered in a later version, but is not implemented in v0.6.
 
 ## Roadmap
 

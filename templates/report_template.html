@@ -65,6 +65,10 @@
     .badge.medium { background: var(--orange); }
     .badge.high { background: var(--red); }
     .badge.unknown { background: #687381; }
+    .badge.a { background: var(--green); }
+    .badge.b { background: var(--blue); }
+    .badge.c { background: var(--orange); }
+    .badge.d { background: var(--red); }
     .bar-track { width: 100%; height: 10px; background: #edf1f5; border-radius: 999px; overflow: hidden; }
     .bar-fill { height: 10px; border-radius: 999px; }
     .bar-fill.low { background: var(--green); }
@@ -165,6 +169,35 @@
     </tr>
   </table>
 
+  <h2>Candidate Prioritization</h2>
+  <div class="metric-grid">
+    <div class="metric"><span class="label">A candidates</span><strong>{{ priority_counts.get("A", 0) if priority_counts is defined else 0 }}</strong></div>
+    <div class="metric"><span class="label">B candidates</span><strong>{{ priority_counts.get("B", 0) if priority_counts is defined else 0 }}</strong></div>
+    <div class="metric"><span class="label">C candidates</span><strong>{{ priority_counts.get("C", 0) if priority_counts is defined else 0 }}</strong></div>
+    <div class="metric"><span class="label">D candidates</span><strong>{{ priority_counts.get("D", 0) if priority_counts is defined else 0 }}</strong></div>
+  </div>
+  <table>
+    <tr>
+      <th>antibody_id</th><th>molecule_format</th><th>final_priority_score</th><th>final_priority_class</th>
+      <th>decision_label</th><th>review_reason</th><th>next_step_recommendation</th>
+    </tr>
+    {% for row in candidate_ranking_rows %}
+    {% set priority_class = row.final_priority_class|dash %}
+    <tr>
+      <td>{{ row.antibody_id|dash }}</td>
+      <td>{{ row.molecule_format|dash }}</td>
+      <td>{{ row.final_priority_score|dash }}</td>
+      <td><span class="badge {{ priority_class|lower }}">{{ priority_class }}</span></td>
+      <td>{{ row.decision_label|dash }}</td>
+      <td>{{ row.review_reason|dash }}</td>
+      <td>{{ row.next_step_recommendation|dash }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="7" class="empty">No candidate ranking results were generated in this run.</td></tr>
+    {% endfor %}
+  </table>
+  <p class="disclaimer">{{ prioritization_disclaimer }}</p>
+
   <h2>Antibody Summary Cards</h2>
   {% for row in summary_rows %}
   <div class="card">
@@ -187,6 +220,9 @@
       <div><span class="label">Non-human-like chains</span><span class="value">{{ row.non_human_like_chain_count|dash }}</span></div>
       <div><span class="label">High humanness risk chains</span><span class="value">{{ row.high_humanness_risk_chain_count|dash }}</span></div>
       <div><span class="label">Combined flag</span><span class="value">{{ row.combined_developability_humanness_flag|dash }}</span></div>
+      <div><span class="label">Final priority class</span><span class="value">{{ row.final_priority_class|dash }}</span></div>
+      <div><span class="label">Final priority score</span><span class="value">{{ row.final_priority_score|dash }}</span></div>
+      <div><span class="label">Decision label</span><span class="value">{{ row.decision_label|dash }}</span></div>
     </div>
     <p class="field"><strong>Major liabilities:</strong> {{ row.major_liabilities|dash }}</p>
     <p><strong>Major CDR liabilities:</strong> {{ row.major_cdr_liabilities|dash }}</p>
@@ -318,6 +354,7 @@
     <li>IMGT-based computational CDR/FR liability mapping</li>
     <li>Optional imported humanness/germline result aggregation without automatic third-party upload</li>
     <li>Rule-based sequence-level risk scoring</li>
+    <li>Rule-based candidate prioritization and decision matrix</li>
     <li>Antibody-level aggregation</li>
   </ul>
 
@@ -332,6 +369,7 @@
     <p><strong>BsAb note:</strong> {{ bsab_notice }}</p>
     {% endif %}
   </div>
+  <div class="disclaimer">{{ prioritization_disclaimer }}</div>
   <div class="disclaimer">{{ disclaimer }}</div>
 </main>
 </body>

@@ -13,6 +13,7 @@ from src.input_parser import parse_input
 from src.liability_scanner import scan_liabilities
 from src.numbering import map_liabilities_to_regions, run_imgt_numbering
 from src.physicochemical import calculate_properties_table
+from src.prioritization import build_candidate_ranking
 from src.report_generator import (
     BSAB_NOTICE,
     FULL_LENGTH_LIMITATION,
@@ -49,6 +50,19 @@ EXAMPLE_ROWS = [
 ]
 
 
+def _priority_counts(candidate_ranking_df: pd.DataFrame | None) -> dict[str, int]:
+    priority_counts = {"A": 0, "B": 0, "C": 0, "D": 0}
+    if (
+        candidate_ranking_df is not None
+        and not candidate_ranking_df.empty
+        and "final_priority_class" in candidate_ranking_df.columns
+    ):
+        observed_counts = candidate_ranking_df["final_priority_class"].astype(str).value_counts().to_dict()
+        for key in priority_counts:
+            priority_counts[key] = int(observed_counts.get(key, 0))
+    return priority_counts
+
+
 def run_pipeline(uploaded_file, humanness_file=None) -> tuple[dict[str, pd.DataFrame], Path, Path]:
     """Run the full AbDev-Lite analysis pipeline."""
     input_df = parse_input(uploaded_file, uploaded_file.name)
@@ -67,6 +81,12 @@ def run_pipeline(uploaded_file, humanness_file=None) -> tuple[dict[str, pd.DataF
         summary_df,
         humanness_input_df,
     )
+    candidate_ranking_df = build_candidate_ranking(
+        summary_df,
+        scores_df,
+        liability_region_map_df,
+        humanness_results_df,
+    )
 
     results = {
         "Input_Cleaned": classified_df,
@@ -79,6 +99,7 @@ def run_pipeline(uploaded_file, humanness_file=None) -> tuple[dict[str, pd.DataF
         "Chain_Risk_Scores": scores_df,
         "Humanness_Results": humanness_results_df,
         "Antibody_Summary": summary_df,
+        "Candidate_Ranking": candidate_ranking_df,
     }
     excel_path, html_path = generate_reports(results, uploaded_file.name)
     return results, excel_path, html_path
@@ -131,6 +152,7 @@ def main() -> None:
             region_summary = results["Region_Summary"]
             liability_region_map = results["Liability_Region_Map"]
             humanness_results = results["Humanness_Results"]
+            candidate_ranking = results.get("Candidate_Ranking", pd.DataFrame())
             if summary.empty or "max_chain_risk_class" not in summary.columns:
                 risk_counts = pd.Series({"Low": 0, "Medium": 0, "High": 0})
             else:
@@ -193,6 +215,40 @@ def main() -> None:
                     "Humanness analysis was not performed in this run."
                 )
             st.caption("Human-likeness is not equivalent to clinical immunogenicity prediction.")
+
+            st.subheader("Candidate Ranking")
+            priority_counts = _priority_counts(candidate_ranking)
+            priority_cols = st.columns(4)
+            priority_cols[0].metric("A candidates", int(priority_counts["A"]))
+            priority_cols[1].metric("B candidates", int(priority_counts["B"]))
+            priority_cols[2].metric("C candidates", int(priority_counts["C"]))
+            priority_cols[3].metric("D candidates", int(priority_counts["D"]))
+            ranking_preview_columns = [
+                "antibody_id",
+                "molecule_format",
+                "final_priority_score",
+                "final_priority_class",
+                "decision_label",
+                "review_reason",
+                "next_step_recommendation",
+            ]
+            ranking_preview = candidate_ranking.sort_values(
+                "final_priority_score",
+                ascending=False,
+            ) if not candidate_ranking.empty and "final_priority_score" in candidate_ranking.columns else candidate_ranking
+            if ranking_preview.empty:
+                st.info("No candidate ranking results were generated in this run.")
+                st.dataframe(pd.DataFrame(columns=ranking_preview_columns), use_container_width=True)
+            else:
+                for column in ranking_preview_columns:
+                    if column not in ranking_preview.columns:
+                        ranking_preview[column] = ""
+                st.dataframe(ranking_preview[ranking_preview_columns].head(200), use_container_width=True)
+            if len(candidate_ranking) > 200:
+                st.caption("Showing the first 200 candidate ranking rows in the app preview. The Excel workbook contains all rows.")
+            st.caption(
+                "Candidate prioritization is rule-based computational triage only. It does not predict experimental success."
+            )
 
             st.info(f"Reports saved to: {excel_path} and {html_path}")
 
