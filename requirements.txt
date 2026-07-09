@@ -1,0 +1,6 @@
+streamlit
+pandas
+openpyxl
+biopython
+jinja2
+abnumber

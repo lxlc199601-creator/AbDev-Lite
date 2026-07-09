@@ -1,0 +1,3534 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>AbDev-Lite: Antibody Variable-Region Developability Screening Report</title>
+  <style>
+    :root {
+      --ink: #17212b;
+      --muted: #5d6975;
+      --line: #d7dee6;
+      --soft: #f6f8fa;
+      --blue: #1f5f8b;
+      --green: #1f8a4c;
+      --orange: #b85f00;
+      --red: #b42318;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #ffffff;
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.48;
+    }
+    main { max-width: 1180px; margin: 0 auto; padding: 32px 28px 56px; }
+    h1 { margin: 0 0 10px; color: #102033; font-size: 30px; line-height: 1.2; }
+    h2 { margin: 32px 0 12px; padding-bottom: 6px; border-bottom: 2px solid var(--line); color: #102033; font-size: 21px; }
+    h3 { margin: 0 0 12px; color: #17212b; font-size: 17px; }
+    p { margin: 8px 0; }
+    .header { border-bottom: 1px solid var(--line); padding-bottom: 18px; margin-bottom: 24px; }
+    .subtitle { color: var(--muted); max-width: 920px; }
+    .meta-grid, .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(140px, 1fr));
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .meta-item, .metric, .card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+    }
+    .meta-item, .metric { padding: 12px; }
+    .label { display: block; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
+    .value { display: block; margin-top: 4px; font-weight: 700; overflow-wrap: anywhere; }
+    .metric strong { display: block; margin-top: 4px; color: var(--blue); font-size: 24px; }
+    table { border-collapse: collapse; width: 100%; margin: 12px 0 24px; font-size: 13px; }
+    th, td { border: 1px solid var(--line); padding: 8px 9px; text-align: left; vertical-align: top; }
+    th { background: var(--soft); color: #263442; font-weight: 700; }
+    tr:nth-child(even) td { background: #fbfcfd; }
+    .card { padding: 16px; margin: 14px 0; }
+    .card-grid { display: grid; grid-template-columns: repeat(3, minmax(160px, 1fr)); gap: 10px; margin-bottom: 12px; }
+    .field { border-top: 1px solid #eef2f5; padding-top: 8px; }
+    .badge {
+      display: inline-block;
+      min-width: 58px;
+      border-radius: 999px;
+      padding: 3px 9px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+    }
+    .badge.low { background: var(--green); }
+    .badge.medium { background: var(--orange); }
+    .badge.high { background: var(--red); }
+    .badge.unknown { background: #687381; }
+    .bar-track { width: 100%; height: 10px; background: #edf1f5; border-radius: 999px; overflow: hidden; }
+    .bar-fill { height: 10px; border-radius: 999px; }
+    .bar-fill.low { background: var(--green); }
+    .bar-fill.medium { background: var(--orange); }
+    .bar-fill.high { background: var(--red); }
+    .note, .notice, .disclaimer {
+      border-left: 4px solid #8a99a8;
+      background: var(--soft);
+      padding: 12px 14px;
+      margin: 12px 0;
+    }
+    .disclaimer { border-left-color: var(--orange); background: #fff8ee; }
+    .empty { color: var(--muted); font-style: italic; }
+    @media (max-width: 820px) {
+      main { padding: 22px 16px 40px; }
+      .meta-grid, .metric-grid, .card-grid { grid-template-columns: 1fr; }
+      table { display: block; overflow-x: auto; white-space: nowrap; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <section class="header">
+    <h1>AbDev-Lite: Antibody Variable-Region Developability Screening Report</h1>
+    <p class="subtitle">This MVP focuses on sequence-level developability screening of antibody variable regions including VH, VL, VHH, and scFv-derived variable domains.</p>
+    <div class="meta-grid">
+      <div class="meta-item"><span class="label">Project</span><span class="value">AbDev-Lite</span></div>
+      <div class="meta-item"><span class="label">Uploaded file</span><span class="value">data\example_input.xlsx</span></div>
+      <div class="meta-item"><span class="label">Analysis time</span><span class="value">2026-07-09 16:40:49</span></div>
+      <div class="meta-item"><span class="label">Report version</span><span class="value">MVP v0.5</span></div>
+    </div>
+  </section>
+
+  <h2>Executive Summary</h2>
+  <div class="metric-grid">
+    <div class="metric"><span class="label">Total antibodies</span><strong>5</strong></div>
+    <div class="metric"><span class="label">Total chains</span><strong>9</strong></div>
+    <div class="metric"><span class="label">Variable-region chains</span><strong>8</strong></div>
+    <div class="metric"><span class="label">Full-length chains</span><strong>1</strong></div>
+    <div class="metric"><span class="label">Low-risk antibodies</span><strong>0</strong></div>
+    <div class="metric"><span class="label">Medium-risk antibodies</span><strong>0</strong></div>
+    <div class="metric"><span class="label">High-risk antibodies</span><strong>5</strong></div>
+    <div class="metric"><span class="label">Liability sites</span><strong>109</strong></div>
+  </div>
+  <p><strong>Most common liability types:</strong> oxidation (51); deamidation (21); hydrophobic_patch_proxy (16); isomerization (13); N_glycosylation (3)</p>
+
+  <h2>Numbering Summary</h2>
+  <div class="metric-grid">
+    <div class="metric"><span class="label">Numbered chains</span><strong>0</strong></div>
+    <div class="metric"><span class="label">Numbering success</span><strong>0</strong></div>
+    <div class="metric"><span class="label">Numbering failed</span><strong>8</strong></div>
+    <div class="metric"><span class="label">Numbering skipped</span><strong>1</strong></div>
+  </div>
+  <p><strong>Numbering scheme:</strong> IMGT</p>
+
+  <h2>Region-Level Liability Summary</h2>
+  <div class="metric-grid">
+    <div class="metric"><span class="label">CDR liabilities</span><strong>0</strong></div>
+    <div class="metric"><span class="label">FR liabilities</span><strong>0</strong></div>
+    <div class="metric"><span class="label">Unknown-region liabilities</span><strong>109</strong></div>
+  </div>
+  <p><strong>Most common CDR liability types:</strong> None detected</p>
+  <p><strong>Most common FR liability types:</strong> None detected</p>
+
+  <h2>Humanness Summary</h2>
+  
+  <div class="metric-grid">
+    <div class="metric"><span class="label">Humanness available</span><strong>True</strong></div>
+    <div class="metric"><span class="label">Chains with data</span><strong>5</strong></div>
+    <div class="metric"><span class="label">Low humanness risk</span><strong>2</strong></div>
+    <div class="metric"><span class="label">Medium humanness risk</span><strong>1</strong></div>
+    <div class="metric"><span class="label">High humanness risk</span><strong>2</strong></div>
+    <div class="metric"><span class="label">Unknown humanness risk</span><strong>0</strong></div>
+  </div>
+  <p><strong>Most common closest human germlines:</strong> IGHV3-23 (1); IGKV1-39 (1); IGHV1-46 (1); IGHV4-34 (1)</p>
+  <p class="note">Human-likeness is not equivalent to clinical immunogenicity prediction. Imported humanness metrics are screening signals only.</p>
+  
+
+  <h2>Risk Distribution</h2>
+  <table>
+    <tr><th>Risk class</th><th>Antibody count</th><th>Distribution</th></tr>
+    <tr>
+      <td><span class="badge low">Low</span></td>
+      <td>0</td>
+      <td><div class="bar-track"><div class="bar-fill low" style="width: 0.0%;"></div></div></td>
+    </tr>
+    <tr>
+      <td><span class="badge medium">Medium</span></td>
+      <td>0</td>
+      <td><div class="bar-track"><div class="bar-fill medium" style="width: 0.0%;"></div></div></td>
+    </tr>
+    <tr>
+      <td><span class="badge high">High</span></td>
+      <td>5</td>
+      <td><div class="bar-track"><div class="bar-fill high" style="width: 100.0%;"></div></div></td>
+    </tr>
+  </table>
+
+  <h2>Antibody Summary Cards</h2>
+  
+  <div class="card">
+    
+    <h3>Ab001 <span class="badge high">High</span></h3>
+    <div class="card-grid">
+      <div><span class="label">Format</span><span class="value">mAb</span></div>
+      <div><span class="label">Number of chains</span><span class="value">2</span></div>
+      <div><span class="label">Sequence scopes</span><span class="value">VH, VL</span></div>
+      <div><span class="label">Total risk score</span><span class="value">17.5</span></div>
+      <div><span class="label">Average chain score</span><span class="value">8.75</span></div>
+      <div><span class="label">Max chain risk class</span><span class="value">High</span></div>
+      <div><span class="label">CDR liabilities</span><span class="value">0</span></div>
+      <div><span class="label">FR liabilities</span><span class="value">0</span></div>
+      <div><span class="label">CDR-adjusted risk score</span><span class="value">17.5</span></div>
+      <div><span class="label">CDR-adjusted max class</span><span class="value">High</span></div>
+      <div><span class="label">Humanness available</span><span class="value">True</span></div>
+      <div><span class="label">Max humanness risk</span><span class="value">Low</span></div>
+      <div><span class="label">Closest human germlines</span><span class="value">IGHV3-23; IGKV1-39</span></div>
+      <div><span class="label">Non-human-like chains</span><span class="value">0.0</span></div>
+      <div><span class="label">High humanness risk chains</span><span class="value">0.0</span></div>
+      <div><span class="label">Combined flag</span><span class="value">Developability review recommended</span></div>
+    </div>
+    <p class="field"><strong>Major liabilities:</strong> oxidation (9); deamidation (4); hydrophobic_patch_proxy (3); isomerization (2)</p>
+    <p><strong>Major CDR liabilities:</strong> None detected</p>
+    <p><strong>Major FR liabilities:</strong> None detected</p>
+    <p><strong>Strengths:</strong> Input sequences passed basic QC; No obvious N-glycosylation motif detected in variable region; No obvious unpaired cysteine proxy detected; No obvious liability motif mapped to CDR regions by IMGT-based computational assignment; Human-likeness metrics suggest low humanness risk based on imported assessment</p>
+    <p><strong>Weaknesses:</strong> Deamidation motif detected; Isomerization motif detected; Oxidation-prone residue detected; Long hydrophobic segment detected by sequence-level proxy</p>
+    <p><strong>Recommendation:</strong> High sequence-level developability risk; recommend engineering review before progression</p>
+  </div>
+  
+  <div class="card">
+    
+    <h3>BadSeq001 <span class="badge high">High</span></h3>
+    <div class="card-grid">
+      <div><span class="label">Format</span><span class="value">mAb</span></div>
+      <div><span class="label">Number of chains</span><span class="value">1</span></div>
+      <div><span class="label">Sequence scopes</span><span class="value">VH</span></div>
+      <div><span class="label">Total risk score</span><span class="value">21.0</span></div>
+      <div><span class="label">Average chain score</span><span class="value">21.0</span></div>
+      <div><span class="label">Max chain risk class</span><span class="value">High</span></div>
+      <div><span class="label">CDR liabilities</span><span class="value">0</span></div>
+      <div><span class="label">FR liabilities</span><span class="value">0</span></div>
+      <div><span class="label">CDR-adjusted risk score</span><span class="value">21.0</span></div>
+      <div><span class="label">CDR-adjusted max class</span><span class="value">High</span></div>
+      <div><span class="label">Humanness available</span><span class="value">False</span></div>
+      <div><span class="label">Max humanness risk</span><span class="value">Unknown</span></div>
+      <div><span class="label">Closest human germlines</span><span class="value">-</span></div>
+      <div><span class="label">Non-human-like chains</span><span class="value">0.0</span></div>
+      <div><span class="label">High humanness risk chains</span><span class="value">0.0</span></div>
+      <div><span class="label">Combined flag</span><span class="value">Developability review recommended</span></div>
+    </div>
+    <p class="field"><strong>Major liabilities:</strong> oxidation (10); low_complexity (3); hydrophobic_patch_proxy (2); deamidation (1); isomerization (1)</p>
+    <p><strong>Major CDR liabilities:</strong> None detected</p>
+    <p><strong>Major FR liabilities:</strong> None detected</p>
+    <p><strong>Strengths:</strong> No obvious unpaired cysteine proxy detected; No obvious liability motif mapped to CDR regions by IMGT-based computational assignment</p>
+    <p><strong>Weaknesses:</strong> N-glycosylation motif detected; Deamidation motif detected; Isomerization motif detected; Oxidation-prone residue detected; Long hydrophobic segment detected by sequence-level proxy; Length warning detected</p>
+    <p><strong>Recommendation:</strong> High sequence-level developability risk; recommend engineering review before progression</p>
+  </div>
+  
+  <div class="card">
+    
+    <h3>BsAb001 <span class="badge high">High</span></h3>
+    <div class="card-grid">
+      <div><span class="label">Format</span><span class="value">BsAb</span></div>
+      <div><span class="label">Number of chains</span><span class="value">4</span></div>
+      <div><span class="label">Sequence scopes</span><span class="value">VH_arm1, VL_arm1, VH_arm2, VL_arm2</span></div>
+      <div><span class="label">Total risk score</span><span class="value">43.5</span></div>
+      <div><span class="label">Average chain score</span><span class="value">10.88</span></div>
+      <div><span class="label">Max chain risk class</span><span class="value">High</span></div>
+      <div><span class="label">CDR liabilities</span><span class="value">0</span></div>
+      <div><span class="label">FR liabilities</span><span class="value">0</span></div>
+      <div><span class="label">CDR-adjusted risk score</span><span class="value">43.5</span></div>
+      <div><span class="label">CDR-adjusted max class</span><span class="value">High</span></div>
+      <div><span class="label">Humanness available</span><span class="value">True</span></div>
+      <div><span class="label">Max humanness risk</span><span class="value">High</span></div>
+      <div><span class="label">Closest human germlines</span><span class="value">IGHV1-46; IGHV4-34</span></div>
+      <div><span class="label">Non-human-like chains</span><span class="value">2.0</span></div>
+      <div><span class="label">High humanness risk chains</span><span class="value">1.0</span></div>
+      <div><span class="label">Combined flag</span><span class="value">High priority engineering review</span></div>
+    </div>
+    <p class="field"><strong>Major liabilities:</strong> oxidation (19); hydrophobic_patch_proxy (8); deamidation (7); isomerization (6); N_glycosylation (1)</p>
+    <p><strong>Major CDR liabilities:</strong> None detected</p>
+    <p><strong>Major FR liabilities:</strong> None detected</p>
+    <p><strong>Strengths:</strong> Input sequences passed basic QC; No obvious unpaired cysteine proxy detected; No obvious liability motif mapped to CDR regions by IMGT-based computational assignment</p>
+    <p><strong>Weaknesses:</strong> N-glycosylation motif detected; Deamidation motif detected; Isomerization motif detected; Oxidation-prone residue detected; Long hydrophobic segment detected by sequence-level proxy; BsAb format detected. This MVP evaluates sequence-level liabilities of each variable region chain independently. It does not yet evaluate chain pairing, heterodimerization, Fc engineering, linker geometry, or full molecule architecture.; Imported humanness metrics suggest high human-likeness risk; humanization review may be needed</p>
+    <p><strong>Recommendation:</strong> High sequence-level developability risk; recommend engineering review before progression</p>
+  </div>
+  
+  <div class="card">
+    
+    <h3>Full001 <span class="badge high">High</span></h3>
+    <div class="card-grid">
+      <div><span class="label">Format</span><span class="value">mAb</span></div>
+      <div><span class="label">Number of chains</span><span class="value">1</span></div>
+      <div><span class="label">Sequence scopes</span><span class="value">full_heavy</span></div>
+      <div><span class="label">Total risk score</span><span class="value">19.5</span></div>
+      <div><span class="label">Average chain score</span><span class="value">19.5</span></div>
+      <div><span class="label">Max chain risk class</span><span class="value">High</span></div>
+      <div><span class="label">CDR liabilities</span><span class="value">0</span></div>
+      <div><span class="label">FR liabilities</span><span class="value">0</span></div>
+      <div><span class="label">CDR-adjusted risk score</span><span class="value">19.5</span></div>
+      <div><span class="label">CDR-adjusted max class</span><span class="value">High</span></div>
+      <div><span class="label">Humanness available</span><span class="value">False</span></div>
+      <div><span class="label">Max humanness risk</span><span class="value">Unknown</span></div>
+      <div><span class="label">Closest human germlines</span><span class="value">-</span></div>
+      <div><span class="label">Non-human-like chains</span><span class="value">0.0</span></div>
+      <div><span class="label">High humanness risk chains</span><span class="value">0.0</span></div>
+      <div><span class="label">Combined flag</span><span class="value">Developability review recommended</span></div>
+    </div>
+    <p class="field"><strong>Major liabilities:</strong> deamidation (7); oxidation (7); isomerization (2); clipping_risk (1); hydrophobic_patch_proxy (1)</p>
+    <p><strong>Major CDR liabilities:</strong> None detected</p>
+    <p><strong>Major FR liabilities:</strong> None detected</p>
+    <p><strong>Strengths:</strong> No obvious N-glycosylation motif detected in variable region; No obvious liability motif mapped to CDR regions by IMGT-based computational assignment</p>
+    <p><strong>Weaknesses:</strong> Deamidation motif detected; Isomerization motif detected; Oxidation-prone residue detected; Long hydrophobic segment detected by sequence-level proxy; Odd cysteine count proxy detected</p>
+    <p><strong>Recommendation:</strong> High sequence-level developability risk; recommend engineering review before progression</p>
+  </div>
+  
+  <div class="card">
+    
+    <h3>VHH001 <span class="badge high">High</span></h3>
+    <div class="card-grid">
+      <div><span class="label">Format</span><span class="value">VHH</span></div>
+      <div><span class="label">Number of chains</span><span class="value">1</span></div>
+      <div><span class="label">Sequence scopes</span><span class="value">VHH</span></div>
+      <div><span class="label">Total risk score</span><span class="value">13.5</span></div>
+      <div><span class="label">Average chain score</span><span class="value">13.5</span></div>
+      <div><span class="label">Max chain risk class</span><span class="value">High</span></div>
+      <div><span class="label">CDR liabilities</span><span class="value">0</span></div>
+      <div><span class="label">FR liabilities</span><span class="value">0</span></div>
+      <div><span class="label">CDR-adjusted risk score</span><span class="value">13.5</span></div>
+      <div><span class="label">CDR-adjusted max class</span><span class="value">High</span></div>
+      <div><span class="label">Humanness available</span><span class="value">True</span></div>
+      <div><span class="label">Max humanness risk</span><span class="value">High</span></div>
+      <div><span class="label">Closest human germlines</span><span class="value">-</span></div>
+      <div><span class="label">Non-human-like chains</span><span class="value">1.0</span></div>
+      <div><span class="label">High humanness risk chains</span><span class="value">1.0</span></div>
+      <div><span class="label">Combined flag</span><span class="value">High priority engineering review</span></div>
+    </div>
+    <p class="field"><strong>Major liabilities:</strong> oxidation (6); deamidation (2); isomerization (2); hydrophobic_patch_proxy (2); N_glycosylation (1)</p>
+    <p><strong>Major CDR liabilities:</strong> None detected</p>
+    <p><strong>Major FR liabilities:</strong> None detected</p>
+    <p><strong>Strengths:</strong> Input sequences passed basic QC; No obvious unpaired cysteine proxy detected; No obvious liability motif mapped to CDR regions by IMGT-based computational assignment</p>
+    <p><strong>Weaknesses:</strong> N-glycosylation motif detected; Deamidation motif detected; Isomerization motif detected; Oxidation-prone residue detected; Long hydrophobic segment detected by sequence-level proxy; Imported humanness metrics suggest high human-likeness risk; humanization review may be needed</p>
+    <p><strong>Recommendation:</strong> High sequence-level developability risk; recommend engineering review before progression</p>
+  </div>
+  
+
+  <h2>Liability Sites Table</h2>
+  
+  <table>
+    <tr>
+      <th>antibody_id</th><th>chain_id</th><th>sequence_scope</th><th>risk_type</th><th>motif</th>
+      <th>position_start</th><th>position_end</th><th>local_sequence_window</th><th>risk_level</th><th>explanation</th>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>deamidation</td>
+      <td>NG</td>
+      <td>99</td>
+      <td>100</td>
+      <td>YYCAR[NG]MDYWG</td>
+      <td>Medium</td>
+      <td>Potential Asn deamidation motif.</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>deamidation</td>
+      <td>NS</td>
+      <td>74</td>
+      <td>75</td>
+      <td>TISRD[NS]KNTLY</td>
+      <td>Medium</td>
+      <td>Potential Asn deamidation motif.</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>deamidation</td>
+      <td>NS</td>
+      <td>84</td>
+      <td>85</td>
+      <td>LYLQM[NS]LRAED</td>
+      <td>Medium</td>
+      <td>Potential Asn deamidation motif.</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>deamidation</td>
+      <td>NT</td>
+      <td>77</td>
+      <td>78</td>
+      <td>RDNSK[NT]LYLQM</td>
+      <td>Medium</td>
+      <td>Potential Asn deamidation motif.</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>isomerization</td>
+      <td>DS</td>
+      <td>62</td>
+      <td>63</td>
+      <td>STYYA[DS]VKGRF</td>
+      <td>Medium</td>
+      <td>Potential Asp isomerization motif.</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>isomerization</td>
+      <td>DT</td>
+      <td>90</td>
+      <td>91</td>
+      <td>SLRAE[DT]AVYYC</td>
+      <td>Medium</td>
+      <td>Potential Asp isomerization motif.</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>AVYY</td>
+      <td>92</td>
+      <td>95</td>
+      <td>RAEDT[AVYY]CARNG</td>
+      <td>Medium</td>
+      <td>Four or more consecutive hydrophobic residues detected as a sequence-level proxy.</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>34</td>
+      <td>34</td>
+      <td>FSSYA[M]SWVRQ</td>
+      <td>Medium</td>
+      <td>Methionine oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>36</td>
+      <td>36</td>
+      <td>SYAMS[W]VRQAP</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>47</td>
+      <td>47</td>
+      <td>GKGLE[W]VSAIS</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>83</td>
+      <td>83</td>
+      <td>TLYLQ[M]NSLRA</td>
+      <td>Medium</td>
+      <td>Methionine oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>101</td>
+      <td>101</td>
+      <td>CARNG[M]DYWGQ</td>
+      <td>Medium</td>
+      <td>Methionine oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>104</td>
+      <td>104</td>
+      <td>NGMDY[W]GQGTL</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VL</td>
+      <td>VL</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>YLAWY</td>
+      <td>32</td>
+      <td>36</td>
+      <td>QSVSS[YLAWY]QQKPG</td>
+      <td>Medium</td>
+      <td>Four or more consecutive hydrophobic residues detected as a sequence-level proxy.</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VL</td>
+      <td>VL</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>LLIY</td>
+      <td>46</td>
+      <td>49</td>
+      <td>GKAPK[LLIY]DASNR</td>
+      <td>Medium</td>
+      <td>Four or more consecutive hydrophobic residues detected as a sequence-level proxy.</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VL</td>
+      <td>VL</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>4</td>
+      <td>4</td>
+      <td>DIQ[M]TQSPS</td>
+      <td>Medium</td>
+      <td>Methionine oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VL</td>
+      <td>VL</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>35</td>
+      <td>35</td>
+      <td>SSYLA[W]YQQKP</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VL</td>
+      <td>VL</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>94</td>
+      <td>94</td>
+      <td>QQRSN[W]PLTFG</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>deamidation</td>
+      <td>NS</td>
+      <td>77</td>
+      <td>78</td>
+      <td>RDNAK[NS]LYLQM</td>
+      <td>Medium</td>
+      <td>Potential Asn deamidation motif.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>deamidation</td>
+      <td>NS</td>
+      <td>84</td>
+      <td>85</td>
+      <td>LYLQM[NS]LRAED</td>
+      <td>Medium</td>
+      <td>Potential Asn deamidation motif.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>isomerization</td>
+      <td>DG</td>
+      <td>54</td>
+      <td>55</td>
+      <td>AVIWY[DG]SNKYY</td>
+      <td>Medium</td>
+      <td>Potential Asp isomerization motif.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>isomerization</td>
+      <td>DG</td>
+      <td>99</td>
+      <td>100</td>
+      <td>YYCAR[DG]NYWGQ</td>
+      <td>Medium</td>
+      <td>Potential Asp isomerization motif.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>isomerization</td>
+      <td>DS</td>
+      <td>62</td>
+      <td>63</td>
+      <td>NKYYA[DS]VKGRF</td>
+      <td>Medium</td>
+      <td>Potential Asp isomerization motif.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>isomerization</td>
+      <td>DT</td>
+      <td>90</td>
+      <td>91</td>
+      <td>SLRAE[DT]AVYYC</td>
+      <td>Medium</td>
+      <td>Potential Asp isomerization motif.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>WVAVIWY</td>
+      <td>47</td>
+      <td>53</td>
+      <td>GKGLE[WVAVIWY]DGSNK</td>
+      <td>Medium</td>
+      <td>Four or more consecutive hydrophobic residues detected as a sequence-level proxy.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>AVYY</td>
+      <td>92</td>
+      <td>95</td>
+      <td>RAEDT[AVYY]CARDG</td>
+      <td>Medium</td>
+      <td>Four or more consecutive hydrophobic residues detected as a sequence-level proxy.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>34</td>
+      <td>34</td>
+      <td>FSSYA[M]SWVRQ</td>
+      <td>Medium</td>
+      <td>Methionine oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>36</td>
+      <td>36</td>
+      <td>SYAMS[W]VRQAP</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>47</td>
+      <td>47</td>
+      <td>GKGLE[W]VAVIW</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>52</td>
+      <td>52</td>
+      <td>WVAVI[W]YDGSN</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>83</td>
+      <td>83</td>
+      <td>SLYLQ[M]NSLRA</td>
+      <td>Medium</td>
+      <td>Methionine oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>103</td>
+      <td>103</td>
+      <td>RDGNY[W]GQGTL</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VL_arm1</td>
+      <td>VL_arm1</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>YLAWY</td>
+      <td>33</td>
+      <td>37</td>
+      <td>SVSSS[YLAWY]QQKPG</td>
+      <td>Medium</td>
+      <td>Four or more consecutive hydrophobic residues detected as a sequence-level proxy.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VL_arm1</td>
+      <td>VL_arm1</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>LLIY</td>
+      <td>47</td>
+      <td>50</td>
+      <td>GQAPR[LLIY]GASSR</td>
+      <td>Medium</td>
+      <td>Four or more consecutive hydrophobic residues detected as a sequence-level proxy.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VL_arm1</td>
+      <td>VL_arm1</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>FAVYY</td>
+      <td>84</td>
+      <td>88</td>
+      <td>LEPED[FAVYY]CQQYN</td>
+      <td>Medium</td>
+      <td>Four or more consecutive hydrophobic residues detected as a sequence-level proxy.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VL_arm1</td>
+      <td>VL_arm1</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>36</td>
+      <td>36</td>
+      <td>SSYLA[W]YQQKP</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VL_arm1</td>
+      <td>VL_arm1</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>95</td>
+      <td>95</td>
+      <td>QQYNN[W]PPWTF</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VL_arm1</td>
+      <td>VL_arm1</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>98</td>
+      <td>98</td>
+      <td>NNWPP[W]TFGQG</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>deamidation</td>
+      <td>NG</td>
+      <td>54</td>
+      <td>55</td>
+      <td>SGISW[NG]GSTYY</td>
+      <td>Medium</td>
+      <td>Potential Asn deamidation motif.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>deamidation</td>
+      <td>NS</td>
+      <td>74</td>
+      <td>75</td>
+      <td>TISRD[NS]KNTLY</td>
+      <td>Medium</td>
+      <td>Potential Asn deamidation motif.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>deamidation</td>
+      <td>NS</td>
+      <td>84</td>
+      <td>85</td>
+      <td>LYLQM[NS]LRAED</td>
+      <td>Medium</td>
+      <td>Potential Asn deamidation motif.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>deamidation</td>
+      <td>NT</td>
+      <td>77</td>
+      <td>78</td>
+      <td>RDNSK[NT]LYLQM</td>
+      <td>Medium</td>
+      <td>Potential Asn deamidation motif.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>deamidation</td>
+      <td>NT</td>
+      <td>99</td>
+      <td>100</td>
+      <td>YYCAR[NT]TWYFD</td>
+      <td>Medium</td>
+      <td>Potential Asn deamidation motif.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>isomerization</td>
+      <td>DS</td>
+      <td>62</td>
+      <td>63</td>
+      <td>STYYA[DS]VKGRF</td>
+      <td>Medium</td>
+      <td>Potential Asp isomerization motif.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>isomerization</td>
+      <td>DT</td>
+      <td>90</td>
+      <td>91</td>
+      <td>SLRAE[DT]AVYYC</td>
+      <td>Medium</td>
+      <td>Potential Asp isomerization motif.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>N_glycosylation</td>
+      <td>NTT</td>
+      <td>99</td>
+      <td>101</td>
+      <td>YYCAR[NTT]WYFDV</td>
+      <td>High</td>
+      <td>N-X-S/T motif detected where X is not proline.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>AVYY</td>
+      <td>92</td>
+      <td>95</td>
+      <td>RAEDT[AVYY]CARNT</td>
+      <td>Medium</td>
+      <td>Four or more consecutive hydrophobic residues detected as a sequence-level proxy.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>34</td>
+      <td>34</td>
+      <td>FSDYA[M]HWVRQ</td>
+      <td>Medium</td>
+      <td>Methionine oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>36</td>
+      <td>36</td>
+      <td>DYAMH[W]VRQAP</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>47</td>
+      <td>47</td>
+      <td>GKGLE[W]VSGIS</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>53</td>
+      <td>53</td>
+      <td>VSGIS[W]NGGST</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>83</td>
+      <td>83</td>
+      <td>TLYLQ[M]NSLRA</td>
+      <td>Medium</td>
+      <td>Methionine oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>102</td>
+      <td>102</td>
+      <td>ARNTT[W]YFDVW</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>107</td>
+      <td>107</td>
+      <td>WYFDV[W]GQGTL</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VL_arm2</td>
+      <td>VL_arm2</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>YLAWY</td>
+      <td>32</td>
+      <td>36</td>
+      <td>QDINN[YLAWY]QQKPG</td>
+      <td>Medium</td>
+      <td>Four or more consecutive hydrophobic residues detected as a sequence-level proxy.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VL_arm2</td>
+      <td>VL_arm2</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>LLIY</td>
+      <td>46</td>
+      <td>49</td>
+      <td>GKAPK[LLIY]DASNL</td>
+      <td>Medium</td>
+      <td>Four or more consecutive hydrophobic residues detected as a sequence-level proxy.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VL_arm2</td>
+      <td>VL_arm2</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>4</td>
+      <td>4</td>
+      <td>DIQ[M]TQSPS</td>
+      <td>Medium</td>
+      <td>Methionine oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VL_arm2</td>
+      <td>VL_arm2</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>35</td>
+      <td>35</td>
+      <td>NNYLA[W]YQQKP</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VL_arm2</td>
+      <td>VL_arm2</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>94</td>
+      <td>94</td>
+      <td>QQRSN[W]PYTFG</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>deamidation</td>
+      <td>NS</td>
+      <td>84</td>
+      <td>85</td>
+      <td>VYLQM[NS]LKPED</td>
+      <td>Medium</td>
+      <td>Potential Asn deamidation motif.</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>deamidation</td>
+      <td>NT</td>
+      <td>77</td>
+      <td>78</td>
+      <td>RDNAK[NT]VYLQM</td>
+      <td>Medium</td>
+      <td>Potential Asn deamidation motif.</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>isomerization</td>
+      <td>DS</td>
+      <td>62</td>
+      <td>63</td>
+      <td>STYYA[DS]VKGRF</td>
+      <td>Medium</td>
+      <td>Potential Asp isomerization motif.</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>isomerization</td>
+      <td>DT</td>
+      <td>90</td>
+      <td>91</td>
+      <td>SLKPE[DT]AVYYC</td>
+      <td>Medium</td>
+      <td>Potential Asp isomerization motif.</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>N_glycosylation</td>
+      <td>NVT</td>
+      <td>99</td>
+      <td>101</td>
+      <td>YYCAA[NVT]MDYWG</td>
+      <td>High</td>
+      <td>N-X-S/T motif detected where X is not proline.</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>FVAAI</td>
+      <td>47</td>
+      <td>51</td>
+      <td>GKERE[FVAAI]SWSGG</td>
+      <td>Medium</td>
+      <td>Four or more consecutive hydrophobic residues detected as a sequence-level proxy.</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>AVYY</td>
+      <td>92</td>
+      <td>95</td>
+      <td>KPEDT[AVYY]CAANV</td>
+      <td>Medium</td>
+      <td>Four or more consecutive hydrophobic residues detected as a sequence-level proxy.</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>34</td>
+      <td>34</td>
+      <td>FSSYA[M]GWFRQ</td>
+      <td>Medium</td>
+      <td>Methionine oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>36</td>
+      <td>36</td>
+      <td>SYAMG[W]FRQAP</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>53</td>
+      <td>53</td>
+      <td>VAAIS[W]SGGST</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>83</td>
+      <td>83</td>
+      <td>TVYLQ[M]NSLKP</td>
+      <td>Medium</td>
+      <td>Methionine oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>102</td>
+      <td>102</td>
+      <td>AANVT[M]DYWGQ</td>
+      <td>Medium</td>
+      <td>Methionine oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>105</td>
+      <td>105</td>
+      <td>VTMDY[W]GQGTQ</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>deamidation</td>
+      <td>NG</td>
+      <td>6</td>
+      <td>7</td>
+      <td>AAAAA[NG]DGMMM</td>
+      <td>Medium</td>
+      <td>Potential Asn deamidation motif.</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>isomerization</td>
+      <td>DG</td>
+      <td>8</td>
+      <td>9</td>
+      <td>AAANG[DG]MMMMM</td>
+      <td>Medium</td>
+      <td>Potential Asp isomerization motif.</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>N_glycosylation</td>
+      <td>NVT</td>
+      <td>20</td>
+      <td>22</td>
+      <td>WWWWW[NVT]</td>
+      <td>High</td>
+      <td>N-X-S/T motif detected where X is not proline.</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>AAAAA</td>
+      <td>1</td>
+      <td>5</td>
+      <td>[AAAAA]NGDGM</td>
+      <td>Medium</td>
+      <td>Four or more consecutive hydrophobic residues detected as a sequence-level proxy.</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>MMMMMWWWWW</td>
+      <td>10</td>
+      <td>19</td>
+      <td>ANGDG[MMMMMWWWWW]NVT</td>
+      <td>Medium</td>
+      <td>Four or more consecutive hydrophobic residues detected as a sequence-level proxy.</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>low_complexity</td>
+      <td>AAAAA</td>
+      <td>1</td>
+      <td>5</td>
+      <td>[AAAAA]NGDGM</td>
+      <td>Medium</td>
+      <td>Same amino acid repeated five or more times.</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>low_complexity</td>
+      <td>MMMMM</td>
+      <td>10</td>
+      <td>14</td>
+      <td>ANGDG[MMMMM]WWWWW</td>
+      <td>Medium</td>
+      <td>Same amino acid repeated five or more times.</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>low_complexity</td>
+      <td>WWWWW</td>
+      <td>15</td>
+      <td>19</td>
+      <td>MMMMM[WWWWW]NVT</td>
+      <td>Medium</td>
+      <td>Same amino acid repeated five or more times.</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>10</td>
+      <td>10</td>
+      <td>ANGDG[M]MMMMW</td>
+      <td>Medium</td>
+      <td>Methionine oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>11</td>
+      <td>11</td>
+      <td>NGDGM[M]MMMWW</td>
+      <td>Medium</td>
+      <td>Methionine oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>12</td>
+      <td>12</td>
+      <td>GDGMM[M]MMWWW</td>
+      <td>Medium</td>
+      <td>Methionine oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>13</td>
+      <td>13</td>
+      <td>DGMMM[M]MWWWW</td>
+      <td>Medium</td>
+      <td>Methionine oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>14</td>
+      <td>14</td>
+      <td>GMMMM[M]WWWWW</td>
+      <td>Medium</td>
+      <td>Methionine oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>15</td>
+      <td>15</td>
+      <td>MMMMM[W]WWWWN</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>16</td>
+      <td>16</td>
+      <td>MMMMW[W]WWWNV</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>17</td>
+      <td>17</td>
+      <td>MMMWW[W]WWNVT</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>18</td>
+      <td>18</td>
+      <td>MMWWW[W]WNVT</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>19</td>
+      <td>19</td>
+      <td>MWWWW[W]NVT</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>deamidation</td>
+      <td>NG</td>
+      <td>99</td>
+      <td>100</td>
+      <td>YYCAR[NG]MDYWG</td>
+      <td>Medium</td>
+      <td>Potential Asn deamidation motif.</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>deamidation</td>
+      <td>NS</td>
+      <td>74</td>
+      <td>75</td>
+      <td>TISRD[NS]KNTLY</td>
+      <td>Medium</td>
+      <td>Potential Asn deamidation motif.</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>deamidation</td>
+      <td>NS</td>
+      <td>84</td>
+      <td>85</td>
+      <td>LYLQM[NS]LRAED</td>
+      <td>Medium</td>
+      <td>Potential Asn deamidation motif.</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>deamidation</td>
+      <td>NS</td>
+      <td>156</td>
+      <td>157</td>
+      <td>VTVSW[NS]GALTS</td>
+      <td>Medium</td>
+      <td>Potential Asn deamidation motif.</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>deamidation</td>
+      <td>NT</td>
+      <td>77</td>
+      <td>78</td>
+      <td>RDNSK[NT]LYLQM</td>
+      <td>Medium</td>
+      <td>Potential Asn deamidation motif.</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>deamidation</td>
+      <td>NT</td>
+      <td>205</td>
+      <td>206</td>
+      <td>NHKPS[NT]KVDKK</td>
+      <td>Medium</td>
+      <td>Potential Asn deamidation motif.</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>deamidation</td>
+      <td>NH</td>
+      <td>200</td>
+      <td>201</td>
+      <td>YICNV[NH]KPSNT</td>
+      <td>Medium</td>
+      <td>Potential Asn deamidation motif.</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>isomerization</td>
+      <td>DS</td>
+      <td>62</td>
+      <td>63</td>
+      <td>STYYA[DS]VKGRF</td>
+      <td>Medium</td>
+      <td>Potential Asp isomerization motif.</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>isomerization</td>
+      <td>DT</td>
+      <td>90</td>
+      <td>91</td>
+      <td>SLRAE[DT]AVYYC</td>
+      <td>Medium</td>
+      <td>Potential Asp isomerization motif.</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>clipping_risk</td>
+      <td>KK</td>
+      <td>210</td>
+      <td>211</td>
+      <td>NTKVD[KK]VEPKS</td>
+      <td>Low</td>
+      <td>Basic residue pair may indicate clipping sensitivity.</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>AVYY</td>
+      <td>92</td>
+      <td>95</td>
+      <td>RAEDT[AVYY]CARNG</td>
+      <td>Medium</td>
+      <td>Four or more consecutive hydrophobic residues detected as a sequence-level proxy.</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>34</td>
+      <td>34</td>
+      <td>FSSYA[M]SWVRQ</td>
+      <td>Medium</td>
+      <td>Methionine oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>36</td>
+      <td>36</td>
+      <td>SYAMS[W]VRQAP</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>47</td>
+      <td>47</td>
+      <td>GKGLE[W]VSAIS</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>83</td>
+      <td>83</td>
+      <td>TLYLQ[M]NSLRA</td>
+      <td>Medium</td>
+      <td>Methionine oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>101</td>
+      <td>101</td>
+      <td>CARNG[M]DYWGQ</td>
+      <td>Medium</td>
+      <td>Methionine oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>104</td>
+      <td>104</td>
+      <td>NGMDY[W]GQGTL</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>155</td>
+      <td>155</td>
+      <td>PVTVS[W]NSGAL</td>
+      <td>High</td>
+      <td>Tryptophan oxidation liability.</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>cysteine_risk</td>
+      <td>potential_unpaired_cysteine</td>
+      <td>1</td>
+      <td>227</td>
+      <td>[EVQLVESGGGLVQPGGSLRLSCAASGFTFSSYAMSWVRQAPGKGLEWVSAISGSGGSTYYADSVKGRFTISRDNSKNTLYLQMNSLRAEDTAVYYCARNGMDYWGQGTLVTVSSASTKGPSVFPLAPSSKSTSGGTAALGCLVKDYFPEPVTVSWNSGALTSGVHTFPAVLQSSGLYSLSSVVTVPSSSLGTQTYICNVNHKPSNTKVDKKVEPKSCDKTHTCPPCP]</td>
+      <td>High</td>
+      <td>Odd cysteine count is a proxy for potential unpaired cysteine.</td>
+    </tr>
+    
+  </table>
+
+  <h2>Liability Region Map Table</h2>
+  
+  <table>
+    <tr>
+      <th>antibody_id</th><th>chain_id</th><th>sequence_scope</th><th>risk_type</th><th>motif</th>
+      <th>position_start</th><th>position_end</th><th>mapped_regions</th><th>cdr_or_fr</th><th>imgt_positions</th><th>risk_level</th>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>deamidation</td>
+      <td>NG</td>
+      <td>99</td>
+      <td>100</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>deamidation</td>
+      <td>NS</td>
+      <td>74</td>
+      <td>75</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>deamidation</td>
+      <td>NS</td>
+      <td>84</td>
+      <td>85</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>deamidation</td>
+      <td>NT</td>
+      <td>77</td>
+      <td>78</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>isomerization</td>
+      <td>DS</td>
+      <td>62</td>
+      <td>63</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>isomerization</td>
+      <td>DT</td>
+      <td>90</td>
+      <td>91</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>AVYY</td>
+      <td>92</td>
+      <td>95</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>34</td>
+      <td>34</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>36</td>
+      <td>36</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>47</td>
+      <td>47</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>83</td>
+      <td>83</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>101</td>
+      <td>101</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>104</td>
+      <td>104</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VL</td>
+      <td>VL</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>YLAWY</td>
+      <td>32</td>
+      <td>36</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VL</td>
+      <td>VL</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>LLIY</td>
+      <td>46</td>
+      <td>49</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VL</td>
+      <td>VL</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>4</td>
+      <td>4</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VL</td>
+      <td>VL</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>35</td>
+      <td>35</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VL</td>
+      <td>VL</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>94</td>
+      <td>94</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>deamidation</td>
+      <td>NS</td>
+      <td>77</td>
+      <td>78</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>deamidation</td>
+      <td>NS</td>
+      <td>84</td>
+      <td>85</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>isomerization</td>
+      <td>DG</td>
+      <td>54</td>
+      <td>55</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>isomerization</td>
+      <td>DG</td>
+      <td>99</td>
+      <td>100</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>isomerization</td>
+      <td>DS</td>
+      <td>62</td>
+      <td>63</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>isomerization</td>
+      <td>DT</td>
+      <td>90</td>
+      <td>91</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>WVAVIWY</td>
+      <td>47</td>
+      <td>53</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>AVYY</td>
+      <td>92</td>
+      <td>95</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>34</td>
+      <td>34</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>36</td>
+      <td>36</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>47</td>
+      <td>47</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>52</td>
+      <td>52</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>83</td>
+      <td>83</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>103</td>
+      <td>103</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VL_arm1</td>
+      <td>VL_arm1</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>YLAWY</td>
+      <td>33</td>
+      <td>37</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VL_arm1</td>
+      <td>VL_arm1</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>LLIY</td>
+      <td>47</td>
+      <td>50</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VL_arm1</td>
+      <td>VL_arm1</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>FAVYY</td>
+      <td>84</td>
+      <td>88</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VL_arm1</td>
+      <td>VL_arm1</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>36</td>
+      <td>36</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VL_arm1</td>
+      <td>VL_arm1</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>95</td>
+      <td>95</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VL_arm1</td>
+      <td>VL_arm1</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>98</td>
+      <td>98</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>deamidation</td>
+      <td>NG</td>
+      <td>54</td>
+      <td>55</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>deamidation</td>
+      <td>NS</td>
+      <td>74</td>
+      <td>75</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>deamidation</td>
+      <td>NS</td>
+      <td>84</td>
+      <td>85</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>deamidation</td>
+      <td>NT</td>
+      <td>77</td>
+      <td>78</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>deamidation</td>
+      <td>NT</td>
+      <td>99</td>
+      <td>100</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>isomerization</td>
+      <td>DS</td>
+      <td>62</td>
+      <td>63</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>isomerization</td>
+      <td>DT</td>
+      <td>90</td>
+      <td>91</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>N_glycosylation</td>
+      <td>NTT</td>
+      <td>99</td>
+      <td>101</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>AVYY</td>
+      <td>92</td>
+      <td>95</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>34</td>
+      <td>34</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>36</td>
+      <td>36</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>47</td>
+      <td>47</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>53</td>
+      <td>53</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>83</td>
+      <td>83</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>102</td>
+      <td>102</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>107</td>
+      <td>107</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VL_arm2</td>
+      <td>VL_arm2</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>YLAWY</td>
+      <td>32</td>
+      <td>36</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VL_arm2</td>
+      <td>VL_arm2</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>LLIY</td>
+      <td>46</td>
+      <td>49</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VL_arm2</td>
+      <td>VL_arm2</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>4</td>
+      <td>4</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VL_arm2</td>
+      <td>VL_arm2</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>35</td>
+      <td>35</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VL_arm2</td>
+      <td>VL_arm2</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>94</td>
+      <td>94</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>deamidation</td>
+      <td>NS</td>
+      <td>84</td>
+      <td>85</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>deamidation</td>
+      <td>NT</td>
+      <td>77</td>
+      <td>78</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>isomerization</td>
+      <td>DS</td>
+      <td>62</td>
+      <td>63</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>isomerization</td>
+      <td>DT</td>
+      <td>90</td>
+      <td>91</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>N_glycosylation</td>
+      <td>NVT</td>
+      <td>99</td>
+      <td>101</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>FVAAI</td>
+      <td>47</td>
+      <td>51</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>AVYY</td>
+      <td>92</td>
+      <td>95</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>34</td>
+      <td>34</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>36</td>
+      <td>36</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>53</td>
+      <td>53</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>83</td>
+      <td>83</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>102</td>
+      <td>102</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>105</td>
+      <td>105</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>deamidation</td>
+      <td>NG</td>
+      <td>6</td>
+      <td>7</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>isomerization</td>
+      <td>DG</td>
+      <td>8</td>
+      <td>9</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>N_glycosylation</td>
+      <td>NVT</td>
+      <td>20</td>
+      <td>22</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>AAAAA</td>
+      <td>1</td>
+      <td>5</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>MMMMMWWWWW</td>
+      <td>10</td>
+      <td>19</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>low_complexity</td>
+      <td>AAAAA</td>
+      <td>1</td>
+      <td>5</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>low_complexity</td>
+      <td>MMMMM</td>
+      <td>10</td>
+      <td>14</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>low_complexity</td>
+      <td>WWWWW</td>
+      <td>15</td>
+      <td>19</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>10</td>
+      <td>10</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>11</td>
+      <td>11</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>12</td>
+      <td>12</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>13</td>
+      <td>13</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>14</td>
+      <td>14</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>15</td>
+      <td>15</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>16</td>
+      <td>16</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>17</td>
+      <td>17</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>18</td>
+      <td>18</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>19</td>
+      <td>19</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>deamidation</td>
+      <td>NG</td>
+      <td>99</td>
+      <td>100</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>deamidation</td>
+      <td>NS</td>
+      <td>74</td>
+      <td>75</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>deamidation</td>
+      <td>NS</td>
+      <td>84</td>
+      <td>85</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>deamidation</td>
+      <td>NS</td>
+      <td>156</td>
+      <td>157</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>deamidation</td>
+      <td>NT</td>
+      <td>77</td>
+      <td>78</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>deamidation</td>
+      <td>NT</td>
+      <td>205</td>
+      <td>206</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>deamidation</td>
+      <td>NH</td>
+      <td>200</td>
+      <td>201</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>isomerization</td>
+      <td>DS</td>
+      <td>62</td>
+      <td>63</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>isomerization</td>
+      <td>DT</td>
+      <td>90</td>
+      <td>91</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>clipping_risk</td>
+      <td>KK</td>
+      <td>210</td>
+      <td>211</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Low</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>hydrophobic_patch_proxy</td>
+      <td>AVYY</td>
+      <td>92</td>
+      <td>95</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>34</td>
+      <td>34</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>36</td>
+      <td>36</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>47</td>
+      <td>47</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>83</td>
+      <td>83</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>oxidation</td>
+      <td>M</td>
+      <td>101</td>
+      <td>101</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>Medium</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>104</td>
+      <td>104</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>oxidation</td>
+      <td>W</td>
+      <td>155</td>
+      <td>155</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>cysteine_risk</td>
+      <td>potential_unpaired_cysteine</td>
+      <td>1</td>
+      <td>227</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>-</td>
+      <td>High</td>
+    </tr>
+    
+  </table>
+
+  <h2>Humanness Results Table</h2>
+  <table>
+    <tr>
+      <th>antibody_id</th><th>chain_id</th><th>sequence_scope</th><th>humanness_tool</th>
+      <th>humanness_score</th><th>humanness_percentile</th><th>closest_human_germline</th>
+      <th>closest_species</th><th>framework_identity</th><th>humanness_risk_class</th><th>humanness_interpretation</th>
+    </tr>
+    
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>Manual</td>
+      <td>0.91</td>
+      <td>82.0</td>
+      <td>IGHV3-23</td>
+      <td>human</td>
+      <td>92.0</td>
+      <td><span class="badge low">Low</span></td>
+      <td>Imported humanness/germline metrics indicate low human-likeness risk based on conservative review of: humanness_percentile=82.0; framework_identity=92.0; identity_to_human_germline=91.5; closest_species=human. Human-likeness is not equivalent to clinical immunogenicity prediction.</td>
+    </tr>
+    
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VL</td>
+      <td>VL</td>
+      <td>Manual</td>
+      <td>0.88</td>
+      <td>76.0</td>
+      <td>IGKV1-39</td>
+      <td>human</td>
+      <td>90.1</td>
+      <td><span class="badge low">Low</span></td>
+      <td>Imported humanness/germline metrics indicate low human-likeness risk based on conservative review of: humanness_percentile=76.0; framework_identity=90.1; identity_to_human_germline=89.2; closest_species=human. Human-likeness is not equivalent to clinical immunogenicity prediction.</td>
+    </tr>
+    
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>Manual</td>
+      <td>0.61</td>
+      <td>55.0</td>
+      <td>IGHV1-46</td>
+      <td>human</td>
+      <td>81.7</td>
+      <td><span class="badge medium">Medium</span></td>
+      <td>Imported humanness/germline metrics indicate medium human-likeness risk based on conservative review of: humanness_percentile=55.0; framework_identity=81.7; identity_to_human_germline=82.3; closest_species=human. Human-likeness is not equivalent to clinical immunogenicity prediction.</td>
+    </tr>
+    
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>Manual</td>
+      <td>0.34</td>
+      <td>22.0</td>
+      <td>IGHV4-34</td>
+      <td>mouse</td>
+      <td>68.5</td>
+      <td><span class="badge high">High</span></td>
+      <td>Imported humanness/germline metrics indicate high human-likeness risk based on conservative review of: humanness_percentile=22.0; framework_identity=68.5; identity_to_human_germline=66.8; closest_species=mouse. Human-likeness is not equivalent to clinical immunogenicity prediction.</td>
+    </tr>
+    
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>Manual</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>camelid</td>
+      <td>72.0</td>
+      <td><span class="badge high">High</span></td>
+      <td>Imported humanness/germline metrics indicate high human-likeness risk based on conservative review of: framework_identity=72.0; identity_to_human_germline=69.0; closest_species=camelid. Human-likeness is not equivalent to clinical immunogenicity prediction.</td>
+    </tr>
+    
+  </table>
+
+  <h2>Chain-Level Risk Table</h2>
+  <table>
+    <tr>
+      <th>antibody_id</th><th>chain_id</th><th>sequence_scope</th><th>risk_score</th><th>risk_class</th>
+      <th>cdr_adjusted_risk_score</th><th>cdr_adjusted_risk_class</th><th>cdr_liability_count</th><th>fr_liability_count</th>
+      <th>main_chain_liabilities</th><th>chain_recommendation</th>
+    </tr>
+    
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>12.0</td>
+      <td><span class="badge high">High</span></td>
+      <td>12.0</td>
+      <td>High</td>
+      <td>0</td>
+      <td>0</td>
+      <td>oxidation; deamidation; isomerization; hydrophobic_patch_proxy</td>
+      <td>Engineering review recommended before progression</td>
+    </tr>
+    
+    
+    <tr>
+      <td>Ab001</td>
+      <td>VL</td>
+      <td>VL</td>
+      <td>5.5</td>
+      <td><span class="badge high">High</span></td>
+      <td>5.5</td>
+      <td>High</td>
+      <td>0</td>
+      <td>0</td>
+      <td>oxidation; hydrophobic_patch_proxy</td>
+      <td>Engineering review recommended before progression</td>
+    </tr>
+    
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>14.0</td>
+      <td><span class="badge high">High</span></td>
+      <td>14.0</td>
+      <td>High</td>
+      <td>0</td>
+      <td>0</td>
+      <td>oxidation; isomerization; deamidation; hydrophobic_patch_proxy</td>
+      <td>Engineering review recommended before progression</td>
+    </tr>
+    
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VL_arm1</td>
+      <td>VL_arm1</td>
+      <td>7.5</td>
+      <td><span class="badge high">High</span></td>
+      <td>7.5</td>
+      <td>High</td>
+      <td>0</td>
+      <td>0</td>
+      <td>hydrophobic_patch_proxy; oxidation</td>
+      <td>Engineering review recommended before progression</td>
+    </tr>
+    
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>16.5</td>
+      <td><span class="badge high">High</span></td>
+      <td>16.5</td>
+      <td>High</td>
+      <td>0</td>
+      <td>0</td>
+      <td>oxidation; deamidation; isomerization; N_glycosylation; hydrophobic_patch_proxy</td>
+      <td>Engineering review recommended before progression</td>
+    </tr>
+    
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>VL_arm2</td>
+      <td>VL_arm2</td>
+      <td>5.5</td>
+      <td><span class="badge high">High</span></td>
+      <td>5.5</td>
+      <td>High</td>
+      <td>0</td>
+      <td>0</td>
+      <td>oxidation; hydrophobic_patch_proxy</td>
+      <td>Engineering review recommended before progression</td>
+    </tr>
+    
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>13.5</td>
+      <td><span class="badge high">High</span></td>
+      <td>13.5</td>
+      <td>High</td>
+      <td>0</td>
+      <td>0</td>
+      <td>oxidation; deamidation; isomerization; hydrophobic_patch_proxy; N_glycosylation</td>
+      <td>Engineering review recommended before progression</td>
+    </tr>
+    
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>21.0</td>
+      <td><span class="badge high">High</span></td>
+      <td>21.0</td>
+      <td>High</td>
+      <td>0</td>
+      <td>0</td>
+      <td>oxidation; low_complexity; hydrophobic_patch_proxy; deamidation; isomerization; length_warning</td>
+      <td>Engineering review recommended before progression</td>
+    </tr>
+    
+    
+    <tr>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>19.5</td>
+      <td><span class="badge high">High</span></td>
+      <td>19.5</td>
+      <td>High</td>
+      <td>0</td>
+      <td>0</td>
+      <td>deamidation; oxidation; isomerization; clipping_risk; hydrophobic_patch_proxy</td>
+      <td>Engineering review recommended before progression</td>
+    </tr>
+    
+  </table>
+
+  <h2>Method Summary</h2>
+  <ul>
+    <li>Input sequence cleaning</li>
+    <li>Basic sequence QC</li>
+    <li>Biopython-based physicochemical property calculation</li>
+    <li>Rule-based liability motif scanning</li>
+    <li>Optional AbNumber/ANARCI IMGT numbering for variable-region sequences</li>
+    <li>IMGT-based computational CDR/FR liability mapping</li>
+    <li>Optional imported humanness/germline result aggregation without automatic third-party upload</li>
+    <li>Rule-based sequence-level risk scoring</li>
+    <li>Antibody-level aggregation</li>
+  </ul>
+
+  <h2>Limitations and Disclaimer</h2>
+  <div class="notice">
+    <p>This version adds IMGT-based computational numbering and CDR/FR region assignment for antibody variable regions. Region mapping depends on successful numbering and should be reviewed before experimental decisions. This MVP does not perform structural paratope prediction or binding-impact prediction.</p>
+    <p>Current version primarily supports variable-region developability screening. Full-length analysis is limited to basic sequence checks and physicochemical reference metrics.</p>
+    <p>Hydrophobic patch detection is only a sequence-level proxy and does not represent true structural surface patch analysis.</p>
+    <p>BsAb analysis is chain-level only and does not evaluate chain pairing, heterodimerization, Fc engineering, linker geometry, or full molecule architecture.</p>
+    <p>Full-length sequences, if uploaded, are only analyzed for basic sequence-level properties in this MVP.</p>
+    
+    <p><strong>BsAb note:</strong> BsAb analysis is chain-level only and does not evaluate chain pairing, heterodimerization, Fc engineering, linker geometry, or full molecule architecture.</p>
+    
+  </div>
+  <div class="disclaimer">This MVP performs sequence-level antibody variable-region developability screening with optional IMGT-based computational numbering, CDR/FR region assignment, and optional imported humanness/germline assessment. It does not perform 3D structure prediction, humanization design, antigen-binding prediction, structural paratope prediction, or experimental validation. Human-likeness assessment is not equivalent to clinical immunogenicity prediction. Results should be interpreted as computational screening signals, not definitive developability conclusions.</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ title }}</title>
+  <style>
+    :root {
+      --ink: #17212b;
+      --muted: #5d6975;
+      --line: #d7dee6;
+      --soft: #f6f8fa;
+      --blue: #1f5f8b;
+      --green: #1f8a4c;
+      --orange: #b85f00;
+      --red: #b42318;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #ffffff;
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.48;
+    }
+    main { max-width: 1180px; margin: 0 auto; padding: 32px 28px 56px; }
+    h1 { margin: 0 0 10px; color: #102033; font-size: 30px; line-height: 1.2; }
+    h2 { margin: 32px 0 12px; padding-bottom: 6px; border-bottom: 2px solid var(--line); color: #102033; font-size: 21px; }
+    h3 { margin: 0 0 12px; color: #17212b; font-size: 17px; }
+    p { margin: 8px 0; }
+    .header { border-bottom: 1px solid var(--line); padding-bottom: 18px; margin-bottom: 24px; }
+    .subtitle { color: var(--muted); max-width: 920px; }
+    .meta-grid, .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(140px, 1fr));
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .meta-item, .metric, .card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+    }
+    .meta-item, .metric { padding: 12px; }
+    .label { display: block; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
+    .value { display: block; margin-top: 4px; font-weight: 700; overflow-wrap: anywhere; }
+    .metric strong { display: block; margin-top: 4px; color: var(--blue); font-size: 24px; }
+    table { border-collapse: collapse; width: 100%; margin: 12px 0 24px; font-size: 13px; }
+    th, td { border: 1px solid var(--line); padding: 8px 9px; text-align: left; vertical-align: top; }
+    th { background: var(--soft); color: #263442; font-weight: 700; }
+    tr:nth-child(even) td { background: #fbfcfd; }
+    .card { padding: 16px; margin: 14px 0; }
+    .card-grid { display: grid; grid-template-columns: repeat(3, minmax(160px, 1fr)); gap: 10px; margin-bottom: 12px; }
+    .field { border-top: 1px solid #eef2f5; padding-top: 8px; }
+    .badge {
+      display: inline-block;
+      min-width: 58px;
+      border-radius: 999px;
+      padding: 3px 9px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+    }
+    .badge.low { background: var(--green); }
+    .badge.medium { background: var(--orange); }
+    .badge.high { background: var(--red); }
+    .badge.unknown { background: #687381; }
+    .bar-track { width: 100%; height: 10px; background: #edf1f5; border-radius: 999px; overflow: hidden; }
+    .bar-fill { height: 10px; border-radius: 999px; }
+    .bar-fill.low { background: var(--green); }
+    .bar-fill.medium { background: var(--orange); }
+    .bar-fill.high { background: var(--red); }
+    .note, .notice, .disclaimer {
+      border-left: 4px solid #8a99a8;
+      background: var(--soft);
+      padding: 12px 14px;
+      margin: 12px 0;
+    }
+    .disclaimer { border-left-color: var(--orange); background: #fff8ee; }
+    .empty { color: var(--muted); font-style: italic; }
+    @media (max-width: 820px) {
+      main { padding: 22px 16px 40px; }
+      .meta-grid, .metric-grid, .card-grid { grid-template-columns: 1fr; }
+      table { display: block; overflow-x: auto; white-space: nowrap; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <section class="header">
+    <h1>{{ title }}</h1>
+    <p class="subtitle">{{ analysis_scope }}</p>
+    <div class="meta-grid">
+      <div class="meta-item"><span class="label">Project</span><span class="value">{{ project_name|dash }}</span></div>
+      <div class="meta-item"><span class="label">Uploaded file</span><span class="value">{{ uploaded_filename|dash }}</span></div>
+      <div class="meta-item"><span class="label">Analysis time</span><span class="value">{{ analysis_time|dash }}</span></div>
+      <div class="meta-item"><span class="label">Report version</span><span class="value">{{ report_version|dash }}</span></div>
+    </div>
+  </section>
+
+  <h2>Executive Summary</h2>
+  <div class="metric-grid">
+    <div class="metric"><span class="label">Total antibodies</span><strong>{{ executive_summary.total_antibodies }}</strong></div>
+    <div class="metric"><span class="label">Total chains</span><strong>{{ executive_summary.total_chains }}</strong></div>
+    <div class="metric"><span class="label">Variable-region chains</span><strong>{{ executive_summary.variable_region_chain_count }}</strong></div>
+    <div class="metric"><span class="label">Full-length chains</span><strong>{{ executive_summary.full_length_chain_count }}</strong></div>
+    <div class="metric"><span class="label">Low-risk antibodies</span><strong>{{ executive_summary.low_risk_antibody_count }}</strong></div>
+    <div class="metric"><span class="label">Medium-risk antibodies</span><strong>{{ executive_summary.medium_risk_antibody_count }}</strong></div>
+    <div class="metric"><span class="label">High-risk antibodies</span><strong>{{ executive_summary.high_risk_antibody_count }}</strong></div>
+    <div class="metric"><span class="label">Liability sites</span><strong>{{ executive_summary.total_liability_sites }}</strong></div>
+  </div>
+  <p><strong>Most common liability types:</strong> {{ executive_summary.most_common_liability_types|dash }}</p>
+
+  <h2>Numbering Summary</h2>
+  <div class="metric-grid">
+    <div class="metric"><span class="label">Numbered chains</span><strong>{{ numbering_summary.total_numbered_chains }}</strong></div>
+    <div class="metric"><span class="label">Numbering success</span><strong>{{ numbering_summary.numbering_success_count }}</strong></div>
+    <div class="metric"><span class="label">Numbering failed</span><strong>{{ numbering_summary.numbering_failed_count }}</strong></div>
+    <div class="metric"><span class="label">Numbering skipped</span><strong>{{ numbering_summary.numbering_skipped_count }}</strong></div>
+  </div>
+  <p><strong>Numbering scheme:</strong> {{ numbering_summary.numbering_scheme|dash }}</p>
+
+  <h2>Region-Level Liability Summary</h2>
+  <div class="metric-grid">
+    <div class="metric"><span class="label">CDR liabilities</span><strong>{{ region_liability_summary.total_cdr_liabilities }}</strong></div>
+    <div class="metric"><span class="label">FR liabilities</span><strong>{{ region_liability_summary.total_fr_liabilities }}</strong></div>
+    <div class="metric"><span class="label">Unknown-region liabilities</span><strong>{{ region_liability_summary.total_unknown_region_liabilities }}</strong></div>
+  </div>
+  <p><strong>Most common CDR liability types:</strong> {{ region_liability_summary.most_common_cdr_liability_types|dash }}</p>
+  <p><strong>Most common FR liability types:</strong> {{ region_liability_summary.most_common_fr_liability_types|dash }}</p>
+
+  <h2>Humanness Summary</h2>
+  {% if humanness_summary.humanness_available %}
+  <div class="metric-grid">
+    <div class="metric"><span class="label">Humanness available</span><strong>{{ humanness_summary.humanness_available }}</strong></div>
+    <div class="metric"><span class="label">Chains with data</span><strong>{{ humanness_summary.number_of_chains_with_humanness_data }}</strong></div>
+    <div class="metric"><span class="label">Low humanness risk</span><strong>{{ humanness_summary.low_humanness_risk_chain_count }}</strong></div>
+    <div class="metric"><span class="label">Medium humanness risk</span><strong>{{ humanness_summary.medium_humanness_risk_chain_count }}</strong></div>
+    <div class="metric"><span class="label">High humanness risk</span><strong>{{ humanness_summary.high_humanness_risk_chain_count }}</strong></div>
+    <div class="metric"><span class="label">Unknown humanness risk</span><strong>{{ humanness_summary.unknown_humanness_risk_chain_count }}</strong></div>
+  </div>
+  <p><strong>Most common closest human germlines:</strong> {{ humanness_summary.most_common_closest_human_germlines|dash }}</p>
+  <p class="note">Human-likeness is not equivalent to clinical immunogenicity prediction. Imported humanness metrics are screening signals only.</p>
+  {% else %}
+  <p class="empty">No external humanness/germline assessment file was provided. Humanness analysis was not performed in this run.</p>
+  {% endif %}
+
+  <h2>Risk Distribution</h2>
+  <table>
+    <tr><th>Risk class</th><th>Antibody count</th><th>Distribution</th></tr>
+    <tr>
+      <td><span class="badge low">Low</span></td>
+      <td>{{ risk_counts.Low }}</td>
+      <td><div class="bar-track"><div class="bar-fill low" style="width: {{ (risk_counts.Low / total_antibodies * 100)|round(1) }}%;"></div></div></td>
+    </tr>
+    <tr>
+      <td><span class="badge medium">Medium</span></td>
+      <td>{{ risk_counts.Medium }}</td>
+      <td><div class="bar-track"><div class="bar-fill medium" style="width: {{ (risk_counts.Medium / total_antibodies * 100)|round(1) }}%;"></div></div></td>
+    </tr>
+    <tr>
+      <td><span class="badge high">High</span></td>
+      <td>{{ risk_counts.High }}</td>
+      <td><div class="bar-track"><div class="bar-fill high" style="width: {{ (risk_counts.High / total_antibodies * 100)|round(1) }}%;"></div></div></td>
+    </tr>
+  </table>
+
+  <h2>Antibody Summary Cards</h2>
+  {% for row in summary_rows %}
+  <div class="card">
+    {% set risk_class = row.max_chain_risk_class|dash %}
+    <h3>{{ row.antibody_id|dash }} <span class="badge {{ risk_class|lower }}">{{ risk_class }}</span></h3>
+    <div class="card-grid">
+      <div><span class="label">Format</span><span class="value">{{ row.molecule_format|dash }}</span></div>
+      <div><span class="label">Number of chains</span><span class="value">{{ row.number_of_chains|dash }}</span></div>
+      <div><span class="label">Sequence scopes</span><span class="value">{{ row.sequence_scopes|dash }}</span></div>
+      <div><span class="label">Total risk score</span><span class="value">{{ row.total_risk_score|dash }}</span></div>
+      <div><span class="label">Average chain score</span><span class="value">{{ row.average_chain_risk_score|dash }}</span></div>
+      <div><span class="label">Max chain risk class</span><span class="value">{{ risk_class }}</span></div>
+      <div><span class="label">CDR liabilities</span><span class="value">{{ row.total_cdr_liabilities|dash }}</span></div>
+      <div><span class="label">FR liabilities</span><span class="value">{{ row.total_fr_liabilities|dash }}</span></div>
+      <div><span class="label">CDR-adjusted risk score</span><span class="value">{{ row.cdr_adjusted_total_risk_score|dash }}</span></div>
+      <div><span class="label">CDR-adjusted max class</span><span class="value">{{ row.cdr_adjusted_max_risk_class|dash }}</span></div>
+      <div><span class="label">Humanness available</span><span class="value">{{ row.humanness_available|dash }}</span></div>
+      <div><span class="label">Max humanness risk</span><span class="value">{{ row.max_humanness_risk_class|dash }}</span></div>
+      <div><span class="label">Closest human germlines</span><span class="value">{{ row.closest_human_germlines|dash }}</span></div>
+      <div><span class="label">Non-human-like chains</span><span class="value">{{ row.non_human_like_chain_count|dash }}</span></div>
+      <div><span class="label">High humanness risk chains</span><span class="value">{{ row.high_humanness_risk_chain_count|dash }}</span></div>
+      <div><span class="label">Combined flag</span><span class="value">{{ row.combined_developability_humanness_flag|dash }}</span></div>
+    </div>
+    <p class="field"><strong>Major liabilities:</strong> {{ row.major_liabilities|dash }}</p>
+    <p><strong>Major CDR liabilities:</strong> {{ row.major_cdr_liabilities|dash }}</p>
+    <p><strong>Major FR liabilities:</strong> {{ row.major_fr_liabilities|dash }}</p>
+    <p><strong>Strengths:</strong> {{ row.strengths|dash }}</p>
+    <p><strong>Weaknesses:</strong> {{ row.weaknesses|dash }}</p>
+    <p><strong>Recommendation:</strong> {{ row.recommendation|dash }}</p>
+  </div>
+  {% else %}
+  <p class="empty">No antibody summary records were generated.</p>
+  {% endfor %}
+
+  <h2>Liability Sites Table</h2>
+  {% if liability_total_count > liability_display_count %}
+  <p class="note">Showing the first {{ liability_display_count }} of {{ liability_total_count }} liability sites. Please see the Excel workbook for complete results.</p>
+  {% endif %}
+  <table>
+    <tr>
+      <th>antibody_id</th><th>chain_id</th><th>sequence_scope</th><th>risk_type</th><th>motif</th>
+      <th>position_start</th><th>position_end</th><th>local_sequence_window</th><th>risk_level</th><th>explanation</th>
+    </tr>
+    {% for site in liability_rows %}
+    <tr>
+      <td>{{ site.antibody_id|dash }}</td>
+      <td>{{ site.chain_id|dash }}</td>
+      <td>{{ site.sequence_scope|dash }}</td>
+      <td>{{ site.risk_type|dash }}</td>
+      <td>{{ site.motif|dash }}</td>
+      <td>{{ site.position_start|dash }}</td>
+      <td>{{ site.position_end|dash }}</td>
+      <td>{{ site.local_sequence_window|dash }}</td>
+      <td>{{ site.risk_level|dash }}</td>
+      <td>{{ site.explanation|dash }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="10" class="empty">No liability sites detected by MVP rules.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Liability Region Map Table</h2>
+  {% if liability_region_total_count > liability_region_display_count %}
+  <p class="note">Showing the first {{ liability_region_display_count }} of {{ liability_region_total_count }} mapped liability sites. Please see the Excel workbook for complete results.</p>
+  {% endif %}
+  <table>
+    <tr>
+      <th>antibody_id</th><th>chain_id</th><th>sequence_scope</th><th>risk_type</th><th>motif</th>
+      <th>position_start</th><th>position_end</th><th>mapped_regions</th><th>cdr_or_fr</th><th>imgt_positions</th><th>risk_level</th>
+    </tr>
+    {% for site in liability_region_rows %}
+    <tr>
+      <td>{{ site.antibody_id|dash }}</td>
+      <td>{{ site.chain_id|dash }}</td>
+      <td>{{ site.sequence_scope|dash }}</td>
+      <td>{{ site.risk_type|dash }}</td>
+      <td>{{ site.motif|dash }}</td>
+      <td>{{ site.position_start|dash }}</td>
+      <td>{{ site.position_end|dash }}</td>
+      <td>{{ site.mapped_regions|dash }}</td>
+      <td>{{ site.cdr_or_fr|dash }}</td>
+      <td>{{ site.imgt_positions|dash }}</td>
+      <td>{{ site.risk_level|dash }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="11" class="empty">No liability-to-region mapping records were generated.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Humanness Results Table</h2>
+  <table>
+    <tr>
+      <th>antibody_id</th><th>chain_id</th><th>sequence_scope</th><th>humanness_tool</th>
+      <th>humanness_score</th><th>humanness_percentile</th><th>closest_human_germline</th>
+      <th>closest_species</th><th>framework_identity</th><th>humanness_risk_class</th><th>humanness_interpretation</th>
+    </tr>
+    {% for row in humanness_rows %}
+    {% set humanness_risk = row.humanness_risk_class|dash %}
+    <tr>
+      <td>{{ row.antibody_id|dash }}</td>
+      <td>{{ row.chain_id|dash }}</td>
+      <td>{{ row.sequence_scope|dash }}</td>
+      <td>{{ row.humanness_tool|dash }}</td>
+      <td>{{ row.humanness_score|dash }}</td>
+      <td>{{ row.humanness_percentile|dash }}</td>
+      <td>{{ row.closest_human_germline|dash }}</td>
+      <td>{{ row.closest_species|dash }}</td>
+      <td>{{ row.framework_identity|dash }}</td>
+      <td><span class="badge {{ humanness_risk|lower }}">{{ humanness_risk }}</span></td>
+      <td>{{ row.humanness_interpretation|dash }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="11" class="empty">No external humanness/germline assessment file was provided. Humanness analysis was not performed in this run.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Chain-Level Risk Table</h2>
+  <table>
+    <tr>
+      <th>antibody_id</th><th>chain_id</th><th>sequence_scope</th><th>risk_score</th><th>risk_class</th>
+      <th>cdr_adjusted_risk_score</th><th>cdr_adjusted_risk_class</th><th>cdr_liability_count</th><th>fr_liability_count</th>
+      <th>main_chain_liabilities</th><th>chain_recommendation</th>
+    </tr>
+    {% for chain in chain_score_rows %}
+    {% set chain_risk = chain.risk_class|dash %}
+    <tr>
+      <td>{{ chain.antibody_id|dash }}</td>
+      <td>{{ chain.chain_id|dash }}</td>
+      <td>{{ chain.sequence_scope|dash }}</td>
+      <td>{{ chain.risk_score|dash }}</td>
+      <td><span class="badge {{ chain_risk|lower }}">{{ chain_risk }}</span></td>
+      <td>{{ chain.cdr_adjusted_risk_score|dash }}</td>
+      <td>{{ chain.cdr_adjusted_risk_class|dash }}</td>
+      <td>{{ chain.cdr_liability_count|dash }}</td>
+      <td>{{ chain.fr_liability_count|dash }}</td>
+      <td>{{ chain.main_chain_liabilities|dash }}</td>
+      <td>{{ chain.chain_recommendation|dash }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="11" class="empty">No chain-level risk records were generated.</td></tr>
+    {% endfor %}
+  </table>
+
+  <h2>Method Summary</h2>
+  <ul>
+    <li>Input sequence cleaning</li>
+    <li>Basic sequence QC</li>
+    <li>Biopython-based physicochemical property calculation</li>
+    <li>Rule-based liability motif scanning</li>
+    <li>Optional AbNumber/ANARCI IMGT numbering for variable-region sequences</li>
+    <li>IMGT-based computational CDR/FR liability mapping</li>
+    <li>Optional imported humanness/germline result aggregation without automatic third-party upload</li>
+    <li>Rule-based sequence-level risk scoring</li>
+    <li>Antibody-level aggregation</li>
+  </ul>
+
+  <h2>Limitations and Disclaimer</h2>
+  <div class="notice">
+    <p>{{ numbering_notice }}</p>
+    <p>{{ full_length_notice }}</p>
+    <p>{{ hydrophobic_patch_notice }}</p>
+    <p>{{ bsab_notice }}</p>
+    <p>{{ full_length_limitation }}</p>
+    {% if has_bsab %}
+    <p><strong>BsAb note:</strong> {{ bsab_notice }}</p>
+    {% endif %}
+  </div>
+  <div class="disclaimer">{{ disclaimer }}</div>
+</main>
+</body>
+</html>
