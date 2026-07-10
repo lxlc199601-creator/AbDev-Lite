@@ -8,24 +8,21 @@ from pathlib import Path
 import pandas as pd
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+from .final_assessment import build_executive_decision_summary
 from .utils import ensure_output_dir
 
 
-REPORT_TITLE = "AbDev-Lite: Antibody Variable-Region Developability Screening Report"
-REPORT_VERSION = "MVP v0.9"
+REPORT_TITLE = "AbDev-Lite v1.0: Integrated Antibody Developability Screening Report"
+REPORT_VERSION = "v1.0 stable"
 ANALYSIS_SCOPE = (
-    "This MVP focuses on sequence-level developability screening of antibody variable regions including VH, VL, "
-    "VHH, and scFv-derived variable domains."
+    "Integrated rule-based and imported computational screening for antibody variable-region developability triage, "
+    "reporting, and planning support."
 )
 REPORT_DISCLAIMER = (
-    "This MVP performs sequence-level antibody variable-region developability screening with optional IMGT-based "
-    "computational numbering, CDR/FR region assignment, optional imported humanness/germline assessment, and "
-    "early-stage formulation recommendation integration, optional imported structural risk metrics, and "
-    "rule-based candidate prioritization for triage support. It does not perform 3D structure "
-    "prediction, humanization design, antigen-binding prediction, structural paratope prediction, docking, "
-    "molecular dynamics, or experimental "
-    "validation. Human-likeness assessment is not equivalent to clinical immunogenicity prediction. Results should "
-    "be interpreted as computational screening signals, not definitive developability conclusions."
+    "AbDev-Lite v1.0 provides rule-based and imported computational screening outputs for antibody variable-region "
+    "developability assessment. Results are intended for candidate triage, reporting, and planning support only. "
+    "They do not replace experimental binding, expression, stability, immunogenicity, structural, formulation, or "
+    "CMC studies."
 )
 STRUCTURAL_DISCLAIMER = (
     "Structural risk interpretation is based on imported computational structure prediction metrics or user-provided "
@@ -33,7 +30,7 @@ STRUCTURAL_DISCLAIMER = (
     "prediction, and does not replace experimental structural characterization."
 )
 EXTERNAL_TOOL_DISCLAIMER = (
-    "External tool integration in AbDev-Lite v0.9 is designed for traceable input export and result import. "
+    "External tool integration in AbDev-Lite v1.0 is designed for traceable input export and result import. "
     "Browser automation is disabled by default. Users are responsible for complying with third-party tool terms "
     "of use and for protecting confidential antibody sequences. Imported external results should be reviewed "
     "before decision-making."
@@ -83,6 +80,7 @@ SHEET_ORDER = [
     "Chain_Risk_Scores",
     "Humanness_Results",
     "Antibody_Summary",
+    "Final_Assessment",
     "Candidate_Ranking",
     "Formulation_Features",
     "Expreso_Predictions",
@@ -174,6 +172,25 @@ def _summary_with_formulation(summary_df: pd.DataFrame, formulation_recommendati
     return summary.merge(formulation[formulation_columns], on="antibody_id", how="left")
 
 
+def _summary_with_final_assessment(summary_df: pd.DataFrame, final_assessment_df: pd.DataFrame) -> pd.DataFrame:
+    summary = _df(summary_df).copy()
+    final_assessment = _df(final_assessment_df)
+    if summary.empty or final_assessment.empty or "antibody_id" not in summary.columns or "antibody_id" not in final_assessment.columns:
+        return summary
+    final_columns = [
+        "antibody_id",
+        "go_no_go_suggestion",
+        "confidence_level",
+        "recommended_next_action",
+        "major_review_flags",
+    ]
+    for column in final_columns:
+        if column not in final_assessment.columns:
+            final_assessment[column] = ""
+    summary = summary.drop(columns=[column for column in final_columns[1:] if column in summary.columns])
+    return summary.merge(final_assessment[final_columns], on="antibody_id", how="left")
+
+
 def _contains_bsab(*frames: pd.DataFrame) -> bool:
     for frame in frames:
         if not frame.empty and "molecule_format" in frame.columns:
@@ -203,6 +220,7 @@ def _build_results(
     external_tool_run_plan_df: pd.DataFrame | None = None,
     external_tool_results_df: pd.DataFrame | None = None,
     external_tool_summary_df: pd.DataFrame | None = None,
+    final_assessment_df: pd.DataFrame | None = None,
 ) -> dict[str, pd.DataFrame]:
     return {
         "Input_Cleaned": _df(input_cleaned_df),
@@ -215,6 +233,7 @@ def _build_results(
         "Chain_Risk_Scores": _df(chain_scores_df),
         "Humanness_Results": _df(humanness_df),
         "Antibody_Summary": _df(antibody_summary_df),
+        "Final_Assessment": _df(final_assessment_df),
         "Candidate_Ranking": _df(candidate_ranking_df),
         "Formulation_Features": _df(formulation_features_df),
         "Expreso_Predictions": _df(expreso_predictions_df),
@@ -250,6 +269,7 @@ def generate_excel_report(
     external_tool_run_plan_df: pd.DataFrame | None = None,
     external_tool_results_df: pd.DataFrame | None = None,
     external_tool_summary_df: pd.DataFrame | None = None,
+    final_assessment_df: pd.DataFrame | None = None,
 ) -> Path:
     """Write all result tables to a multi-sheet Excel workbook."""
     output_path = Path(output_path)
@@ -275,6 +295,7 @@ def generate_excel_report(
         external_tool_run_plan_df,
         external_tool_results_df,
         external_tool_summary_df,
+        final_assessment_df,
     )
     with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
         for sheet in SHEET_ORDER:
@@ -307,6 +328,7 @@ def write_excel(results: dict[str, pd.DataFrame], output_dir: str | Path = "outp
         external_tool_run_plan_df=results.get("External_Tool_Run_Plan"),
         external_tool_results_df=results.get("External_Tool_Results"),
         external_tool_summary_df=results.get("External_Tool_Summary"),
+        final_assessment_df=results.get("Final_Assessment"),
     )
 
 
@@ -335,6 +357,7 @@ def generate_html_report(
     external_tool_run_plan_df: pd.DataFrame | None = None,
     external_tool_results_df: pd.DataFrame | None = None,
     external_tool_summary_df: pd.DataFrame | None = None,
+    final_assessment_df: pd.DataFrame | None = None,
 ) -> Path:
     """Render the HTML report with Jinja2."""
     output_path = Path(output_path)
@@ -360,8 +383,11 @@ def generate_html_report(
     external_tool_run_plan_df = _df(external_tool_run_plan_df)
     external_tool_results_df = _df(external_tool_results_df)
     external_tool_summary_df = _df(external_tool_summary_df)
+    final_assessment_df = _df(final_assessment_df)
     summary_display_df = _summary_with_ranking(antibody_summary_df, candidate_ranking_df)
     summary_display_df = _summary_with_formulation(summary_display_df, formulation_recommendations_df)
+    summary_display_df = _summary_with_final_assessment(summary_display_df, final_assessment_df)
+    executive_decision_summary = build_executive_decision_summary(final_assessment_df)
 
     risk_counts = _series_value_counts(antibody_summary_df, "max_chain_risk_class", ["Low", "Medium", "High"])
     total_antibodies = (
@@ -489,6 +515,24 @@ def generate_html_report(
         if not humanness_matched.empty and "closest_human_germline" in humanness_matched.columns
         else "None available"
     )
+    go_no_go_counts = _series_value_counts(
+        final_assessment_df,
+        "go_no_go_suggestion",
+        ["Advance", "Advance with review", "Engineering review", "Deprioritize / redesign"],
+    )
+    confidence_counts = _series_value_counts(final_assessment_df, "confidence_level", ["High", "Medium", "Low"])
+    top_final_rows = (
+        final_assessment_df.sort_values("final_priority_score", ascending=False, kind="mergesort")
+        if not final_assessment_df.empty and "final_priority_score" in final_assessment_df.columns
+        else final_assessment_df
+    )
+    engineering_review_rows = (
+        final_assessment_df[
+            final_assessment_df["go_no_go_suggestion"].astype(str).isin(["Engineering review", "Deprioritize / redesign"])
+        ]
+        if not final_assessment_df.empty and "go_no_go_suggestion" in final_assessment_df.columns
+        else pd.DataFrame()
+    )
 
     context = {
         "title": REPORT_TITLE,
@@ -508,6 +552,50 @@ def generate_html_report(
             "total_liability_sites": int(len(liability_df)),
             "most_common_liability_types": common_liabilities,
         },
+        "executive_decision_summary": executive_decision_summary,
+        "go_no_go_counts": go_no_go_counts,
+        "confidence_counts": confidence_counts,
+        "final_assessment_rows": _safe_records(
+            final_assessment_df,
+            [
+                "antibody_id",
+                "molecule_format",
+                "final_priority_class",
+                "final_priority_score",
+                "go_no_go_suggestion",
+                "confidence_level",
+                "developability_risk_class",
+                "humanness_risk_class",
+                "structural_risk_class",
+                "formulation_risk_class",
+                "external_tool_risk_flag",
+                "major_review_flags",
+                "recommended_next_action",
+                "final_interpretation",
+            ],
+        ),
+        "top_final_assessment_rows": _safe_records(
+            top_final_rows,
+            [
+                "antibody_id",
+                "final_priority_class",
+                "final_priority_score",
+                "go_no_go_suggestion",
+                "confidence_level",
+                "recommended_next_action",
+            ],
+            5,
+        ),
+        "engineering_review_rows": _safe_records(
+            engineering_review_rows,
+            [
+                "antibody_id",
+                "final_priority_class",
+                "go_no_go_suggestion",
+                "major_review_flags",
+                "recommended_next_action",
+            ],
+        ),
         "risk_counts": risk_counts,
         "total_antibodies": max(total_antibodies, 1),
         "numbering_summary": {
@@ -788,6 +876,7 @@ def write_html_report(
         external_tool_run_plan_df=results.get("External_Tool_Run_Plan"),
         external_tool_results_df=results.get("External_Tool_Results"),
         external_tool_summary_df=results.get("External_Tool_Summary"),
+        final_assessment_df=results.get("Final_Assessment"),
     )
 
 

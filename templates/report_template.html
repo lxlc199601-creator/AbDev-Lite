@@ -69,6 +69,10 @@
     .badge.b { background: var(--blue); }
     .badge.c { background: var(--orange); }
     .badge.d { background: var(--red); }
+    .badge.advance { background: var(--green); }
+    .badge.advance-with-review { background: var(--blue); }
+    .badge.engineering-review { background: var(--orange); }
+    .badge.deprioritize-redesign { background: var(--red); }
     .bar-track { width: 100%; height: 10px; background: #edf1f5; border-radius: 999px; overflow: hidden; }
     .bar-fill { height: 10px; border-radius: 999px; }
     .bar-fill.low { background: var(--green); }
@@ -104,18 +108,136 @@
 
   <h2>Executive Summary</h2>
   <div class="metric-grid">
+    <div class="metric"><span class="label">Total candidates</span><strong>{{ executive_decision_summary.total_candidates }}</strong></div>
+    <div class="metric"><span class="label">Advance</span><strong>{{ executive_decision_summary.advance_count }}</strong></div>
+    <div class="metric"><span class="label">Advance with review</span><strong>{{ executive_decision_summary.advance_with_review_count }}</strong></div>
+    <div class="metric"><span class="label">Engineering review</span><strong>{{ executive_decision_summary.engineering_review_count }}</strong></div>
+    <div class="metric"><span class="label">Deprioritize / redesign</span><strong>{{ executive_decision_summary.deprioritize_count }}</strong></div>
+    <div class="metric"><span class="label">High-risk candidates</span><strong>{{ executive_decision_summary.high_risk_candidate_count }}</strong></div>
+    <div class="metric"><span class="label">High confidence</span><strong>{{ executive_decision_summary.candidates_with_high_confidence }}</strong></div>
+    <div class="metric"><span class="label">Top ranked candidate</span><strong>{{ executive_decision_summary.top_ranked_candidate|dash }}</strong></div>
+  </div>
+  <p><strong>Executive decision summary:</strong> {{ executive_decision_summary.overall_project_summary }}</p>
+  <p><strong>Most common liability types:</strong> {{ executive_summary.most_common_liability_types|dash }}</p>
+
+  <h2>Final Integrated Assessment</h2>
+  <div class="metric-grid">
+    <div class="metric"><span class="label">Advance</span><strong>{{ go_no_go_counts.get("Advance", 0) }}</strong></div>
+    <div class="metric"><span class="label">Advance with review</span><strong>{{ go_no_go_counts.get("Advance with review", 0) }}</strong></div>
+    <div class="metric"><span class="label">Engineering review</span><strong>{{ go_no_go_counts.get("Engineering review", 0) }}</strong></div>
+    <div class="metric"><span class="label">Deprioritize / redesign</span><strong>{{ go_no_go_counts.get("Deprioritize / redesign", 0) }}</strong></div>
+    <div class="metric"><span class="label">High completeness</span><strong>{{ confidence_counts.High }}</strong></div>
+    <div class="metric"><span class="label">Medium completeness</span><strong>{{ confidence_counts.Medium }}</strong></div>
+    <div class="metric"><span class="label">Low completeness</span><strong>{{ confidence_counts.Low }}</strong></div>
+  </div>
+  <table>
+    <tr>
+      <th>antibody_id</th><th>format</th><th>priority</th><th>score</th><th>go/no-go</th><th>confidence</th>
+      <th>developability</th><th>humanness</th><th>structure</th><th>formulation</th><th>external</th>
+      <th>major_review_flags</th><th>recommended_next_action</th>
+    </tr>
+    {% for row in final_assessment_rows %}
+    {% set priority_class = row.final_priority_class|dash %}
+    {% set go_label = row.go_no_go_suggestion|dash %}
+    <tr>
+      <td>{{ row.antibody_id|dash }}</td>
+      <td>{{ row.molecule_format|dash }}</td>
+      <td><span class="badge {{ priority_class|lower }}">{{ priority_class }}</span></td>
+      <td>{{ row.final_priority_score|dash }}</td>
+      <td><span class="badge {{ go_label|lower|replace(' / ', '-')|replace(' ', '-') }}">{{ go_label }}</span></td>
+      <td>{{ row.confidence_level|dash }}</td>
+      <td>{{ row.developability_risk_class|dash }}</td>
+      <td>{{ row.humanness_risk_class|dash }}</td>
+      <td>{{ row.structural_risk_class|dash }}</td>
+      <td>{{ row.formulation_risk_class|dash }}</td>
+      <td>{{ row.external_tool_risk_flag|dash }}</td>
+      <td>{{ row.major_review_flags|dash }}</td>
+      <td>{{ row.recommended_next_action|dash }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="13" class="empty">No final integrated assessment rows were generated.</td></tr>
+    {% endfor %}
+  </table>
+  <h3>Top Ranked Candidates</h3>
+  <table>
+    <tr><th>antibody_id</th><th>priority</th><th>score</th><th>go/no-go</th><th>confidence</th><th>next_action</th></tr>
+    {% for row in top_final_assessment_rows %}
+    <tr>
+      <td>{{ row.antibody_id|dash }}</td>
+      <td>{{ row.final_priority_class|dash }}</td>
+      <td>{{ row.final_priority_score|dash }}</td>
+      <td>{{ row.go_no_go_suggestion|dash }}</td>
+      <td>{{ row.confidence_level|dash }}</td>
+      <td>{{ row.recommended_next_action|dash }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6" class="empty">No top candidate rows were available.</td></tr>
+    {% endfor %}
+  </table>
+  <h3>Candidates Requiring Engineering Review</h3>
+  <table>
+    <tr><th>antibody_id</th><th>priority</th><th>go/no-go</th><th>major_review_flags</th><th>next_action</th></tr>
+    {% for row in engineering_review_rows %}
+    <tr>
+      <td>{{ row.antibody_id|dash }}</td>
+      <td>{{ row.final_priority_class|dash }}</td>
+      <td>{{ row.go_no_go_suggestion|dash }}</td>
+      <td>{{ row.major_review_flags|dash }}</td>
+      <td>{{ row.recommended_next_action|dash }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5" class="empty">No candidates require engineering review or redesign by integrated rules.</td></tr>
+    {% endfor %}
+  </table>
+  <p class="note">Confidence level is an evidence completeness level only; it is not an experimental confidence value or success probability.</p>
+
+  <h2>Candidate Prioritization</h2>
+  <div class="metric-grid">
+    <div class="metric"><span class="label">A candidates</span><strong>{{ priority_counts.get("A", 0) if priority_counts is defined else 0 }}</strong></div>
+    <div class="metric"><span class="label">B candidates</span><strong>{{ priority_counts.get("B", 0) if priority_counts is defined else 0 }}</strong></div>
+    <div class="metric"><span class="label">C candidates</span><strong>{{ priority_counts.get("C", 0) if priority_counts is defined else 0 }}</strong></div>
+    <div class="metric"><span class="label">D candidates</span><strong>{{ priority_counts.get("D", 0) if priority_counts is defined else 0 }}</strong></div>
+  </div>
+  <table>
+    <tr>
+      <th>antibody_id</th><th>molecule_format</th><th>final_priority_score</th><th>final_priority_class</th>
+      <th>external_high_risk_flags</th><th>external_medium_risk_flags</th><th>external_tool_results_available</th>
+      <th>structural_risk_class</th><th>decision_label</th><th>review_reason</th><th>next_step_recommendation</th>
+    </tr>
+    {% for row in candidate_ranking_rows %}
+    {% set priority_class = row.final_priority_class|dash %}
+    <tr>
+      <td>{{ row.antibody_id|dash }}</td>
+      <td>{{ row.molecule_format|dash }}</td>
+      <td>{{ row.final_priority_score|dash }}</td>
+      <td><span class="badge {{ priority_class|lower }}">{{ priority_class }}</span></td>
+      <td>{{ row.external_high_risk_flags|dash }}</td>
+      <td>{{ row.external_medium_risk_flags|dash }}</td>
+      <td>{{ row.external_tool_results_available|dash }}</td>
+      <td>{{ row.structural_risk_class|dash }}</td>
+      <td>{{ row.decision_label|dash }}</td>
+      <td>{{ row.review_reason|dash }}</td>
+      <td>{{ row.next_step_recommendation|dash }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="11" class="empty">No candidate ranking results were generated in this run.</td></tr>
+    {% endfor %}
+  </table>
+  <p class="disclaimer">{{ prioritization_disclaimer }}</p>
+
+  <h2>Key Risk Overview</h2>
+  <div class="metric-grid">
     <div class="metric"><span class="label">Total antibodies</span><strong>{{ executive_summary.total_antibodies }}</strong></div>
     <div class="metric"><span class="label">Total chains</span><strong>{{ executive_summary.total_chains }}</strong></div>
     <div class="metric"><span class="label">Variable-region chains</span><strong>{{ executive_summary.variable_region_chain_count }}</strong></div>
-    <div class="metric"><span class="label">Full-length chains</span><strong>{{ executive_summary.full_length_chain_count }}</strong></div>
+    <div class="metric"><span class="label">Liability sites</span><strong>{{ executive_summary.total_liability_sites }}</strong></div>
     <div class="metric"><span class="label">Low-risk antibodies</span><strong>{{ executive_summary.low_risk_antibody_count }}</strong></div>
     <div class="metric"><span class="label">Medium-risk antibodies</span><strong>{{ executive_summary.medium_risk_antibody_count }}</strong></div>
     <div class="metric"><span class="label">High-risk antibodies</span><strong>{{ executive_summary.high_risk_antibody_count }}</strong></div>
-    <div class="metric"><span class="label">Liability sites</span><strong>{{ executive_summary.total_liability_sites }}</strong></div>
+    <div class="metric"><span class="label">Full-length chains</span><strong>{{ executive_summary.full_length_chain_count }}</strong></div>
   </div>
-  <p><strong>Most common liability types:</strong> {{ executive_summary.most_common_liability_types|dash }}</p>
 
-  <h2>Numbering Summary</h2>
+  <h2>Sequence Developability</h2>
   <div class="metric-grid">
     <div class="metric"><span class="label">Numbered chains</span><strong>{{ numbering_summary.total_numbered_chains }}</strong></div>
     <div class="metric"><span class="label">Numbering success</span><strong>{{ numbering_summary.numbering_success_count }}</strong></div>
@@ -124,7 +246,7 @@
   </div>
   <p><strong>Numbering scheme:</strong> {{ numbering_summary.numbering_scheme|dash }}</p>
 
-  <h2>Region-Level Liability Summary</h2>
+  <h2>CDR/FR Liability Mapping</h2>
   <div class="metric-grid">
     <div class="metric"><span class="label">CDR liabilities</span><strong>{{ region_liability_summary.total_cdr_liabilities }}</strong></div>
     <div class="metric"><span class="label">FR liabilities</span><strong>{{ region_liability_summary.total_fr_liabilities }}</strong></div>
@@ -133,7 +255,7 @@
   <p><strong>Most common CDR liability types:</strong> {{ region_liability_summary.most_common_cdr_liability_types|dash }}</p>
   <p><strong>Most common FR liability types:</strong> {{ region_liability_summary.most_common_fr_liability_types|dash }}</p>
 
-  <h2>Humanness Summary</h2>
+  <h2>Humanness / Germline Assessment</h2>
   {% if humanness_summary.humanness_available %}
   <div class="metric-grid">
     <div class="metric"><span class="label">Humanness available</span><strong>{{ humanness_summary.humanness_available }}</strong></div>
@@ -305,7 +427,7 @@
   </table>
   <p class="disclaimer">{{ external_tool_disclaimer }}</p>
 
-  <h2>Risk Distribution</h2>
+  <h2>Developability Risk Distribution</h2>
   <table>
     <tr><th>Risk class</th><th>Antibody count</th><th>Distribution</th></tr>
     <tr>
@@ -324,41 +446,6 @@
       <td><div class="bar-track"><div class="bar-fill high" style="width: {{ (risk_counts.High / total_antibodies * 100)|round(1) }}%;"></div></div></td>
     </tr>
   </table>
-
-  <h2>Candidate Prioritization</h2>
-  <div class="metric-grid">
-    <div class="metric"><span class="label">A candidates</span><strong>{{ priority_counts.get("A", 0) if priority_counts is defined else 0 }}</strong></div>
-    <div class="metric"><span class="label">B candidates</span><strong>{{ priority_counts.get("B", 0) if priority_counts is defined else 0 }}</strong></div>
-    <div class="metric"><span class="label">C candidates</span><strong>{{ priority_counts.get("C", 0) if priority_counts is defined else 0 }}</strong></div>
-    <div class="metric"><span class="label">D candidates</span><strong>{{ priority_counts.get("D", 0) if priority_counts is defined else 0 }}</strong></div>
-  </div>
-  <table>
-    <tr>
-      <th>antibody_id</th><th>molecule_format</th><th>final_priority_score</th><th>final_priority_class</th>
-      <th>external_high_risk_flags</th><th>external_medium_risk_flags</th><th>external_tool_results_available</th>
-      <th>structural_risk_class</th><th>decision_label</th><th>review_reason</th><th>next_step_recommendation</th>
-    </tr>
-    {% for row in candidate_ranking_rows %}
-    {% set priority_class = row.final_priority_class|dash %}
-    <tr>
-      <td>{{ row.antibody_id|dash }}</td>
-      <td>{{ row.molecule_format|dash }}</td>
-      <td>{{ row.final_priority_score|dash }}</td>
-      <td><span class="badge {{ priority_class|lower }}">{{ priority_class }}</span></td>
-      <td>{{ row.external_high_risk_flags|dash }}</td>
-      <td>{{ row.external_medium_risk_flags|dash }}</td>
-      <td>{{ row.external_tool_results_available|dash }}</td>
-      <td>{{ row.structural_risk_class|dash }}</td>
-      <td>{{ row.decision_label|dash }}</td>
-      <td>{{ row.review_reason|dash }}</td>
-      <td>{{ row.next_step_recommendation|dash }}</td>
-    </tr>
-    {% else %}
-    <tr><td colspan="11" class="empty">No candidate ranking results were generated in this run.</td></tr>
-    {% endfor %}
-  </table>
-  <p class="disclaimer">{{ prioritization_disclaimer }}</p>
-
   <h2>Formulation Recommendation</h2>
   <div class="metric-grid">
     <div class="metric"><span class="label">Recommendations</span><strong>{{ formulation_summary.total_antibodies_with_formulation_recommendation }}</strong></div>
@@ -429,7 +516,11 @@
       <div><span class="label">External high flags</span><span class="value">{{ row.external_high_risk_flags|dash }}</span></div>
       <div><span class="label">External medium flags</span><span class="value">{{ row.external_medium_risk_flags|dash }}</span></div>
       <div><span class="label">External review recommendation</span><span class="value">{{ row.external_tool_review_recommendation|dash }}</span></div>
+      <div><span class="label">Go/no-go suggestion</span><span class="value">{{ row.go_no_go_suggestion|dash }}</span></div>
+      <div><span class="label">Confidence level</span><span class="value">{{ row.confidence_level|dash }}</span></div>
+      <div><span class="label">Recommended next action</span><span class="value">{{ row.recommended_next_action|dash }}</span></div>
     </div>
+    <p class="field"><strong>Major review flags:</strong> {{ row.major_review_flags|dash }}</p>
     <p class="field"><strong>Major liabilities:</strong> {{ row.major_liabilities|dash }}</p>
     <p><strong>Major CDR liabilities:</strong> {{ row.major_cdr_liabilities|dash }}</p>
     <p><strong>Major FR liabilities:</strong> {{ row.major_fr_liabilities|dash }}</p>

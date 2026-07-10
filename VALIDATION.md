@@ -1,4 +1,4 @@
-# AbDev-Lite MVP v0.9 Validation
+# AbDev-Lite v1.0 Validation
 
 ## Validation Date
 
@@ -7,11 +7,11 @@
 ## Environment
 
 - Local Windows workspace
-- Streamlit app entry point: `app.py`
+- Streamlit entry point: `app.py`
 - Dependencies from `requirements.txt`
-- AbNumber/ANARCI is recommended for IMGT numbering but optional
-- Browser automation is disabled by default
-- No external webpage call, automatic sequence upload, CAPTCHA bypass, login bypass, credential storage, docking, molecular dynamics, or automatic structure model generation is required
+- AbNumber/ANARCI is optional for IMGT numbering
+- Browser automation remains disabled
+- No external webpage call or automatic sequence upload is required
 
 ## Run Command
 
@@ -19,7 +19,7 @@
 streamlit run app.py
 ```
 
-## Test Input Files
+## Example Inputs
 
 ```text
 data/example_input.xlsx
@@ -33,10 +33,9 @@ data/example_external_tool_results.xlsx
 ```text
 outputs/abdev_lite_results.xlsx
 outputs/abdev_lite_report.html
-external_inputs/
 ```
 
-Expected v0.9 Excel sheets:
+Expected Excel sheets:
 
 - `Input_Cleaned`
 - `Sequence_QC`
@@ -48,6 +47,7 @@ Expected v0.9 Excel sheets:
 - `Chain_Risk_Scores`
 - `Humanness_Results`
 - `Antibody_Summary`
+- `Final_Assessment`
 - `Candidate_Ranking`
 - `Formulation_Features`
 - `Expreso_Predictions`
@@ -59,22 +59,23 @@ Expected v0.9 Excel sheets:
 - `External_Tool_Results`
 - `External_Tool_Summary`
 
-Expected HTML sections include `External Tool Integration`.
+## v1.0 Validation Checklist
 
-## v0.9 Validation Checklist
-
-- [ ] App runs without external tool selection
-- [ ] Tool_Registry sheet is generated
-- [ ] External_Tool_Run_Plan sheet is generated
-- [ ] External input package can be generated
-- [ ] External_Tool_Results sheet is generated
-- [ ] External_Tool_Summary sheet is generated
-- [ ] Example external tool result file can be imported
-- [ ] Antibody_Summary includes external tool fields
-- [ ] Candidate_Ranking includes external tool fields
-- [ ] HTML report shows External Tool Integration section
-- [ ] Streamlit shows Tool Registry and Run Plan
-- [ ] Browser automation remains disabled by default
+- [ ] App starts successfully
+- [ ] App runs with only `example_input.xlsx`
+- [ ] App runs with humanness file
+- [ ] App runs with structure file
+- [ ] App runs with external tool result file
+- [ ] App runs with all optional files
+- [ ] Excel report is generated
+- [ ] HTML report is generated
+- [ ] Final_Assessment sheet is generated
+- [ ] Final Integrated Assessment section appears in HTML
+- [ ] Streamlit dashboard displays final metrics
+- [ ] Optional modules can be skipped safely
+- [ ] Browser automation remains disabled
+- [ ] No external upload occurs
+- [ ] v0.9 external tool adapter still works
 - [ ] v0.8 structure import still works
 - [ ] v0.7 formulation module still works
 - [ ] v0.6 candidate ranking still works
@@ -92,7 +93,7 @@ Expected HTML sections include `External Tool Integration`.
 
 ## Known Limitations
 
-- v0.9 creates traceable input packages and imports user-provided results; it does not run most external tools directly.
-- Browser automation is a reserved interface only and remains disabled by default.
-- Imported external results are computational evidence and require human review before decision-making.
-- BsAb analysis remains chain-level and does not evaluate full molecular architecture.
+- v1.0 is an integrated computational screening and reporting release, not an experimental decision engine.
+- `confidence_level` is evidence completeness only.
+- Imported optional results are user-provided evidence and require review.
+- Browser automation is a reserved interface only and remains disabled.

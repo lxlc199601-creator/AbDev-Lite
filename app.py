@@ -18,6 +18,7 @@ from src.external_result_importer import (
 )
 from src.external_tool_registry import get_available_tools
 from src.external_tool_summary import build_external_tool_summary, empty_external_tool_summary
+from src.final_assessment import build_executive_decision_summary, build_final_assessment
 from src.formulation_features import build_formulation_features
 from src.formulation_recommendation import build_formulation_recommendations
 from src.humanness import load_humanness_file, merge_humanness_results
@@ -160,6 +161,13 @@ def run_pipeline(
         formulation_features_df,
         expreso_predictions_df,
     )
+    final_assessment_df = build_final_assessment(
+        summary_df,
+        candidate_ranking_df,
+        formulation_recommendations_df,
+        structural_risk_summary_df,
+        external_summary_df,
+    )
 
     results = {
         "Input_Cleaned": classified_df,
@@ -172,6 +180,7 @@ def run_pipeline(
         "Chain_Risk_Scores": scores_df,
         "Humanness_Results": humanness_results_df,
         "Antibody_Summary": summary_df,
+        "Final_Assessment": final_assessment_df,
         "Candidate_Ranking": candidate_ranking_df,
         "Formulation_Features": formulation_features_df,
         "Expreso_Predictions": expreso_predictions_df,
@@ -194,12 +203,12 @@ def _download_file(path: Path) -> bytes:
 def main() -> None:
     """Render the Streamlit UI."""
     st.set_page_config(page_title="AbDev-Lite", layout="wide")
-    st.title("AbDev-Lite: Antibody Variable-Region Developability Screening")
+    st.title("AbDev-Lite v1.0: Integrated Antibody Developability Screening Platform")
     st.write(
-        "A local lightweight MVP for early antibody VH/VL/VHH/scFv variable-region sequence screening. "
-        "It performs input checks, basic sequence QC, physicochemical calculations, sequence-level liability "
-        "scanning, chain scoring, antibody-level summaries, and report export."
+        "A local, lightweight platform for end-to-end antibody variable-region developability triage, "
+        "candidate prioritization, final integrated assessment, and Excel/HTML report export."
     )
+    st.caption(REPORT_DISCLAIMER)
 
     with st.expander("Input format", expanded=True):
         st.write("Upload a CSV or XLSX file with these required columns:")
@@ -229,7 +238,7 @@ def main() -> None:
     tool_registry = get_available_tools()
     st.subheader("External Tool Adapter")
     st.info(
-        "Browser automation is disabled by default. AbDev-Lite v0.9 prepares input files and imports external results, "
+        "Browser automation is disabled by default. AbDev-Lite v1.0 prepares input files and imports external results, "
         "but does not automatically submit confidential sequences to third-party websites."
     )
     st.write("Tool Registry")
@@ -263,6 +272,17 @@ def main() -> None:
         help="Upload a user-generated external tool result file for import and evidence integration.",
     )
 
+    st.subheader("Module Status")
+    module_status_rows = [
+        {"Module": "Numbering module status", "Status": "Available when AbNumber/ANARCI is installed; otherwise optional module skipped during run"},
+        {"Module": "Humanness file status", "Status": "Provided" if humanness_file is not None else "Not provided / optional module skipped"},
+        {"Module": "Structure file status", "Status": "Provided" if structure_file is not None else "Not provided / optional module skipped"},
+        {"Module": "Expreso-lite model status", "Status": "Local model used if present; rule-based fallback if not provided"},
+        {"Module": "External tool result status", "Status": "Provided" if external_result_file is not None else "Not provided / optional module skipped"},
+        {"Module": "Browser automation status", "Status": "Disabled"},
+    ]
+    st.dataframe(pd.DataFrame(module_status_rows), use_container_width=True, hide_index=True)
+
     if st.button("Run Analysis", type="primary", disabled=uploaded_file is None):
         if uploaded_file is None:
             st.warning("Please upload a CSV or XLSX file first.")
@@ -286,6 +306,8 @@ def main() -> None:
             liability_region_map = results["Liability_Region_Map"]
             humanness_results = results["Humanness_Results"]
             candidate_ranking = results.get("Candidate_Ranking", pd.DataFrame())
+            final_assessment = results.get("Final_Assessment", pd.DataFrame())
+            executive_decision_summary = build_executive_decision_summary(final_assessment)
             formulation_features = results.get("Formulation_Features", pd.DataFrame())
             expreso_predictions = results.get("Expreso_Predictions", pd.DataFrame())
             formulation_recommendations = results.get("Formulation_Recommendations", pd.DataFrame())
@@ -299,6 +321,37 @@ def main() -> None:
                 risk_counts = pd.Series({"Low": 0, "Medium": 0, "High": 0})
             else:
                 risk_counts = summary["max_chain_risk_class"].value_counts().reindex(["Low", "Medium", "High"], fill_value=0)
+
+            st.subheader("Dashboard")
+            dashboard_cols = st.columns(7)
+            dashboard_cols[0].metric("Total candidates", executive_decision_summary["total_candidates"])
+            dashboard_cols[1].metric("Advance", executive_decision_summary["advance_count"])
+            dashboard_cols[2].metric("Advance with review", executive_decision_summary["advance_with_review_count"])
+            dashboard_cols[3].metric("Engineering review", executive_decision_summary["engineering_review_count"])
+            dashboard_cols[4].metric("Deprioritize / redesign", executive_decision_summary["deprioritize_count"])
+            dashboard_cols[5].metric("High-risk candidates", executive_decision_summary["high_risk_candidate_count"])
+            dashboard_cols[6].metric("Top ranked candidate", executive_decision_summary["top_ranked_candidate"] or "-")
+            st.write(executive_decision_summary["overall_project_summary"])
+            st.caption("Confidence level means evidence completeness level only; it is not experimental confidence or success probability.")
+
+            st.subheader("Final_Assessment")
+            final_preview_columns = [
+                "antibody_id",
+                "molecule_format",
+                "final_priority_class",
+                "final_priority_score",
+                "go_no_go_suggestion",
+                "confidence_level",
+                "major_review_flags",
+                "recommended_next_action",
+            ]
+            final_preview = final_assessment.copy()
+            for column in final_preview_columns:
+                if column not in final_preview.columns:
+                    final_preview[column] = ""
+            st.dataframe(final_preview[final_preview_columns].head(200), use_container_width=True)
+            if len(final_assessment) > 200:
+                st.caption("Showing the first 200 final assessment rows in the app preview. The Excel workbook contains all rows.")
 
             metric_cols = st.columns(6)
             metric_cols[0].metric("Total antibodies", summary["antibody_id"].nunique() if "antibody_id" in summary.columns else 0)
@@ -538,7 +591,7 @@ def main() -> None:
             st.error(f"Analysis failed: {exc}")
 
     st.divider()
-    st.subheader("MVP Scope")
+    st.subheader("v1.0 Scope")
     st.write(NUMBERING_NOTICE)
     st.write(FULL_LENGTH_NOTICE)
     st.write(HYDROPHOBIC_PATCH_NOTICE)
