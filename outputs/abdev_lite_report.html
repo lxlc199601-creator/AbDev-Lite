@@ -96,9 +96,9 @@
     <p class="subtitle">This MVP focuses on sequence-level developability screening of antibody variable regions including VH, VL, VHH, and scFv-derived variable domains.</p>
     <div class="meta-grid">
       <div class="meta-item"><span class="label">Project</span><span class="value">AbDev-Lite</span></div>
-      <div class="meta-item"><span class="label">Uploaded file</span><span class="value">example_input.xlsx</span></div>
-      <div class="meta-item"><span class="label">Analysis time</span><span class="value">2026-07-10 09:22:18</span></div>
-      <div class="meta-item"><span class="label">Report version</span><span class="value">MVP v0.7</span></div>
+      <div class="meta-item"><span class="label">Uploaded file</span><span class="value">data/example_input.xlsx</span></div>
+      <div class="meta-item"><span class="label">Analysis time</span><span class="value">2026-07-10 09:48:55</span></div>
+      <div class="meta-item"><span class="label">Report version</span><span class="value">MVP v0.8</span></div>
     </div>
   </section>
 
@@ -147,6 +147,122 @@
   <p class="note">Human-likeness is not equivalent to clinical immunogenicity prediction. Imported humanness metrics are screening signals only.</p>
   
 
+  <h2>Structural Risk Summary</h2>
+  <div class="metric-grid">
+    <div class="metric"><span class="label">Structure available</span><strong>2</strong></div>
+    <div class="metric"><span class="label">Structure not available</span><strong>3</strong></div>
+    <div class="metric"><span class="label">Low structural risk</span><strong>1</strong></div>
+    <div class="metric"><span class="label">Medium structural risk</span><strong>1</strong></div>
+    <div class="metric"><span class="label">High structural risk</span><strong>0</strong></div>
+    <div class="metric"><span class="label">Not available</span><strong>3</strong></div>
+  </div>
+  <table>
+    <tr>
+      <th>antibody_id</th><th>structure_available</th><th>structure_tools</th><th>structure_model_files</th>
+      <th>structure_status_summary</th><th>mean_plddt_min</th><th>mean_plddt_mean</th>
+      <th>cdr1_plddt_min</th><th>cdr2_plddt_min</th><th>cdr3_plddt_min</th>
+      <th>low_confidence_cdr_count</th><th>structural_risk_score</th><th>structural_risk_class</th>
+      <th>structural_review_reason</th><th>structural_next_step_recommendation</th>
+    </tr>
+    
+    
+    <tr>
+      <td>Ab001</td>
+      <td>True</td>
+      <td>IgFold</td>
+      <td>Ab001_VHVL.pdb</td>
+      <td>PASS (1)</td>
+      <td>88.5</td>
+      <td>88.5</td>
+      <td>86.0</td>
+      <td>84.5</td>
+      <td>82.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td><span class="badge low">Low</span></td>
+      <td>No major structural risk flag detected from imported metrics</td>
+      <td>Imported structure metrics do not indicate a major structural review flag in this MVP assessment</td>
+    </tr>
+    
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>True</td>
+      <td>Manual</td>
+      <td>BsAb001_ArmA_model.pdb</td>
+      <td>WARNING (1)</td>
+      <td>76.0</td>
+      <td>76.0</td>
+      <td>74.0</td>
+      <td>72.0</td>
+      <td>71.0</td>
+      <td>0</td>
+      <td>3</td>
+      <td><span class="badge medium">Medium</span></td>
+      <td>No major structural risk flag detected from imported metrics</td>
+      <td>Review imported structure confidence and patch annotations before progression</td>
+    </tr>
+    
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>False</td>
+      <td>-</td>
+      <td>-</td>
+      <td>Not Available</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>0</td>
+      <td>0</td>
+      <td><span class="badge not-available">Not Available</span></td>
+      <td>No external structure prediction result was provided</td>
+      <td>Import external structure prediction summary metrics if structural triage is needed</td>
+    </tr>
+    
+    
+    <tr>
+      <td>Full001</td>
+      <td>False</td>
+      <td>-</td>
+      <td>-</td>
+      <td>Not Available</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>0</td>
+      <td>0</td>
+      <td><span class="badge not-available">Not Available</span></td>
+      <td>No external structure prediction result was provided</td>
+      <td>Import external structure prediction summary metrics if structural triage is needed</td>
+    </tr>
+    
+    
+    <tr>
+      <td>VHH001</td>
+      <td>False</td>
+      <td>-</td>
+      <td>-</td>
+      <td>Not Available</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>0</td>
+      <td>0</td>
+      <td><span class="badge not-available">Not Available</span></td>
+      <td>No external structure prediction result was provided</td>
+      <td>Import external structure prediction summary metrics if structural triage is needed</td>
+    </tr>
+    
+  </table>
+  <p class="disclaimer">Structural risk interpretation is based on imported computational structure prediction metrics or user-provided annotations. AbDev-Lite v0.8 does not generate or validate 3D structures, does not perform antigen-binding prediction, and does not replace experimental structural characterization.</p>
+
   <h2>Risk Distribution</h2>
   <table>
     <tr><th>Risk class</th><th>Antibody count</th><th>Distribution</th></tr>
@@ -177,7 +293,7 @@
   <table>
     <tr>
       <th>antibody_id</th><th>molecule_format</th><th>final_priority_score</th><th>final_priority_class</th>
-      <th>decision_label</th><th>review_reason</th><th>next_step_recommendation</th>
+      <th>structural_risk_class</th><th>decision_label</th><th>review_reason</th><th>next_step_recommendation</th>
     </tr>
     
     
@@ -186,6 +302,7 @@
       <td>mAb</td>
       <td>0.0</td>
       <td><span class="badge d">D</span></td>
+      <td>Low</td>
       <td>Deprioritize or redesign before progression</td>
       <td>High CDR-adjusted developability burden; Sequence-level hydrophobic patch proxy detected</td>
       <td>Consider redesign, deprioritization, or additional humanization/developability review</td>
@@ -197,8 +314,9 @@
       <td>mAb</td>
       <td>0.0</td>
       <td><span class="badge d">D</span></td>
+      <td>Not Available</td>
       <td>Deprioritize or redesign before progression</td>
-      <td>High CDR-adjusted developability burden; Sequence-level hydrophobic patch proxy detected</td>
+      <td>High CDR-adjusted developability burden; No structure result imported; Sequence-level hydrophobic patch proxy detected</td>
       <td>Consider redesign, deprioritization, or additional humanization/developability review</td>
     </tr>
     
@@ -208,6 +326,7 @@
       <td>BsAb</td>
       <td>0.0</td>
       <td><span class="badge d">D</span></td>
+      <td>Medium</td>
       <td>Deprioritize or redesign before progression</td>
       <td>High humanness risk based on imported assessment; High CDR-adjusted developability burden; Sequence-level hydrophobic patch proxy detected</td>
       <td>Consider redesign, deprioritization, or additional humanization/developability review</td>
@@ -219,8 +338,9 @@
       <td>mAb</td>
       <td>0.0</td>
       <td><span class="badge d">D</span></td>
+      <td>Not Available</td>
       <td>Deprioritize or redesign before progression</td>
-      <td>High CDR-adjusted developability burden</td>
+      <td>High CDR-adjusted developability burden; No structure result imported</td>
       <td>Consider redesign, deprioritization, or additional humanization/developability review</td>
     </tr>
     
@@ -230,8 +350,9 @@
       <td>VHH</td>
       <td>0.0</td>
       <td><span class="badge d">D</span></td>
+      <td>Not Available</td>
       <td>Deprioritize or redesign before progression</td>
-      <td>High humanness risk based on imported assessment; High CDR-adjusted developability burden; Sequence-level hydrophobic patch proxy detected</td>
+      <td>High humanness risk based on imported assessment; High CDR-adjusted developability burden; No structure result imported; Sequence-level hydrophobic patch proxy detected</td>
       <td>Consider redesign, deprioritization, or additional humanization/developability review</td>
     </tr>
     
@@ -350,11 +471,14 @@
       <div><span class="label">Formulation risk class</span><span class="value">High</span></div>
       <div><span class="label">Recommended excipient classes</span><span class="value">sugar stabilizer; antioxidant; surfactant</span></div>
       <div><span class="label">Formulation next step</span><span class="value">Prioritize preformulation risk review before scale-up or advanced developability studies</span></div>
+      <div><span class="label">Structure available</span><span class="value">True</span></div>
+      <div><span class="label">Structural risk class</span><span class="value">Low</span></div>
+      <div><span class="label">Structural review reason</span><span class="value">No major structural risk flag detected from imported metrics</span></div>
     </div>
     <p class="field"><strong>Major liabilities:</strong> oxidation (9); deamidation (4); hydrophobic_patch_proxy (3); isomerization (2)</p>
     <p><strong>Major CDR liabilities:</strong> None detected</p>
     <p><strong>Major FR liabilities:</strong> None detected</p>
-    <p><strong>Strengths:</strong> Input sequences passed basic QC; No obvious N-glycosylation motif detected in variable region; No obvious unpaired cysteine proxy detected; No obvious liability motif mapped to CDR regions by IMGT-based computational assignment; Human-likeness metrics suggest low humanness risk based on imported assessment</p>
+    <p><strong>Strengths:</strong> Input sequences passed basic QC; No obvious N-glycosylation motif detected in variable region; No obvious unpaired cysteine proxy detected; No obvious liability motif mapped to CDR regions by IMGT-based computational assignment; Human-likeness metrics suggest low humanness risk based on imported assessment; Imported structure metrics suggest low structural risk in this MVP assessment</p>
     <p><strong>Weaknesses:</strong> Deamidation motif detected; Isomerization motif detected; Oxidation-prone residue detected; Long hydrophobic segment detected by sequence-level proxy</p>
     <p><strong>Recommendation:</strong> High sequence-level developability risk; recommend engineering review before progression</p>
   </div>
@@ -385,6 +509,9 @@
       <div><span class="label">Formulation risk class</span><span class="value">High</span></div>
       <div><span class="label">Recommended excipient classes</span><span class="value">surfactant; buffer / pH modifier; antioxidant</span></div>
       <div><span class="label">Formulation next step</span><span class="value">Prioritize preformulation risk review before scale-up or advanced developability studies</span></div>
+      <div><span class="label">Structure available</span><span class="value">False</span></div>
+      <div><span class="label">Structural risk class</span><span class="value">Not Available</span></div>
+      <div><span class="label">Structural review reason</span><span class="value">No external structure prediction result was provided</span></div>
     </div>
     <p class="field"><strong>Major liabilities:</strong> oxidation (10); low_complexity (3); hydrophobic_patch_proxy (2); deamidation (1); isomerization (1)</p>
     <p><strong>Major CDR liabilities:</strong> None detected</p>
@@ -420,6 +547,9 @@
       <div><span class="label">Formulation risk class</span><span class="value">High</span></div>
       <div><span class="label">Recommended excipient classes</span><span class="value">antioxidant; surfactant; buffer / pH modifier</span></div>
       <div><span class="label">Formulation next step</span><span class="value">Prioritize preformulation risk review before scale-up or advanced developability studies</span></div>
+      <div><span class="label">Structure available</span><span class="value">True</span></div>
+      <div><span class="label">Structural risk class</span><span class="value">Medium</span></div>
+      <div><span class="label">Structural review reason</span><span class="value">No major structural risk flag detected from imported metrics</span></div>
     </div>
     <p class="field"><strong>Major liabilities:</strong> oxidation (19); hydrophobic_patch_proxy (8); deamidation (7); isomerization (6); N_glycosylation (1)</p>
     <p><strong>Major CDR liabilities:</strong> None detected</p>
@@ -455,6 +585,9 @@
       <div><span class="label">Formulation risk class</span><span class="value">High</span></div>
       <div><span class="label">Recommended excipient classes</span><span class="value">sugar stabilizer; antioxidant; surfactant</span></div>
       <div><span class="label">Formulation next step</span><span class="value">Prioritize preformulation risk review before scale-up or advanced developability studies</span></div>
+      <div><span class="label">Structure available</span><span class="value">False</span></div>
+      <div><span class="label">Structural risk class</span><span class="value">Not Available</span></div>
+      <div><span class="label">Structural review reason</span><span class="value">No external structure prediction result was provided</span></div>
     </div>
     <p class="field"><strong>Major liabilities:</strong> deamidation (7); oxidation (7); isomerization (2); clipping_risk (1); hydrophobic_patch_proxy (1)</p>
     <p><strong>Major CDR liabilities:</strong> None detected</p>
@@ -490,6 +623,9 @@
       <div><span class="label">Formulation risk class</span><span class="value">High</span></div>
       <div><span class="label">Recommended excipient classes</span><span class="value">antioxidant; surfactant; buffer / pH modifier</span></div>
       <div><span class="label">Formulation next step</span><span class="value">Prioritize preformulation risk review before scale-up or advanced developability studies</span></div>
+      <div><span class="label">Structure available</span><span class="value">False</span></div>
+      <div><span class="label">Structural risk class</span><span class="value">Not Available</span></div>
+      <div><span class="label">Structural review reason</span><span class="value">No external structure prediction result was provided</span></div>
     </div>
     <p class="field"><strong>Major liabilities:</strong> oxidation (6); deamidation (2); isomerization (2); hydrophobic_patch_proxy (2); N_glycosylation (1)</p>
     <p><strong>Major CDR liabilities:</strong> None detected</p>
@@ -3707,6 +3843,7 @@
     <li>Formulation-related feature extraction</li>
     <li>Optional local Expreso-lite model adapter with rule-based fallback</li>
     <li>Excipient class recommendation and formulation risk triage</li>
+    <li>Optional external structure prediction summary import and structural risk aggregation</li>
     <li>Antibody-level aggregation</li>
   </ul>
 
@@ -3723,7 +3860,8 @@
   </div>
   <div class="disclaimer">Candidate prioritization is based on rule-based computational scoring from sequence-level developability, CDR/FR mapping, and optional imported humanness metrics. It should be used for triage and reporting support only, not as a definitive experimental or clinical developability conclusion.</div>
   <div class="disclaimer">Formulation recommendations are computational triage outputs based on sequence-level features and optional Expreso-lite model predictions. They are intended to support early preformulation planning only and do not replace experimental formulation screening, stability studies, or CMC evaluation.</div>
-  <div class="disclaimer">This MVP performs sequence-level antibody variable-region developability screening with optional IMGT-based computational numbering, CDR/FR region assignment, optional imported humanness/germline assessment, and early-stage formulation recommendation integration. It also provides rule-based candidate prioritization for triage support. It does not perform 3D structure prediction, humanization design, antigen-binding prediction, structural paratope prediction, or experimental validation. Human-likeness assessment is not equivalent to clinical immunogenicity prediction. Results should be interpreted as computational screening signals, not definitive developability conclusions.</div>
+  <div class="disclaimer">Structural risk interpretation is based on imported computational structure prediction metrics or user-provided annotations. AbDev-Lite v0.8 does not generate or validate 3D structures, does not perform antigen-binding prediction, and does not replace experimental structural characterization.</div>
+  <div class="disclaimer">This MVP performs sequence-level antibody variable-region developability screening with optional IMGT-based computational numbering, CDR/FR region assignment, optional imported humanness/germline assessment, and early-stage formulation recommendation integration, optional imported structural risk metrics, and rule-based candidate prioritization for triage support. It does not perform 3D structure prediction, humanization design, antigen-binding prediction, structural paratope prediction, docking, molecular dynamics, or experimental validation. Human-likeness assessment is not equivalent to clinical immunogenicity prediction. Results should be interpreted as computational screening signals, not definitive developability conclusions.</div>
 </main>
 </body>
 </html>

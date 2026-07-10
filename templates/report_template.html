@@ -149,6 +149,48 @@
   <p class="empty">No external humanness/germline assessment file was provided. Humanness analysis was not performed in this run.</p>
   {% endif %}
 
+  <h2>Structural Risk Summary</h2>
+  <div class="metric-grid">
+    <div class="metric"><span class="label">Structure available</span><strong>{{ structural_summary.structure_available_count }}</strong></div>
+    <div class="metric"><span class="label">Structure not available</span><strong>{{ structural_summary.structure_unavailable_count }}</strong></div>
+    <div class="metric"><span class="label">Low structural risk</span><strong>{{ structural_summary.low_structural_risk_count }}</strong></div>
+    <div class="metric"><span class="label">Medium structural risk</span><strong>{{ structural_summary.medium_structural_risk_count }}</strong></div>
+    <div class="metric"><span class="label">High structural risk</span><strong>{{ structural_summary.high_structural_risk_count }}</strong></div>
+    <div class="metric"><span class="label">Not available</span><strong>{{ structural_summary.not_available_structural_risk_count }}</strong></div>
+  </div>
+  <table>
+    <tr>
+      <th>antibody_id</th><th>structure_available</th><th>structure_tools</th><th>structure_model_files</th>
+      <th>structure_status_summary</th><th>mean_plddt_min</th><th>mean_plddt_mean</th>
+      <th>cdr1_plddt_min</th><th>cdr2_plddt_min</th><th>cdr3_plddt_min</th>
+      <th>low_confidence_cdr_count</th><th>structural_risk_score</th><th>structural_risk_class</th>
+      <th>structural_review_reason</th><th>structural_next_step_recommendation</th>
+    </tr>
+    {% for row in structural_risk_rows %}
+    {% set structural_risk = row.structural_risk_class|dash %}
+    <tr>
+      <td>{{ row.antibody_id|dash }}</td>
+      <td>{{ row.structure_available|dash }}</td>
+      <td>{{ row.structure_tools|dash }}</td>
+      <td>{{ row.structure_model_files|dash }}</td>
+      <td>{{ row.structure_status_summary|dash }}</td>
+      <td>{{ row.mean_plddt_min|dash }}</td>
+      <td>{{ row.mean_plddt_mean|dash }}</td>
+      <td>{{ row.cdr1_plddt_min|dash }}</td>
+      <td>{{ row.cdr2_plddt_min|dash }}</td>
+      <td>{{ row.cdr3_plddt_min|dash }}</td>
+      <td>{{ row.low_confidence_cdr_count|dash }}</td>
+      <td>{{ row.structural_risk_score|dash }}</td>
+      <td><span class="badge {{ structural_risk|lower|replace(' ', '-') }}">{{ structural_risk }}</span></td>
+      <td>{{ row.structural_review_reason|dash }}</td>
+      <td>{{ row.structural_next_step_recommendation|dash }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="15" class="empty">No external structure prediction result was provided.</td></tr>
+    {% endfor %}
+  </table>
+  <p class="disclaimer">{{ structural_disclaimer }}</p>
+
   <h2>Risk Distribution</h2>
   <table>
     <tr><th>Risk class</th><th>Antibody count</th><th>Distribution</th></tr>
@@ -179,7 +221,7 @@
   <table>
     <tr>
       <th>antibody_id</th><th>molecule_format</th><th>final_priority_score</th><th>final_priority_class</th>
-      <th>decision_label</th><th>review_reason</th><th>next_step_recommendation</th>
+      <th>structural_risk_class</th><th>decision_label</th><th>review_reason</th><th>next_step_recommendation</th>
     </tr>
     {% for row in candidate_ranking_rows %}
     {% set priority_class = row.final_priority_class|dash %}
@@ -188,12 +230,13 @@
       <td>{{ row.molecule_format|dash }}</td>
       <td>{{ row.final_priority_score|dash }}</td>
       <td><span class="badge {{ priority_class|lower }}">{{ priority_class }}</span></td>
+      <td>{{ row.structural_risk_class|dash }}</td>
       <td>{{ row.decision_label|dash }}</td>
       <td>{{ row.review_reason|dash }}</td>
       <td>{{ row.next_step_recommendation|dash }}</td>
     </tr>
     {% else %}
-    <tr><td colspan="7" class="empty">No candidate ranking results were generated in this run.</td></tr>
+    <tr><td colspan="8" class="empty">No candidate ranking results were generated in this run.</td></tr>
     {% endfor %}
   </table>
   <p class="disclaimer">{{ prioritization_disclaimer }}</p>
@@ -260,6 +303,9 @@
       <div><span class="label">Formulation risk class</span><span class="value">{{ row.formulation_risk_class|dash }}</span></div>
       <div><span class="label">Recommended excipient classes</span><span class="value">{{ row.recommended_excipient_classes|dash }}</span></div>
       <div><span class="label">Formulation next step</span><span class="value">{{ row.formulation_next_step_recommendation|dash }}</span></div>
+      <div><span class="label">Structure available</span><span class="value">{{ row.structure_available|dash }}</span></div>
+      <div><span class="label">Structural risk class</span><span class="value">{{ row.structural_risk_class|dash }}</span></div>
+      <div><span class="label">Structural review reason</span><span class="value">{{ row.structural_review_reason|dash }}</span></div>
     </div>
     <p class="field"><strong>Major liabilities:</strong> {{ row.major_liabilities|dash }}</p>
     <p><strong>Major CDR liabilities:</strong> {{ row.major_cdr_liabilities|dash }}</p>
@@ -395,6 +441,7 @@
     <li>Formulation-related feature extraction</li>
     <li>Optional local Expreso-lite model adapter with rule-based fallback</li>
     <li>Excipient class recommendation and formulation risk triage</li>
+    <li>Optional external structure prediction summary import and structural risk aggregation</li>
     <li>Antibody-level aggregation</li>
   </ul>
 
@@ -411,6 +458,7 @@
   </div>
   <div class="disclaimer">{{ prioritization_disclaimer }}</div>
   <div class="disclaimer">{{ formulation_disclaimer }}</div>
+  <div class="disclaimer">{{ structural_disclaimer }}</div>
   <div class="disclaimer">{{ disclaimer }}</div>
 </main>
 </body>

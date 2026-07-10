@@ -12,7 +12,7 @@ from .utils import ensure_output_dir
 
 
 REPORT_TITLE = "AbDev-Lite: Antibody Variable-Region Developability Screening Report"
-REPORT_VERSION = "MVP v0.7"
+REPORT_VERSION = "MVP v0.8"
 ANALYSIS_SCOPE = (
     "This MVP focuses on sequence-level developability screening of antibody variable regions including VH, VL, "
     "VHH, and scFv-derived variable domains."
@@ -20,11 +20,17 @@ ANALYSIS_SCOPE = (
 REPORT_DISCLAIMER = (
     "This MVP performs sequence-level antibody variable-region developability screening with optional IMGT-based "
     "computational numbering, CDR/FR region assignment, optional imported humanness/germline assessment, and "
-    "early-stage formulation recommendation integration. It also provides rule-based candidate prioritization "
-    "for triage support. It does not perform 3D structure "
-    "prediction, humanization design, antigen-binding prediction, structural paratope prediction, or experimental "
+    "early-stage formulation recommendation integration, optional imported structural risk metrics, and "
+    "rule-based candidate prioritization for triage support. It does not perform 3D structure "
+    "prediction, humanization design, antigen-binding prediction, structural paratope prediction, docking, "
+    "molecular dynamics, or experimental "
     "validation. Human-likeness assessment is not equivalent to clinical immunogenicity prediction. Results should "
     "be interpreted as computational screening signals, not definitive developability conclusions."
+)
+STRUCTURAL_DISCLAIMER = (
+    "Structural risk interpretation is based on imported computational structure prediction metrics or user-provided "
+    "annotations. AbDev-Lite v0.8 does not generate or validate 3D structures, does not perform antigen-binding "
+    "prediction, and does not replace experimental structural characterization."
 )
 FORMULATION_DISCLAIMER = (
     "Formulation recommendations are computational triage outputs based on sequence-level features and optional "
@@ -75,6 +81,8 @@ SHEET_ORDER = [
     "Formulation_Features",
     "Expreso_Predictions",
     "Formulation_Recommendations",
+    "Structure_Results",
+    "Structural_Risk_Summary",
 ]
 
 
@@ -179,6 +187,8 @@ def _build_results(
     formulation_features_df: pd.DataFrame | None = None,
     expreso_predictions_df: pd.DataFrame | None = None,
     formulation_recommendations_df: pd.DataFrame | None = None,
+    structure_results_df: pd.DataFrame | None = None,
+    structural_risk_summary_df: pd.DataFrame | None = None,
 ) -> dict[str, pd.DataFrame]:
     return {
         "Input_Cleaned": _df(input_cleaned_df),
@@ -195,6 +205,8 @@ def _build_results(
         "Formulation_Features": _df(formulation_features_df),
         "Expreso_Predictions": _df(expreso_predictions_df),
         "Formulation_Recommendations": _df(formulation_recommendations_df),
+        "Structure_Results": _df(structure_results_df),
+        "Structural_Risk_Summary": _df(structural_risk_summary_df),
     }
 
 
@@ -214,6 +226,8 @@ def generate_excel_report(
     formulation_features_df: pd.DataFrame | None = None,
     expreso_predictions_df: pd.DataFrame | None = None,
     formulation_recommendations_df: pd.DataFrame | None = None,
+    structure_results_df: pd.DataFrame | None = None,
+    structural_risk_summary_df: pd.DataFrame | None = None,
 ) -> Path:
     """Write all result tables to a multi-sheet Excel workbook."""
     output_path = Path(output_path)
@@ -233,6 +247,8 @@ def generate_excel_report(
         formulation_features_df,
         expreso_predictions_df,
         formulation_recommendations_df,
+        structure_results_df,
+        structural_risk_summary_df,
     )
     with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
         for sheet in SHEET_ORDER:
@@ -259,6 +275,8 @@ def write_excel(results: dict[str, pd.DataFrame], output_dir: str | Path = "outp
         formulation_features_df=results.get("Formulation_Features"),
         expreso_predictions_df=results.get("Expreso_Predictions"),
         formulation_recommendations_df=results.get("Formulation_Recommendations"),
+        structure_results_df=results.get("Structure_Results"),
+        structural_risk_summary_df=results.get("Structural_Risk_Summary"),
     )
 
 
@@ -281,6 +299,8 @@ def generate_html_report(
     formulation_features_df: pd.DataFrame | None = None,
     expreso_predictions_df: pd.DataFrame | None = None,
     formulation_recommendations_df: pd.DataFrame | None = None,
+    structure_results_df: pd.DataFrame | None = None,
+    structural_risk_summary_df: pd.DataFrame | None = None,
 ) -> Path:
     """Render the HTML report with Jinja2."""
     output_path = Path(output_path)
@@ -300,6 +320,8 @@ def generate_html_report(
     formulation_features_df = _df(formulation_features_df)
     expreso_predictions_df = _df(expreso_predictions_df)
     formulation_recommendations_df = _df(formulation_recommendations_df)
+    structure_results_df = _df(structure_results_df)
+    structural_risk_summary_df = _df(structural_risk_summary_df)
     summary_display_df = _summary_with_ranking(antibody_summary_df, candidate_ranking_df)
     summary_display_df = _summary_with_formulation(summary_display_df, formulation_recommendations_df)
 
@@ -384,6 +406,16 @@ def generate_html_report(
         "formulation_risk_class",
         ["Low", "Medium", "High"],
     )
+    structural_counts = _series_value_counts(
+        structural_risk_summary_df,
+        "structural_risk_class",
+        ["Low", "Medium", "High", "Not Available"],
+    )
+    structure_available_count = (
+        int(structural_risk_summary_df["structure_available"].fillna(False).astype(bool).sum())
+        if not structural_risk_summary_df.empty and "structure_available" in structural_risk_summary_df.columns
+        else 0
+    )
     expreso_model_available = (
         bool(expreso_predictions_df["model_available"].fillna(False).astype(bool).any())
         if not expreso_predictions_df.empty and "model_available" in expreso_predictions_df.columns
@@ -457,6 +489,9 @@ def generate_html_report(
                 "decision_label",
                 "review_reason",
                 "next_step_recommendation",
+                "structure_available",
+                "structural_risk_class",
+                "structural_risk_score",
             ],
         ),
         "formulation_summary": {
@@ -467,6 +502,37 @@ def generate_html_report(
             "expreso_model_available": expreso_model_available,
             "prediction_mode": prediction_modes,
         },
+        "structural_summary": {
+            "structure_available_count": structure_available_count,
+            "structure_unavailable_count": max(total_antibodies - structure_available_count, 0),
+            "low_structural_risk_count": structural_counts["Low"],
+            "medium_structural_risk_count": structural_counts["Medium"],
+            "high_structural_risk_count": structural_counts["High"],
+            "not_available_structural_risk_count": structural_counts["Not Available"],
+        },
+        "structural_risk_rows": _safe_records(
+            structural_risk_summary_df,
+            [
+                "antibody_id",
+                "structure_available",
+                "structure_tools",
+                "structure_model_files",
+                "structure_status_summary",
+                "mean_plddt_min",
+                "mean_plddt_mean",
+                "cdr1_plddt_min",
+                "cdr2_plddt_min",
+                "cdr3_plddt_min",
+                "low_confidence_cdr_count",
+                "high_hydrophobic_patch_flag",
+                "high_aggregation_patch_flag",
+                "high_charge_patch_flag",
+                "structural_risk_score",
+                "structural_risk_class",
+                "structural_review_reason",
+                "structural_next_step_recommendation",
+            ],
+        ),
         "formulation_recommendation_rows": _safe_records(
             formulation_recommendations_df,
             [
@@ -555,6 +621,7 @@ def generate_html_report(
         "disclaimer": REPORT_DISCLAIMER,
         "prioritization_disclaimer": PRIORITIZATION_DISCLAIMER,
         "formulation_disclaimer": FORMULATION_DISCLAIMER,
+        "structural_disclaimer": STRUCTURAL_DISCLAIMER,
         "numbering_notice": NUMBERING_NOTICE,
         "full_length_notice": FULL_LENGTH_NOTICE,
         "hydrophobic_patch_notice": HYDROPHOBIC_PATCH_NOTICE,
@@ -594,6 +661,8 @@ def write_html_report(
         formulation_features_df=results.get("Formulation_Features"),
         expreso_predictions_df=results.get("Expreso_Predictions"),
         formulation_recommendations_df=results.get("Formulation_Recommendations"),
+        structure_results_df=results.get("Structure_Results"),
+        structural_risk_summary_df=results.get("Structural_Risk_Summary"),
     )
 
 

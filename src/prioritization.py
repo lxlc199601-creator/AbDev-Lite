@@ -21,6 +21,9 @@ RANKING_COLUMNS = [
     "high_humanness_risk_chain_count",
     "non_human_like_chain_count",
     "combined_developability_humanness_flag",
+    "structure_available",
+    "structural_risk_class",
+    "structural_risk_score",
     "final_priority_score",
     "final_priority_class",
     "decision_label",
@@ -74,6 +77,15 @@ def _next_step(priority_class: str) -> str:
 
 
 def _risk_penalty(risk_class: object) -> int:
+    risk = normalize_text(risk_class)
+    if risk == "Medium":
+        return 10
+    if risk == "High":
+        return 25
+    return 0
+
+
+def _structural_risk_penalty(risk_class: object) -> int:
     risk = normalize_text(risk_class)
     if risk == "Medium":
         return 10
@@ -153,6 +165,10 @@ def _review_reason(row: pd.Series, region_rows: pd.DataFrame, chain_rows: pd.Dat
         reasons.append("High humanness risk based on imported assessment")
     if _to_float(row.get("cdr_adjusted_total_risk_score")) > 8:
         reasons.append("High CDR-adjusted developability burden")
+    if normalize_text(row.get("structural_risk_class")) == "High":
+        reasons.append("High structural risk based on imported structure metrics")
+    if not bool(row.get("structure_available", False)):
+        reasons.append("No structure result imported")
 
     if not region_rows.empty and {"risk_type", "cdr_or_fr"}.issubset(region_rows.columns):
         cdr_risk_types = region_rows[region_rows["cdr_or_fr"].astype(str).eq("CDR")]["risk_type"].astype(str)
@@ -194,6 +210,9 @@ def _base_ranking_table(
         "high_humanness_risk_chain_count",
         "non_human_like_chain_count",
         "combined_developability_humanness_flag",
+        "structure_available",
+        "structural_risk_class",
+        "structural_risk_score",
     ]:
         if column not in ranking.columns:
             ranking[column] = pd.NA
@@ -221,6 +240,9 @@ def _base_ranking_table(
         .fillna("")
         .replace("", "No major sequence-level humanness/developability flag in MVP assessment")
     )
+    ranking["structure_available"] = ranking["structure_available"].fillna(False).astype(bool)
+    ranking["structural_risk_class"] = ranking["structural_risk_class"].fillna("Not Available").replace("", "Not Available")
+    ranking["structural_risk_score"] = ranking["structural_risk_score"].fillna(0)
     return ranking
 
 
@@ -245,6 +267,7 @@ def build_candidate_ranking(
         score -= _risk_penalty(row.get("max_chain_risk_class"))
         score -= _risk_penalty(row.get("cdr_adjusted_max_risk_class"))
         score -= _risk_penalty(row.get("max_humanness_risk_class"))
+        score -= _structural_risk_penalty(row.get("structural_risk_class"))
         score -= _to_int(row.get("high_humanness_risk_chain_count")) * 10
         score -= _to_int(row.get("non_human_like_chain_count")) * 5
         score = max(0.0, min(100.0, score))
@@ -267,6 +290,9 @@ def build_candidate_ranking(
                 "high_humanness_risk_chain_count": _to_int(row.get("high_humanness_risk_chain_count")),
                 "non_human_like_chain_count": _to_int(row.get("non_human_like_chain_count")),
                 "combined_developability_humanness_flag": row.get("combined_developability_humanness_flag", ""),
+                "structure_available": bool(row.get("structure_available", False)),
+                "structural_risk_class": normalize_text(row.get("structural_risk_class")) or "Not Available",
+                "structural_risk_score": _to_int(row.get("structural_risk_score")),
                 "final_priority_score": round(score, 2),
                 "final_priority_class": priority_class,
                 "decision_label": _decision_label(priority_class),

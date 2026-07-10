@@ -29,6 +29,14 @@ from src.report_generator import (
 from src.scoring import score_chains
 from src.sequence_classifier import classify_sequences
 from src.sequence_qc import run_qc
+from src.structural_risk import build_structural_risk_summary
+from src.structure_import import (
+    annotate_structure_result_matches,
+    complete_structural_risk_summary_for_antibodies,
+    empty_structure_results_for_antibodies,
+    load_structure_results,
+    merge_structure_results,
+)
 
 
 EXAMPLE_ROWS = [
@@ -66,7 +74,7 @@ def _priority_counts(candidate_ranking_df: pd.DataFrame | None) -> dict[str, int
     return priority_counts
 
 
-def run_pipeline(uploaded_file, humanness_file=None) -> tuple[dict[str, pd.DataFrame], Path, Path]:
+def run_pipeline(uploaded_file, humanness_file=None, structure_file=None) -> tuple[dict[str, pd.DataFrame], Path, Path]:
     """Run the full AbDev-Lite analysis pipeline."""
     input_df = parse_input(uploaded_file, uploaded_file.name)
     classified_df = classify_sequences(input_df)
@@ -83,6 +91,20 @@ def run_pipeline(uploaded_file, humanness_file=None) -> tuple[dict[str, pd.DataF
         region_summary_df,
         summary_df,
         humanness_input_df,
+    )
+    structure_input_df = load_structure_results(structure_file)
+    structure_results_df = annotate_structure_result_matches(summary_df, pd.DataFrame(), structure_input_df)
+    if structure_results_df.empty:
+        structure_results_df = empty_structure_results_for_antibodies(summary_df)
+    structural_risk_summary_df = build_structural_risk_summary(structure_results_df)
+    structural_risk_summary_df = complete_structural_risk_summary_for_antibodies(
+        summary_df,
+        structural_risk_summary_df,
+    )
+    summary_df, _ = merge_structure_results(
+        summary_df,
+        pd.DataFrame(),
+        structure_results_df,
     )
     candidate_ranking_df = build_candidate_ranking(
         summary_df,
@@ -122,6 +144,8 @@ def run_pipeline(uploaded_file, humanness_file=None) -> tuple[dict[str, pd.DataF
         "Formulation_Features": formulation_features_df,
         "Expreso_Predictions": expreso_predictions_df,
         "Formulation_Recommendations": formulation_recommendations_df,
+        "Structure_Results": structure_results_df,
+        "Structural_Risk_Summary": structural_risk_summary_df,
     }
     excel_path, html_path = generate_reports(results, uploaded_file.name)
     return results, excel_path, html_path
@@ -158,6 +182,14 @@ def main() -> None:
             "If not provided, AbDev-Lite will run sequence-level developability analysis only."
         ),
     )
+    structure_file = st.file_uploader(
+        "Optional structure prediction result file",
+        type=["csv", "xlsx", "xls"],
+        help=(
+            "Upload an optional external structure prediction summary file if available. "
+            "If not provided, AbDev-Lite will run sequence-level, humanness, prioritization, and formulation analysis only."
+        ),
+    )
 
     if st.button("Run Analysis", type="primary", disabled=uploaded_file is None):
         if uploaded_file is None:
@@ -165,7 +197,7 @@ def main() -> None:
             return
         try:
             with st.spinner("Running AbDev-Lite analysis and generating reports..."):
-                results, excel_path, html_path = run_pipeline(uploaded_file, humanness_file)
+                results, excel_path, html_path = run_pipeline(uploaded_file, humanness_file, structure_file)
             st.success("Analysis complete. Excel and HTML reports were generated.")
 
             summary = results["Antibody_Summary"]
@@ -178,6 +210,8 @@ def main() -> None:
             formulation_features = results.get("Formulation_Features", pd.DataFrame())
             expreso_predictions = results.get("Expreso_Predictions", pd.DataFrame())
             formulation_recommendations = results.get("Formulation_Recommendations", pd.DataFrame())
+            structure_results = results.get("Structure_Results", pd.DataFrame())
+            structural_risk_summary = results.get("Structural_Risk_Summary", pd.DataFrame())
             if summary.empty or "max_chain_risk_class" not in summary.columns:
                 risk_counts = pd.Series({"Low": 0, "Medium": 0, "High": 0})
             else:
@@ -241,6 +275,31 @@ def main() -> None:
                 )
             st.caption("Human-likeness is not equivalent to clinical immunogenicity prediction.")
 
+            st.subheader("Structural Risk Summary")
+            structural_counts = (
+                structural_risk_summary["structural_risk_class"]
+                .astype(str)
+                .value_counts()
+                .reindex(["Low", "Medium", "High", "Not Available"], fill_value=0)
+                if not structural_risk_summary.empty and "structural_risk_class" in structural_risk_summary.columns
+                else pd.Series({"Low": 0, "Medium": 0, "High": 0, "Not Available": 0})
+            )
+            structure_cols = st.columns(4)
+            structure_cols[0].metric("Low", int(structural_counts["Low"]))
+            structure_cols[1].metric("Medium", int(structural_counts["Medium"]))
+            structure_cols[2].metric("High", int(structural_counts["High"]))
+            structure_cols[3].metric("Not Available", int(structural_counts["Not Available"]))
+            st.write("Structure_Results")
+            st.dataframe(structure_results.head(200), use_container_width=True)
+            if len(structure_results) > 200:
+                st.caption("Showing the first 200 structure result rows in the app preview. The Excel workbook contains all rows.")
+            st.write("Structural_Risk_Summary")
+            st.dataframe(structural_risk_summary.head(200), use_container_width=True)
+            st.caption(
+                "Structural risk interpretation is based on imported computational metrics or user annotations only. "
+                "AbDev-Lite v0.8 does not generate or validate 3D structures."
+            )
+
             st.subheader("Candidate Ranking")
             priority_counts = _priority_counts(candidate_ranking)
             priority_cols = st.columns(4)
@@ -253,6 +312,7 @@ def main() -> None:
                 "molecule_format",
                 "final_priority_score",
                 "final_priority_class",
+                "structural_risk_class",
                 "decision_label",
                 "review_reason",
                 "next_step_recommendation",
