@@ -97,8 +97,8 @@
     <div class="meta-grid">
       <div class="meta-item"><span class="label">Project</span><span class="value">AbDev-Lite</span></div>
       <div class="meta-item"><span class="label">Uploaded file</span><span class="value">example_input.xlsx</span></div>
-      <div class="meta-item"><span class="label">Analysis time</span><span class="value">2026-07-09 17:16:55</span></div>
-      <div class="meta-item"><span class="label">Report version</span><span class="value">MVP v0.5</span></div>
+      <div class="meta-item"><span class="label">Analysis time</span><span class="value">2026-07-10 09:05:54</span></div>
+      <div class="meta-item"><span class="label">Report version</span><span class="value">MVP v0.6</span></div>
     </div>
   </section>
 
@@ -172,7 +172,7 @@
     <div class="metric"><span class="label">A candidates</span><strong>0</strong></div>
     <div class="metric"><span class="label">B candidates</span><strong>0</strong></div>
     <div class="metric"><span class="label">C candidates</span><strong>0</strong></div>
-    <div class="metric"><span class="label">D candidates</span><strong>0</strong></div>
+    <div class="metric"><span class="label">D candidates</span><strong>5</strong></div>
   </div>
   <table>
     <tr>
@@ -180,10 +180,63 @@
       <th>decision_label</th><th>review_reason</th><th>next_step_recommendation</th>
     </tr>
     
-    <tr><td colspan="7" class="empty">No candidate ranking results were generated in this run.</td></tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>mAb</td>
+      <td>0.0</td>
+      <td><span class="badge d">D</span></td>
+      <td>Deprioritize or redesign before progression</td>
+      <td>High CDR-adjusted developability burden; Sequence-level hydrophobic patch proxy detected</td>
+      <td>Consider redesign, deprioritization, or additional humanization/developability review</td>
+    </tr>
+    
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>mAb</td>
+      <td>0.0</td>
+      <td><span class="badge d">D</span></td>
+      <td>Deprioritize or redesign before progression</td>
+      <td>High CDR-adjusted developability burden; Sequence-level hydrophobic patch proxy detected</td>
+      <td>Consider redesign, deprioritization, or additional humanization/developability review</td>
+    </tr>
+    
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>BsAb</td>
+      <td>0.0</td>
+      <td><span class="badge d">D</span></td>
+      <td>Deprioritize or redesign before progression</td>
+      <td>High humanness risk based on imported assessment; High CDR-adjusted developability burden; Sequence-level hydrophobic patch proxy detected</td>
+      <td>Consider redesign, deprioritization, or additional humanization/developability review</td>
+    </tr>
+    
+    
+    <tr>
+      <td>Full001</td>
+      <td>mAb</td>
+      <td>0.0</td>
+      <td><span class="badge d">D</span></td>
+      <td>Deprioritize or redesign before progression</td>
+      <td>High CDR-adjusted developability burden</td>
+      <td>Consider redesign, deprioritization, or additional humanization/developability review</td>
+    </tr>
+    
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>0.0</td>
+      <td><span class="badge d">D</span></td>
+      <td>Deprioritize or redesign before progression</td>
+      <td>High humanness risk based on imported assessment; High CDR-adjusted developability burden; Sequence-level hydrophobic patch proxy detected</td>
+      <td>Consider redesign, deprioritization, or additional humanization/developability review</td>
+    </tr>
     
   </table>
-  <p class="disclaimer"></p>
+  <p class="disclaimer">Candidate prioritization is based on rule-based computational scoring from sequence-level developability, CDR/FR mapping, and optional imported humanness metrics. It should be used for triage and reporting support only, not as a definitive experimental or clinical developability conclusion.</p>
 
   <h2>Antibody Summary Cards</h2>
   
@@ -207,9 +260,9 @@
       <div><span class="label">Non-human-like chains</span><span class="value">0.0</span></div>
       <div><span class="label">High humanness risk chains</span><span class="value">0.0</span></div>
       <div><span class="label">Combined flag</span><span class="value">Developability review recommended</span></div>
-      <div><span class="label">Final priority class</span><span class="value">-</span></div>
-      <div><span class="label">Final priority score</span><span class="value">-</span></div>
-      <div><span class="label">Decision label</span><span class="value">-</span></div>
+      <div><span class="label">Final priority class</span><span class="value">D</span></div>
+      <div><span class="label">Final priority score</span><span class="value">0.0</span></div>
+      <div><span class="label">Decision label</span><span class="value">Deprioritize or redesign before progression</span></div>
     </div>
     <p class="field"><strong>Major liabilities:</strong> oxidation (9); deamidation (4); hydrophobic_patch_proxy (3); isomerization (2)</p>
     <p><strong>Major CDR liabilities:</strong> None detected</p>
@@ -239,9 +292,9 @@
       <div><span class="label">Non-human-like chains</span><span class="value">0.0</span></div>
       <div><span class="label">High humanness risk chains</span><span class="value">0.0</span></div>
       <div><span class="label">Combined flag</span><span class="value">Developability review recommended</span></div>
-      <div><span class="label">Final priority class</span><span class="value">-</span></div>
-      <div><span class="label">Final priority score</span><span class="value">-</span></div>
-      <div><span class="label">Decision label</span><span class="value">-</span></div>
+      <div><span class="label">Final priority class</span><span class="value">D</span></div>
+      <div><span class="label">Final priority score</span><span class="value">0.0</span></div>
+      <div><span class="label">Decision label</span><span class="value">Deprioritize or redesign before progression</span></div>
     </div>
     <p class="field"><strong>Major liabilities:</strong> oxidation (10); low_complexity (3); hydrophobic_patch_proxy (2); deamidation (1); isomerization (1)</p>
     <p><strong>Major CDR liabilities:</strong> None detected</p>
@@ -271,9 +324,9 @@
       <div><span class="label">Non-human-like chains</span><span class="value">2.0</span></div>
       <div><span class="label">High humanness risk chains</span><span class="value">1.0</span></div>
       <div><span class="label">Combined flag</span><span class="value">High priority engineering review</span></div>
-      <div><span class="label">Final priority class</span><span class="value">-</span></div>
-      <div><span class="label">Final priority score</span><span class="value">-</span></div>
-      <div><span class="label">Decision label</span><span class="value">-</span></div>
+      <div><span class="label">Final priority class</span><span class="value">D</span></div>
+      <div><span class="label">Final priority score</span><span class="value">0.0</span></div>
+      <div><span class="label">Decision label</span><span class="value">Deprioritize or redesign before progression</span></div>
     </div>
     <p class="field"><strong>Major liabilities:</strong> oxidation (19); hydrophobic_patch_proxy (8); deamidation (7); isomerization (6); N_glycosylation (1)</p>
     <p><strong>Major CDR liabilities:</strong> None detected</p>
@@ -303,9 +356,9 @@
       <div><span class="label">Non-human-like chains</span><span class="value">0.0</span></div>
       <div><span class="label">High humanness risk chains</span><span class="value">0.0</span></div>
       <div><span class="label">Combined flag</span><span class="value">Developability review recommended</span></div>
-      <div><span class="label">Final priority class</span><span class="value">-</span></div>
-      <div><span class="label">Final priority score</span><span class="value">-</span></div>
-      <div><span class="label">Decision label</span><span class="value">-</span></div>
+      <div><span class="label">Final priority class</span><span class="value">D</span></div>
+      <div><span class="label">Final priority score</span><span class="value">0.0</span></div>
+      <div><span class="label">Decision label</span><span class="value">Deprioritize or redesign before progression</span></div>
     </div>
     <p class="field"><strong>Major liabilities:</strong> deamidation (7); oxidation (7); isomerization (2); clipping_risk (1); hydrophobic_patch_proxy (1)</p>
     <p><strong>Major CDR liabilities:</strong> None detected</p>
@@ -335,9 +388,9 @@
       <div><span class="label">Non-human-like chains</span><span class="value">1.0</span></div>
       <div><span class="label">High humanness risk chains</span><span class="value">1.0</span></div>
       <div><span class="label">Combined flag</span><span class="value">High priority engineering review</span></div>
-      <div><span class="label">Final priority class</span><span class="value">-</span></div>
-      <div><span class="label">Final priority score</span><span class="value">-</span></div>
-      <div><span class="label">Decision label</span><span class="value">-</span></div>
+      <div><span class="label">Final priority class</span><span class="value">D</span></div>
+      <div><span class="label">Final priority score</span><span class="value">0.0</span></div>
+      <div><span class="label">Decision label</span><span class="value">Deprioritize or redesign before progression</span></div>
     </div>
     <p class="field"><strong>Major liabilities:</strong> oxidation (6); deamidation (2); isomerization (2); hydrophobic_patch_proxy (2); N_glycosylation (1)</p>
     <p><strong>Major CDR liabilities:</strong> None detected</p>
@@ -3566,8 +3619,8 @@
     <p><strong>BsAb note:</strong> BsAb analysis is chain-level only and does not evaluate chain pairing, heterodimerization, Fc engineering, linker geometry, or full molecule architecture.</p>
     
   </div>
-  <div class="disclaimer"></div>
-  <div class="disclaimer">This MVP performs sequence-level antibody variable-region developability screening with optional IMGT-based computational numbering, CDR/FR region assignment, and optional imported humanness/germline assessment. It does not perform 3D structure prediction, humanization design, antigen-binding prediction, structural paratope prediction, or experimental validation. Human-likeness assessment is not equivalent to clinical immunogenicity prediction. Results should be interpreted as computational screening signals, not definitive developability conclusions.</div>
+  <div class="disclaimer">Candidate prioritization is based on rule-based computational scoring from sequence-level developability, CDR/FR mapping, and optional imported humanness metrics. It should be used for triage and reporting support only, not as a definitive experimental or clinical developability conclusion.</div>
+  <div class="disclaimer">This MVP performs sequence-level antibody variable-region developability screening with optional IMGT-based computational numbering, CDR/FR region assignment, and optional imported humanness/germline assessment. It also provides rule-based candidate prioritization for triage support. It does not perform 3D structure prediction, humanization design, antigen-binding prediction, structural paratope prediction, or experimental validation. Human-likeness assessment is not equivalent to clinical immunogenicity prediction. Results should be interpreted as computational screening signals, not definitive developability conclusions.</div>
 </main>
 </body>
 </html>
