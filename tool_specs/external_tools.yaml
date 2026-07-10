@@ -1,0 +1,85 @@
+tools:
+  - tool_id: BioPhi_OASis
+    tool_name: BioPhi / OASis
+    tool_category: humanness
+    input_type: FASTA
+    output_type: CSV/XLSX
+    recommended_use: Human-likeness and OASis-style humanness review.
+    requires_web_upload: true
+    supports_batch: true
+    supports_api: false
+    supports_cli: false
+    default_mode: manual_export_import
+    automation_allowed: false
+    notes: Prepare FASTA locally, run manually according to tool terms, then import the result.
+    expected_result_fields: antibody_id, chain_id, sequence_scope, result_risk_class, result_metric_name, result_metric_value
+  - tool_id: IgBLAST
+    tool_name: IgBLAST
+    tool_category: germline
+    input_type: FASTA
+    output_type: CSV/TSV/XLSX
+    recommended_use: Germline assignment and V(D)J annotation support.
+    requires_web_upload: false
+    supports_batch: true
+    supports_api: false
+    supports_cli: true
+    default_mode: local_cli
+    automation_allowed: false
+    notes: Local CLI use is preferred when available; no browser automation is enabled by default.
+    expected_result_fields: antibody_id, chain_id, sequence_scope, result_metric_name, result_metric_value
+  - tool_id: TAP
+    tool_name: TAP
+    tool_category: developability
+    input_type: FASTA
+    output_type: CSV/XLSX
+    recommended_use: External developability flag review.
+    requires_web_upload: true
+    supports_batch: true
+    supports_api: false
+    supports_cli: false
+    default_mode: manual_export_import
+    automation_allowed: false
+    notes: User-managed export/import workflow only in v0.9.
+    expected_result_fields: antibody_id, chain_id, sequence_scope, result_risk_class, result_interpretation
+  - tool_id: IgFold
+    tool_name: IgFold
+    tool_category: structure
+    input_type: FASTA
+    output_type: CSV/XLSX/PDB
+    recommended_use: Optional structure prediction evidence generated outside AbDev-Lite.
+    requires_web_upload: false
+    supports_batch: true
+    supports_api: false
+    supports_cli: true
+    default_mode: local_cli
+    automation_allowed: false
+    notes: Import only summary-level user-provided structure evidence in this framework.
+    expected_result_fields: antibody_id, chain_id, sequence_scope, result_metric_name, result_metric_value, result_risk_class
+  - tool_id: ImmuneBuilder
+    tool_name: ImmuneBuilder
+    tool_category: structure
+    input_type: FASTA
+    output_type: CSV/XLSX/PDB
+    recommended_use: Optional antibody structure model evidence generated outside AbDev-Lite.
+    requires_web_upload: false
+    supports_batch: true
+    supports_api: false
+    supports_cli: true
+    default_mode: local_cli
+    automation_allowed: false
+    notes: Browser automation and credential handling are not implemented.
+    expected_result_fields: antibody_id, chain_id, sequence_scope, result_metric_name, result_metric_value, result_risk_class
+  - tool_id: Custom_Manual_Tool
+    tool_name: Custom Manual Tool
+    tool_category: custom
+    input_type: CSV/FASTA
+    output_type: CSV/XLSX
+    recommended_use: User-defined external computational evidence.
+    requires_web_upload: false
+    supports_batch: true
+    supports_api: false
+    supports_cli: false
+    default_mode: manual_export_import
+    automation_allowed: false
+    notes: Generic manual export/import path for internal or user-defined tools.
+    expected_result_fields: antibody_id, chain_id, sequence_scope, result_risk_class, result_interpretation

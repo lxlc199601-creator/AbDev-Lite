@@ -24,6 +24,9 @@ RANKING_COLUMNS = [
     "structure_available",
     "structural_risk_class",
     "structural_risk_score",
+    "external_high_risk_flags",
+    "external_medium_risk_flags",
+    "external_tool_results_available",
     "final_priority_score",
     "final_priority_class",
     "decision_label",
@@ -167,8 +170,12 @@ def _review_reason(row: pd.Series, region_rows: pd.DataFrame, chain_rows: pd.Dat
         reasons.append("High CDR-adjusted developability burden")
     if normalize_text(row.get("structural_risk_class")) == "High":
         reasons.append("High structural risk based on imported structure metrics")
+    if _to_int(row.get("external_high_risk_flags")) > 0:
+        reasons.append("High-risk flags imported from external tool results")
     if not bool(row.get("structure_available", False)):
         reasons.append("No structure result imported")
+    if not bool(row.get("external_tool_results_available", False)):
+        reasons.append("No external tool result imported")
 
     if not region_rows.empty and {"risk_type", "cdr_or_fr"}.issubset(region_rows.columns):
         cdr_risk_types = region_rows[region_rows["cdr_or_fr"].astype(str).eq("CDR")]["risk_type"].astype(str)
@@ -213,6 +220,9 @@ def _base_ranking_table(
         "structure_available",
         "structural_risk_class",
         "structural_risk_score",
+        "external_high_risk_flags",
+        "external_medium_risk_flags",
+        "external_tool_results_available",
     ]:
         if column not in ranking.columns:
             ranking[column] = pd.NA
@@ -243,6 +253,9 @@ def _base_ranking_table(
     ranking["structure_available"] = ranking["structure_available"].fillna(False).astype(bool)
     ranking["structural_risk_class"] = ranking["structural_risk_class"].fillna("Not Available").replace("", "Not Available")
     ranking["structural_risk_score"] = ranking["structural_risk_score"].fillna(0)
+    ranking["external_high_risk_flags"] = ranking["external_high_risk_flags"].fillna(0)
+    ranking["external_medium_risk_flags"] = ranking["external_medium_risk_flags"].fillna(0)
+    ranking["external_tool_results_available"] = ranking["external_tool_results_available"].fillna(False).astype(bool)
     return ranking
 
 
@@ -268,6 +281,8 @@ def build_candidate_ranking(
         score -= _risk_penalty(row.get("cdr_adjusted_max_risk_class"))
         score -= _risk_penalty(row.get("max_humanness_risk_class"))
         score -= _structural_risk_penalty(row.get("structural_risk_class"))
+        score -= _to_int(row.get("external_high_risk_flags")) * 10
+        score -= _to_int(row.get("external_medium_risk_flags")) * 5
         score -= _to_int(row.get("high_humanness_risk_chain_count")) * 10
         score -= _to_int(row.get("non_human_like_chain_count")) * 5
         score = max(0.0, min(100.0, score))
@@ -293,6 +308,9 @@ def build_candidate_ranking(
                 "structure_available": bool(row.get("structure_available", False)),
                 "structural_risk_class": normalize_text(row.get("structural_risk_class")) or "Not Available",
                 "structural_risk_score": _to_int(row.get("structural_risk_score")),
+                "external_high_risk_flags": _to_int(row.get("external_high_risk_flags")),
+                "external_medium_risk_flags": _to_int(row.get("external_medium_risk_flags")),
+                "external_tool_results_available": bool(row.get("external_tool_results_available", False)),
                 "final_priority_score": round(score, 2),
                 "final_priority_class": priority_class,
                 "decision_label": _decision_label(priority_class),

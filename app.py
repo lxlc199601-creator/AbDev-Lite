@@ -9,6 +9,15 @@ import streamlit as st
 
 from src.antibody_summary import summarize_antibodies
 from src.expreso_adapter import MODEL_NOT_FOUND_WARNING, predict_with_expreso
+from src.external_input_builder import build_external_input_package, empty_external_run_plan
+from src.external_result_importer import (
+    empty_external_results,
+    load_external_tool_result,
+    merge_external_results,
+    standardize_external_results,
+)
+from src.external_tool_registry import get_available_tools
+from src.external_tool_summary import build_external_tool_summary, empty_external_tool_summary
 from src.formulation_features import build_formulation_features
 from src.formulation_recommendation import build_formulation_recommendations
 from src.humanness import load_humanness_file, merge_humanness_results
@@ -74,7 +83,14 @@ def _priority_counts(candidate_ranking_df: pd.DataFrame | None) -> dict[str, int
     return priority_counts
 
 
-def run_pipeline(uploaded_file, humanness_file=None, structure_file=None) -> tuple[dict[str, pd.DataFrame], Path, Path]:
+def run_pipeline(
+    uploaded_file,
+    humanness_file=None,
+    structure_file=None,
+    selected_external_tools: list[str] | None = None,
+    external_result_file=None,
+    external_result_tool_id: str = "",
+) -> tuple[dict[str, pd.DataFrame], Path, Path]:
     """Run the full AbDev-Lite analysis pipeline."""
     input_df = parse_input(uploaded_file, uploaded_file.name)
     classified_df = classify_sequences(input_df)
@@ -106,6 +122,22 @@ def run_pipeline(uploaded_file, humanness_file=None, structure_file=None) -> tup
         pd.DataFrame(),
         structure_results_df,
     )
+    tool_registry_df = get_available_tools()
+    external_run_plan_df = build_external_input_package(
+        qc_df,
+        qc_df,
+        summary_df,
+        selected_external_tools or [],
+        Path("external_inputs"),
+    )
+    external_results_df = empty_external_results()
+    if external_result_file is not None and external_result_tool_id:
+        imported_external_df = load_external_tool_result(external_result_file, external_result_tool_id)
+        external_results_df = standardize_external_results(imported_external_df, external_result_tool_id)
+    summary_df, _ = merge_external_results(summary_df, pd.DataFrame(), external_results_df)
+    external_summary_df = build_external_tool_summary(external_results_df)
+    if external_summary_df.empty:
+        external_summary_df = empty_external_tool_summary(summary_df["antibody_id"].dropna().tolist() if "antibody_id" in summary_df.columns else [])
     candidate_ranking_df = build_candidate_ranking(
         summary_df,
         scores_df,
@@ -146,6 +178,10 @@ def run_pipeline(uploaded_file, humanness_file=None, structure_file=None) -> tup
         "Formulation_Recommendations": formulation_recommendations_df,
         "Structure_Results": structure_results_df,
         "Structural_Risk_Summary": structural_risk_summary_df,
+        "Tool_Registry": tool_registry_df,
+        "External_Tool_Run_Plan": external_run_plan_df,
+        "External_Tool_Results": external_results_df,
+        "External_Tool_Summary": external_summary_df,
     }
     excel_path, html_path = generate_reports(results, uploaded_file.name)
     return results, excel_path, html_path
@@ -190,6 +226,42 @@ def main() -> None:
             "If not provided, AbDev-Lite will run sequence-level, humanness, prioritization, and formulation analysis only."
         ),
     )
+    tool_registry = get_available_tools()
+    st.subheader("External Tool Adapter")
+    st.info(
+        "Browser automation is disabled by default. AbDev-Lite v0.9 prepares input files and imports external results, "
+        "but does not automatically submit confidential sequences to third-party websites."
+    )
+    st.write("Tool Registry")
+    st.dataframe(tool_registry, use_container_width=True)
+    tool_options = tool_registry["tool_id"].astype(str).tolist() if not tool_registry.empty and "tool_id" in tool_registry.columns else []
+    selected_external_tools = st.multiselect(
+        "Select external tools to prepare input packages",
+        options=tool_options,
+    )
+    if st.button("Generate External Tool Input Package", disabled=uploaded_file is None or not selected_external_tools):
+        try:
+            input_df = parse_input(uploaded_file, uploaded_file.name)
+            classified_df = classify_sequences(input_df)
+            qc_df = run_qc(classified_df)
+            temp_run_plan = build_external_input_package(qc_df, qc_df, pd.DataFrame(), selected_external_tools, Path("external_inputs"))
+            st.success("External tool input package generated in external_inputs.")
+            st.write("External_Tool_Run_Plan")
+            st.dataframe(temp_run_plan, use_container_width=True)
+        except Exception as exc:
+            st.error(f"External input package generation failed: {exc}")
+    external_result_tool_id = ""
+    if tool_options:
+        external_result_tool_id = st.selectbox(
+            "External result file tool_id",
+            options=tool_options,
+            index=0,
+        )
+    external_result_file = st.file_uploader(
+        "Upload external tool result file",
+        type=["csv", "xlsx", "xls"],
+        help="Upload a user-generated external tool result file for import and evidence integration.",
+    )
 
     if st.button("Run Analysis", type="primary", disabled=uploaded_file is None):
         if uploaded_file is None:
@@ -197,7 +269,14 @@ def main() -> None:
             return
         try:
             with st.spinner("Running AbDev-Lite analysis and generating reports..."):
-                results, excel_path, html_path = run_pipeline(uploaded_file, humanness_file, structure_file)
+                results, excel_path, html_path = run_pipeline(
+                    uploaded_file,
+                    humanness_file,
+                    structure_file,
+                    selected_external_tools,
+                    external_result_file,
+                    external_result_tool_id,
+                )
             st.success("Analysis complete. Excel and HTML reports were generated.")
 
             summary = results["Antibody_Summary"]
@@ -212,6 +291,10 @@ def main() -> None:
             formulation_recommendations = results.get("Formulation_Recommendations", pd.DataFrame())
             structure_results = results.get("Structure_Results", pd.DataFrame())
             structural_risk_summary = results.get("Structural_Risk_Summary", pd.DataFrame())
+            tool_registry_results = results.get("Tool_Registry", pd.DataFrame())
+            external_run_plan = results.get("External_Tool_Run_Plan", pd.DataFrame())
+            external_results = results.get("External_Tool_Results", pd.DataFrame())
+            external_summary = results.get("External_Tool_Summary", pd.DataFrame())
             if summary.empty or "max_chain_risk_class" not in summary.columns:
                 risk_counts = pd.Series({"Low": 0, "Medium": 0, "High": 0})
             else:
@@ -297,7 +380,24 @@ def main() -> None:
             st.dataframe(structural_risk_summary.head(200), use_container_width=True)
             st.caption(
                 "Structural risk interpretation is based on imported computational metrics or user annotations only. "
-                "AbDev-Lite v0.8 does not generate or validate 3D structures."
+                "This version does not generate or validate 3D structures."
+            )
+
+            st.subheader("External Tool Integration")
+            st.write("Tool Registry")
+            st.dataframe(tool_registry_results, use_container_width=True)
+            st.write("External_Tool_Run_Plan")
+            st.dataframe(external_run_plan.head(200), use_container_width=True)
+            if external_run_plan.empty:
+                st.info("No external input package was generated in this run.")
+            st.write("External_Tool_Results")
+            st.dataframe(external_results.head(200), use_container_width=True)
+            if external_results.empty:
+                st.info("No external tool result file was imported in this run.")
+            st.write("External_Tool_Summary")
+            st.dataframe(external_summary.head(200), use_container_width=True)
+            st.caption(
+                "External tool results are user-provided computational evidence. Review imported results before decision-making."
             )
 
             st.subheader("Candidate Ranking")
@@ -312,6 +412,9 @@ def main() -> None:
                 "molecule_format",
                 "final_priority_score",
                 "final_priority_class",
+                "external_high_risk_flags",
+                "external_medium_risk_flags",
+                "external_tool_results_available",
                 "structural_risk_class",
                 "decision_label",
                 "review_reason",

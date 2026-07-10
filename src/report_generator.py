@@ -12,7 +12,7 @@ from .utils import ensure_output_dir
 
 
 REPORT_TITLE = "AbDev-Lite: Antibody Variable-Region Developability Screening Report"
-REPORT_VERSION = "MVP v0.8"
+REPORT_VERSION = "MVP v0.9"
 ANALYSIS_SCOPE = (
     "This MVP focuses on sequence-level developability screening of antibody variable regions including VH, VL, "
     "VHH, and scFv-derived variable domains."
@@ -29,8 +29,14 @@ REPORT_DISCLAIMER = (
 )
 STRUCTURAL_DISCLAIMER = (
     "Structural risk interpretation is based on imported computational structure prediction metrics or user-provided "
-    "annotations. AbDev-Lite v0.8 does not generate or validate 3D structures, does not perform antigen-binding "
+    "annotations. This version does not generate or validate 3D structures, does not perform antigen-binding "
     "prediction, and does not replace experimental structural characterization."
+)
+EXTERNAL_TOOL_DISCLAIMER = (
+    "External tool integration in AbDev-Lite v0.9 is designed for traceable input export and result import. "
+    "Browser automation is disabled by default. Users are responsible for complying with third-party tool terms "
+    "of use and for protecting confidential antibody sequences. Imported external results should be reviewed "
+    "before decision-making."
 )
 FORMULATION_DISCLAIMER = (
     "Formulation recommendations are computational triage outputs based on sequence-level features and optional "
@@ -83,6 +89,10 @@ SHEET_ORDER = [
     "Formulation_Recommendations",
     "Structure_Results",
     "Structural_Risk_Summary",
+    "Tool_Registry",
+    "External_Tool_Run_Plan",
+    "External_Tool_Results",
+    "External_Tool_Summary",
 ]
 
 
@@ -189,6 +199,10 @@ def _build_results(
     formulation_recommendations_df: pd.DataFrame | None = None,
     structure_results_df: pd.DataFrame | None = None,
     structural_risk_summary_df: pd.DataFrame | None = None,
+    tool_registry_df: pd.DataFrame | None = None,
+    external_tool_run_plan_df: pd.DataFrame | None = None,
+    external_tool_results_df: pd.DataFrame | None = None,
+    external_tool_summary_df: pd.DataFrame | None = None,
 ) -> dict[str, pd.DataFrame]:
     return {
         "Input_Cleaned": _df(input_cleaned_df),
@@ -207,6 +221,10 @@ def _build_results(
         "Formulation_Recommendations": _df(formulation_recommendations_df),
         "Structure_Results": _df(structure_results_df),
         "Structural_Risk_Summary": _df(structural_risk_summary_df),
+        "Tool_Registry": _df(tool_registry_df),
+        "External_Tool_Run_Plan": _df(external_tool_run_plan_df),
+        "External_Tool_Results": _df(external_tool_results_df),
+        "External_Tool_Summary": _df(external_tool_summary_df),
     }
 
 
@@ -228,6 +246,10 @@ def generate_excel_report(
     formulation_recommendations_df: pd.DataFrame | None = None,
     structure_results_df: pd.DataFrame | None = None,
     structural_risk_summary_df: pd.DataFrame | None = None,
+    tool_registry_df: pd.DataFrame | None = None,
+    external_tool_run_plan_df: pd.DataFrame | None = None,
+    external_tool_results_df: pd.DataFrame | None = None,
+    external_tool_summary_df: pd.DataFrame | None = None,
 ) -> Path:
     """Write all result tables to a multi-sheet Excel workbook."""
     output_path = Path(output_path)
@@ -249,6 +271,10 @@ def generate_excel_report(
         formulation_recommendations_df,
         structure_results_df,
         structural_risk_summary_df,
+        tool_registry_df,
+        external_tool_run_plan_df,
+        external_tool_results_df,
+        external_tool_summary_df,
     )
     with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
         for sheet in SHEET_ORDER:
@@ -277,6 +303,10 @@ def write_excel(results: dict[str, pd.DataFrame], output_dir: str | Path = "outp
         formulation_recommendations_df=results.get("Formulation_Recommendations"),
         structure_results_df=results.get("Structure_Results"),
         structural_risk_summary_df=results.get("Structural_Risk_Summary"),
+        tool_registry_df=results.get("Tool_Registry"),
+        external_tool_run_plan_df=results.get("External_Tool_Run_Plan"),
+        external_tool_results_df=results.get("External_Tool_Results"),
+        external_tool_summary_df=results.get("External_Tool_Summary"),
     )
 
 
@@ -301,6 +331,10 @@ def generate_html_report(
     formulation_recommendations_df: pd.DataFrame | None = None,
     structure_results_df: pd.DataFrame | None = None,
     structural_risk_summary_df: pd.DataFrame | None = None,
+    tool_registry_df: pd.DataFrame | None = None,
+    external_tool_run_plan_df: pd.DataFrame | None = None,
+    external_tool_results_df: pd.DataFrame | None = None,
+    external_tool_summary_df: pd.DataFrame | None = None,
 ) -> Path:
     """Render the HTML report with Jinja2."""
     output_path = Path(output_path)
@@ -322,6 +356,10 @@ def generate_html_report(
     formulation_recommendations_df = _df(formulation_recommendations_df)
     structure_results_df = _df(structure_results_df)
     structural_risk_summary_df = _df(structural_risk_summary_df)
+    tool_registry_df = _df(tool_registry_df)
+    external_tool_run_plan_df = _df(external_tool_run_plan_df)
+    external_tool_results_df = _df(external_tool_results_df)
+    external_tool_summary_df = _df(external_tool_summary_df)
     summary_display_df = _summary_with_ranking(antibody_summary_df, candidate_ranking_df)
     summary_display_df = _summary_with_formulation(summary_display_df, formulation_recommendations_df)
 
@@ -411,6 +449,23 @@ def generate_html_report(
         "structural_risk_class",
         ["Low", "Medium", "High", "Not Available"],
     )
+    external_result_count = int(len(external_tool_results_df))
+    external_run_plan_count = int(len(external_tool_run_plan_df))
+    external_tools_with_results = (
+        int(external_tool_results_df["tool_id"].astype(str).nunique())
+        if not external_tool_results_df.empty and "tool_id" in external_tool_results_df.columns
+        else 0
+    )
+    external_high_flags = (
+        int(pd.to_numeric(external_tool_summary_df.get("external_high_risk_flags", pd.Series(dtype=int)), errors="coerce").fillna(0).sum())
+        if not external_tool_summary_df.empty
+        else 0
+    )
+    external_medium_flags = (
+        int(pd.to_numeric(external_tool_summary_df.get("external_medium_risk_flags", pd.Series(dtype=int)), errors="coerce").fillna(0).sum())
+        if not external_tool_summary_df.empty
+        else 0
+    )
     structure_available_count = (
         int(structural_risk_summary_df["structure_available"].fillna(False).astype(bool).sum())
         if not structural_risk_summary_df.empty and "structure_available" in structural_risk_summary_df.columns
@@ -486,6 +541,9 @@ def generate_html_report(
                 "molecule_format",
                 "final_priority_score",
                 "final_priority_class",
+                "external_high_risk_flags",
+                "external_medium_risk_flags",
+                "external_tool_results_available",
                 "decision_label",
                 "review_reason",
                 "next_step_recommendation",
@@ -533,6 +591,68 @@ def generate_html_report(
                 "structural_next_step_recommendation",
             ],
         ),
+        "external_tool_integration": {
+            "registered_tool_count": int(len(tool_registry_df)),
+            "run_plan_row_count": external_run_plan_count,
+            "imported_result_row_count": external_result_count,
+            "tools_with_results_count": external_tools_with_results,
+            "external_high_risk_flags": external_high_flags,
+            "external_medium_risk_flags": external_medium_flags,
+        },
+        "tool_registry_rows": _safe_records(
+            tool_registry_df,
+            [
+                "tool_id",
+                "tool_name",
+                "tool_category",
+                "default_mode",
+                "automation_allowed",
+                "supports_batch",
+                "supports_api",
+                "supports_cli",
+                "requires_web_upload",
+                "recommended_use",
+                "notes",
+            ],
+        ),
+        "external_run_plan_rows": _safe_records(
+            external_tool_run_plan_df,
+            [
+                "run_id",
+                "tool_id",
+                "tool_name",
+                "antibody_id",
+                "chain_id",
+                "sequence_scope",
+                "input_file",
+                "input_format",
+                "run_mode",
+                "run_status",
+                "user_action_required",
+                "warning",
+            ],
+            100,
+        ),
+        "external_result_rows": _safe_records(
+            external_tool_results_df,
+            [
+                "tool_id",
+                "tool_name",
+                "tool_category",
+                "antibody_id",
+                "chain_id",
+                "sequence_scope",
+                "result_status",
+                "result_metric_name",
+                "result_metric_value",
+                "result_risk_class",
+                "result_interpretation",
+                "merge_status",
+                "merge_warning",
+            ],
+            100,
+        ),
+        "external_summary_rows": _safe_records(external_tool_summary_df),
         "formulation_recommendation_rows": _safe_records(
             formulation_recommendations_df,
             [
@@ -622,6 +742,7 @@ def generate_html_report(
         "prioritization_disclaimer": PRIORITIZATION_DISCLAIMER,
         "formulation_disclaimer": FORMULATION_DISCLAIMER,
         "structural_disclaimer": STRUCTURAL_DISCLAIMER,
+        "external_tool_disclaimer": EXTERNAL_TOOL_DISCLAIMER,
         "numbering_notice": NUMBERING_NOTICE,
         "full_length_notice": FULL_LENGTH_NOTICE,
         "hydrophobic_patch_notice": HYDROPHOBIC_PATCH_NOTICE,
@@ -663,6 +784,10 @@ def write_html_report(
         formulation_recommendations_df=results.get("Formulation_Recommendations"),
         structure_results_df=results.get("Structure_Results"),
         structural_risk_summary_df=results.get("Structural_Risk_Summary"),
+        tool_registry_df=results.get("Tool_Registry"),
+        external_tool_run_plan_df=results.get("External_Tool_Run_Plan"),
+        external_tool_results_df=results.get("External_Tool_Results"),
+        external_tool_summary_df=results.get("External_Tool_Summary"),
     )
 
 

@@ -1,8 +1,10 @@
 # AbDev-Lite
 
-AbDev-Lite is a local lightweight Streamlit MVP for antibody variable-region developability screening. Version `MVP v0.8` analyzes sequence-level signals for VH, VL, VHH, and scFv-derived variable domains, supports optional IMGT numbering and CDR/FR liability mapping, imports optional external humanness/germline and structure prediction summary results, ranks candidates with a rule-based decision matrix, adds formulation recommendations, then exports Excel and offline HTML reports.
+AbDev-Lite is a local lightweight Streamlit MVP for antibody variable-region developability screening. Version `MVP v0.9` keeps the v0.8 sequence QC, liability scanning, IMGT numbering, CDR/FR mapping, humanness import, candidate prioritization, formulation recommendation, optional structure import, Excel report, HTML report, and Streamlit interface, then adds an External Tool Adapter Framework.
 
-The project is intentionally local and lightweight. It does not call external webpages, upload sequences to third-party platforms, or run BioPhi, IgBLAST, Sapiens, OASis, TAP, IgFold, ImmuneBuilder, AlphaFold, ColabFold, docking, or molecular dynamics.
+The v0.9 external tool workflow is manual-assisted and auditable. It prepares local input packages, tracks planned external runs, imports user-provided result files, summarizes imported evidence, and integrates external high/medium risk flags into `Antibody_Summary` and `Candidate_Ranking`.
+
+The project is intentionally local and lightweight. It does not automatically submit sequences to third-party websites, does not bypass CAPTCHA or login permissions, does not store credentials or API keys, and does not enable browser automation by default.
 
 ## Current Features
 
@@ -17,12 +19,29 @@ The project is intentionally local and lightweight. It does not call external we
 - Candidate prioritization with final priority score and A/B/C/D class
 - Formulation feature extraction and recommendation
 - Optional external structure prediction result import
-- Structure confidence metrics
-- CDR loop confidence summary
-- Surface/aggregation/charge patch risk summary
-- Structural risk class
-- Structural risk integration into candidate ranking
 - Excel report, HTML report, and Streamlit interface
+- External tool registry
+- External input package generation
+- Manual-assisted external tool workflow
+- External result import
+- External tool summary
+- Integration of external tool results into `Antibody_Summary` and `Candidate_Ranking`
+- Browser automation interface reserved but disabled by default
+
+## External Tool Adapter Framework
+
+The registry is defined in `tool_specs/external_tools.yaml` and currently includes:
+
+- BioPhi / OASis
+- IgBLAST
+- TAP
+- IgFold
+- ImmuneBuilder
+- Custom Manual Tool
+
+Generated local external input packages are written under `external_inputs/`. User-provided external result files can be imported from CSV or XLSX. Runtime folders `external_inputs/`, `external_results/`, and `external_runs/` are ignored by Git except for `.gitkeep` files, so real project sequences and external run results should not be committed.
+
+Browser automation is represented only by a reserved adapter interface in `src/browser_adapter.py`. It is disabled by default and does not install Playwright or Selenium, open webpages, submit sequences, bypass CAPTCHA, bypass login requirements, save credentials, or store API keys.
 
 ## Input Format
 
@@ -38,21 +57,11 @@ Upload a CSV or XLSX file with these required columns:
 | sequence_scope | VH, VL, VHH, scFv, VH_arm1, VL_arm1, VH_arm2, VL_arm2, full_heavy, full_light |
 | sequence | Amino acid sequence |
 
-## Optional Humanness/Germline Import
+## Optional Imports
 
-AbDev-Lite can import an optional external humanness/germline assessment file in CSV or XLSX format. If it is not provided, sequence-level analysis, prioritization, formulation, and reporting still run.
+AbDev-Lite can import optional humanness/germline results, optional structure prediction summary results, and v0.9 external tool results. If any optional file is not provided, the core sequence-level analysis still runs and the corresponding output sheets keep headers and empty/default status rows.
 
-Recommended columns include `antibody_id`, `chain_id`, `sequence_scope`, `humanness_tool`, `humanness_score`, `humanness_percentile`, `closest_human_germline`, `closest_species`, `v_gene`, `j_gene`, `identity_to_human_germline`, `framework_identity`, `cdr_identity`, and `humanness_notes`.
-
-Human-likeness assessment is not equivalent to clinical immunogenicity prediction. AbDev-Lite does not run BioPhi, IgBLAST, Sapiens, OASis, or automatic humanization design.
-
-## Optional Structure Result Import
-
-AbDev-Lite v0.8 can import an optional external structure prediction summary file in CSV or XLSX format. If it is not provided, AbDev-Lite reports structure status as `Not Available` and does not penalize candidate ranking.
-
-Recommended columns include `antibody_id`, `chain_id`, `sequence_scope`, `structure_tool`, `structure_model_file`, `structure_status`, `mean_plddt`, `cdr1_plddt`, `cdr2_plddt`, `cdr3_plddt`, `vh_vl_orientation_confidence`, `predicted_surface_hydrophobic_patch_score`, `predicted_aggregation_patch_score`, `predicted_charge_patch_score`, and `structural_notes`.
-
-Structural risk interpretation is based only on imported computational metrics or user-provided annotations. AbDev-Lite v0.8 does not run IgFold, ImmuneBuilder, AlphaFold, ColabFold, docking, molecular dynamics, antigen-binding prediction, paratope prediction, or experimental structural validation.
+External tool result imports use the standard `External_Tool_Results` fields, including `tool_id`, `antibody_id`, `chain_id`, `sequence_scope`, `result_metric_name`, `result_metric_value`, `result_risk_class`, and `result_interpretation`. Missing fields are allowed but are marked with warnings.
 
 ## Output Files
 
@@ -61,26 +70,14 @@ After clicking **Run Analysis**, reports are written to `outputs/`:
 - `outputs/abdev_lite_results.xlsx`
 - `outputs/abdev_lite_report.html`
 
-The Excel workbook contains:
+The Excel workbook contains the v0.8 sheets plus:
 
-- `Input_Cleaned`
-- `Sequence_QC`
-- `Chain_Properties`
-- `Numbering_Residues`
-- `Region_Summary`
-- `Liability_Sites`
-- `Liability_Region_Map`
-- `Chain_Risk_Scores`
-- `Humanness_Results`
-- `Antibody_Summary`
-- `Candidate_Ranking`
-- `Formulation_Features`
-- `Expreso_Predictions`
-- `Formulation_Recommendations`
-- `Structure_Results`
-- `Structural_Risk_Summary`
+- `Tool_Registry`
+- `External_Tool_Run_Plan`
+- `External_Tool_Results`
+- `External_Tool_Summary`
 
-The HTML report can be opened offline in a browser and includes executive metrics, numbering and region summaries, humanness summary, Structural Risk Summary, candidate prioritization, formulation recommendation, antibody summary cards, detailed result tables, and disclaimers.
+The HTML report includes an **External Tool Integration** section with registry, run plan, imported result, antibody-level summary, and disclaimer tables.
 
 ## Installation
 
@@ -96,7 +93,7 @@ If AbNumber/ANARCI installation fails, install it separately with conda or mamba
 streamlit run app.py
 ```
 
-Upload the main input file, optionally upload humanness/germline and structure result files, then click **Run Analysis**. The page provides **Download Excel Results** and **Download HTML Report** buttons.
+Upload the main input file, optionally select external tools to generate input packages, optionally upload humanness/germline, structure, or external tool result files, then click **Run Analysis**. The page provides **Download Excel Results** and **Download HTML Report** buttons.
 
 ## Example Data
 
@@ -104,36 +101,19 @@ Upload the main input file, optionally upload humanness/germline and structure r
 data/example_input.xlsx
 data/example_humanness_results.xlsx
 data/example_structure_results.xlsx
+data/example_external_tool_results.xlsx
 ```
 
-Use `example_input.xlsx` alone for a compatibility smoke test. Use `example_humanness_results.xlsx` and `example_structure_results.xlsx` to test optional v0.8 imports, merge behavior, structural risk summary, and candidate ranking integration.
+Use `example_input.xlsx` alone for a compatibility smoke test. Use `example_external_tool_results.xlsx` to test v0.9 external result import and candidate ranking integration.
 
-## Methodology
+## Limitations
 
-AbDev-Lite v0.8 performs local rule-based screening and aggregation:
-
-- Input sequence cleaning and QC
-- Biopython-based physicochemical property calculation
-- Rule-based liability motif scanning
-- Optional AbNumber/ANARCI IMGT numbering
-- IMGT-based FR/CDR extraction and liability mapping
-- Rule-based sequence-level and CDR-adjusted risk scoring
-- Optional external humanness/germline result import
-- Optional external structure summary import
-- Structural confidence, CDR loop confidence, and patch-risk aggregation
-- Rule-based candidate prioritization from developability, CDR/FR mapping, optional humanness metrics, and optional structural risk metrics
-- Formulation-related feature extraction and recommendation
-- Antibody-level aggregation
-
-## Current Limitations
-
-- v0.8 does not run IgFold, AlphaFold, ColabFold, or ImmuneBuilder automatically.
-- v0.8 only imports external structure summary results.
-- Structural interpretation is computational and should be reviewed.
-- No antigen-binding, paratope prediction, docking, or molecular dynamics is performed.
-- No experimental structural validation is performed.
-- Hydrophobic patch detection in the sequence-level liability scanner remains a sequence-level proxy and does not represent true structural surface patch analysis.
-- BsAb analysis is chain-level only and does not evaluate chain pairing, heterodimerization, Fc engineering, linker geometry, or full molecule architecture.
-- Full-length sequences are only analyzed for basic sequence-level properties in this MVP.
+- v0.9 does not automatically submit sequences to websites.
+- Browser automation is disabled by default.
+- Users must comply with third-party tool terms of use.
+- Users should not upload confidential antibody sequences to public tools without authorization.
+- External results are imported as user-provided computational evidence and should be reviewed.
+- Web automation may be considered in a later version only for tools that explicitly permit it.
+- No antigen-binding prediction, paratope prediction, docking, molecular dynamics, or experimental validation is performed.
+- BsAb analysis remains chain-level and does not evaluate chain pairing, heterodimerization, Fc engineering, linker geometry, or full molecule architecture.
 - Human-likeness assessment is not equivalent to clinical immunogenicity prediction.
-- Candidate ranking is rule-based computational triage and does not predict experimental success.

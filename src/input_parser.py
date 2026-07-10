@@ -19,6 +19,8 @@ def read_input_file(file_obj: BinaryIO | str | Path, filename: str | None = None
     name = filename or getattr(file_obj, "name", "") or str(file_obj)
     suffix = Path(name).suffix.lower()
     try:
+        if hasattr(file_obj, "seek"):
+            file_obj.seek(0)
         if suffix == ".csv":
             return pd.read_csv(file_obj)
         if suffix in {".xlsx", ".xls"}:

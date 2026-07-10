@@ -191,6 +191,120 @@
   </table>
   <p class="disclaimer">{{ structural_disclaimer }}</p>
 
+  <h2>External Tool Integration</h2>
+  <div class="metric-grid">
+    <div class="metric"><span class="label">Registered tools</span><strong>{{ external_tool_integration.registered_tool_count }}</strong></div>
+    <div class="metric"><span class="label">Run plan rows</span><strong>{{ external_tool_integration.run_plan_row_count }}</strong></div>
+    <div class="metric"><span class="label">Imported result rows</span><strong>{{ external_tool_integration.imported_result_row_count }}</strong></div>
+    <div class="metric"><span class="label">Tools with results</span><strong>{{ external_tool_integration.tools_with_results_count }}</strong></div>
+    <div class="metric"><span class="label">External high flags</span><strong>{{ external_tool_integration.external_high_risk_flags }}</strong></div>
+    <div class="metric"><span class="label">External medium flags</span><strong>{{ external_tool_integration.external_medium_risk_flags }}</strong></div>
+  </div>
+  <h3>Tool Registry Summary</h3>
+  <table>
+    <tr>
+      <th>tool_id</th><th>tool_name</th><th>tool_category</th><th>default_mode</th><th>automation_allowed</th>
+      <th>supports_batch</th><th>supports_api</th><th>supports_cli</th><th>requires_web_upload</th><th>recommended_use</th><th>notes</th>
+    </tr>
+    {% for row in tool_registry_rows %}
+    <tr>
+      <td>{{ row.tool_id|dash }}</td>
+      <td>{{ row.tool_name|dash }}</td>
+      <td>{{ row.tool_category|dash }}</td>
+      <td>{{ row.default_mode|dash }}</td>
+      <td>{{ row.automation_allowed|dash }}</td>
+      <td>{{ row.supports_batch|dash }}</td>
+      <td>{{ row.supports_api|dash }}</td>
+      <td>{{ row.supports_cli|dash }}</td>
+      <td>{{ row.requires_web_upload|dash }}</td>
+      <td>{{ row.recommended_use|dash }}</td>
+      <td>{{ row.notes|dash }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="11" class="empty">No external tool registry rows were available.</td></tr>
+    {% endfor %}
+  </table>
+  <h3>External Tool Run Plan Summary</h3>
+  <table>
+    <tr>
+      <th>run_id</th><th>tool_id</th><th>tool_name</th><th>antibody_id</th><th>chain_id</th><th>sequence_scope</th>
+      <th>input_file</th><th>input_format</th><th>run_mode</th><th>run_status</th><th>user_action_required</th><th>warning</th>
+    </tr>
+    {% for row in external_run_plan_rows %}
+    <tr>
+      <td>{{ row.run_id|dash }}</td>
+      <td>{{ row.tool_id|dash }}</td>
+      <td>{{ row.tool_name|dash }}</td>
+      <td>{{ row.antibody_id|dash }}</td>
+      <td>{{ row.chain_id|dash }}</td>
+      <td>{{ row.sequence_scope|dash }}</td>
+      <td>{{ row.input_file|dash }}</td>
+      <td>{{ row.input_format|dash }}</td>
+      <td>{{ row.run_mode|dash }}</td>
+      <td>{{ row.run_status|dash }}</td>
+      <td>{{ row.user_action_required|dash }}</td>
+      <td>{{ row.warning|dash }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="12" class="empty">No external input package was generated in this run.</td></tr>
+    {% endfor %}
+  </table>
+  <h3>External Tool Results Summary</h3>
+  <table>
+    <tr>
+      <th>tool_id</th><th>tool_name</th><th>tool_category</th><th>antibody_id</th><th>chain_id</th><th>sequence_scope</th>
+      <th>result_status</th><th>result_metric_name</th><th>result_metric_value</th><th>result_risk_class</th>
+      <th>result_interpretation</th><th>merge_status</th><th>merge_warning</th>
+    </tr>
+    {% for row in external_result_rows %}
+    {% set external_risk = row.result_risk_class|dash %}
+    <tr>
+      <td>{{ row.tool_id|dash }}</td>
+      <td>{{ row.tool_name|dash }}</td>
+      <td>{{ row.tool_category|dash }}</td>
+      <td>{{ row.antibody_id|dash }}</td>
+      <td>{{ row.chain_id|dash }}</td>
+      <td>{{ row.sequence_scope|dash }}</td>
+      <td>{{ row.result_status|dash }}</td>
+      <td>{{ row.result_metric_name|dash }}</td>
+      <td>{{ row.result_metric_value|dash }}</td>
+      <td><span class="badge {{ external_risk|lower }}">{{ external_risk }}</span></td>
+      <td>{{ row.result_interpretation|dash }}</td>
+      <td>{{ row.merge_status|dash }}</td>
+      <td>{{ row.merge_warning|dash }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="13" class="empty">No external tool result was imported.</td></tr>
+    {% endfor %}
+  </table>
+  <h3>External_Tool_Summary</h3>
+  <table>
+    <tr>
+      <th>antibody_id</th><th>external_tool_results_available</th><th>tools_with_results</th>
+      <th>humanness_tool_result_available</th><th>developability_tool_result_available</th><th>structure_tool_result_available</th>
+      <th>external_high_risk_flags</th><th>external_medium_risk_flags</th><th>external_low_risk_flags</th>
+      <th>external_tool_summary_text</th><th>external_tool_review_recommendation</th>
+    </tr>
+    {% for row in external_summary_rows %}
+    <tr>
+      <td>{{ row.antibody_id|dash }}</td>
+      <td>{{ row.external_tool_results_available|dash }}</td>
+      <td>{{ row.tools_with_results|dash }}</td>
+      <td>{{ row.humanness_tool_result_available|dash }}</td>
+      <td>{{ row.developability_tool_result_available|dash }}</td>
+      <td>{{ row.structure_tool_result_available|dash }}</td>
+      <td>{{ row.external_high_risk_flags|dash }}</td>
+      <td>{{ row.external_medium_risk_flags|dash }}</td>
+      <td>{{ row.external_low_risk_flags|dash }}</td>
+      <td>{{ row.external_tool_summary_text|dash }}</td>
+      <td>{{ row.external_tool_review_recommendation|dash }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="11" class="empty">No antibody-level external tool summary rows were generated.</td></tr>
+    {% endfor %}
+  </table>
+  <p class="disclaimer">{{ external_tool_disclaimer }}</p>
+
   <h2>Risk Distribution</h2>
   <table>
     <tr><th>Risk class</th><th>Antibody count</th><th>Distribution</th></tr>
@@ -221,6 +335,7 @@
   <table>
     <tr>
       <th>antibody_id</th><th>molecule_format</th><th>final_priority_score</th><th>final_priority_class</th>
+      <th>external_high_risk_flags</th><th>external_medium_risk_flags</th><th>external_tool_results_available</th>
       <th>structural_risk_class</th><th>decision_label</th><th>review_reason</th><th>next_step_recommendation</th>
     </tr>
     {% for row in candidate_ranking_rows %}
@@ -230,13 +345,16 @@
       <td>{{ row.molecule_format|dash }}</td>
       <td>{{ row.final_priority_score|dash }}</td>
       <td><span class="badge {{ priority_class|lower }}">{{ priority_class }}</span></td>
+      <td>{{ row.external_high_risk_flags|dash }}</td>
+      <td>{{ row.external_medium_risk_flags|dash }}</td>
+      <td>{{ row.external_tool_results_available|dash }}</td>
       <td>{{ row.structural_risk_class|dash }}</td>
       <td>{{ row.decision_label|dash }}</td>
       <td>{{ row.review_reason|dash }}</td>
       <td>{{ row.next_step_recommendation|dash }}</td>
     </tr>
     {% else %}
-    <tr><td colspan="8" class="empty">No candidate ranking results were generated in this run.</td></tr>
+    <tr><td colspan="11" class="empty">No candidate ranking results were generated in this run.</td></tr>
     {% endfor %}
   </table>
   <p class="disclaimer">{{ prioritization_disclaimer }}</p>
@@ -306,6 +424,11 @@
       <div><span class="label">Structure available</span><span class="value">{{ row.structure_available|dash }}</span></div>
       <div><span class="label">Structural risk class</span><span class="value">{{ row.structural_risk_class|dash }}</span></div>
       <div><span class="label">Structural review reason</span><span class="value">{{ row.structural_review_reason|dash }}</span></div>
+      <div><span class="label">External results available</span><span class="value">{{ row.external_tool_results_available|dash }}</span></div>
+      <div><span class="label">External tools with results</span><span class="value">{{ row.tools_with_results|dash }}</span></div>
+      <div><span class="label">External high flags</span><span class="value">{{ row.external_high_risk_flags|dash }}</span></div>
+      <div><span class="label">External medium flags</span><span class="value">{{ row.external_medium_risk_flags|dash }}</span></div>
+      <div><span class="label">External review recommendation</span><span class="value">{{ row.external_tool_review_recommendation|dash }}</span></div>
     </div>
     <p class="field"><strong>Major liabilities:</strong> {{ row.major_liabilities|dash }}</p>
     <p><strong>Major CDR liabilities:</strong> {{ row.major_cdr_liabilities|dash }}</p>
@@ -442,6 +565,8 @@
     <li>Optional local Expreso-lite model adapter with rule-based fallback</li>
     <li>Excipient class recommendation and formulation risk triage</li>
     <li>Optional external structure prediction summary import and structural risk aggregation</li>
+    <li>External tool registry, traceable input export, manual result import, and antibody-level external evidence summary</li>
+    <li>Reserved browser automation adapter interface with automation disabled by default</li>
     <li>Antibody-level aggregation</li>
   </ul>
 
@@ -459,6 +584,7 @@
   <div class="disclaimer">{{ prioritization_disclaimer }}</div>
   <div class="disclaimer">{{ formulation_disclaimer }}</div>
   <div class="disclaimer">{{ structural_disclaimer }}</div>
+  <div class="disclaimer">{{ external_tool_disclaimer }}</div>
   <div class="disclaimer">{{ disclaimer }}</div>
 </main>
 </body>

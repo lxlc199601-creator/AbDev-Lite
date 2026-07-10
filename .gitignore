@@ -12,3 +12,13 @@ outputs/*.csv
 !models/
 !models/expreso_lite/
 !models/expreso_lite/.gitkeep
+external_inputs/*
+external_results/*
+external_runs/*
+!external_inputs/.gitkeep
+!external_results/.gitkeep
+!external_runs/.gitkeep
+.streamlit/cookies*
+browser_cache/
+credentials*
+*.key

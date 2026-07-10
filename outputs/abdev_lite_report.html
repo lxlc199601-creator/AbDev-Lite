@@ -97,8 +97,8 @@
     <div class="meta-grid">
       <div class="meta-item"><span class="label">Project</span><span class="value">AbDev-Lite</span></div>
       <div class="meta-item"><span class="label">Uploaded file</span><span class="value">example_input.xlsx</span></div>
-      <div class="meta-item"><span class="label">Analysis time</span><span class="value">2026-07-10 09:59:30</span></div>
-      <div class="meta-item"><span class="label">Report version</span><span class="value">MVP v0.8</span></div>
+      <div class="meta-item"><span class="label">Analysis time</span><span class="value">2026-07-10 10:29:41</span></div>
+      <div class="meta-item"><span class="label">Report version</span><span class="value">MVP v0.9</span></div>
     </div>
   </section>
 
@@ -135,26 +135,17 @@
 
   <h2>Humanness Summary</h2>
   
-  <div class="metric-grid">
-    <div class="metric"><span class="label">Humanness available</span><strong>True</strong></div>
-    <div class="metric"><span class="label">Chains with data</span><strong>5</strong></div>
-    <div class="metric"><span class="label">Low humanness risk</span><strong>2</strong></div>
-    <div class="metric"><span class="label">Medium humanness risk</span><strong>1</strong></div>
-    <div class="metric"><span class="label">High humanness risk</span><strong>2</strong></div>
-    <div class="metric"><span class="label">Unknown humanness risk</span><strong>0</strong></div>
-  </div>
-  <p><strong>Most common closest human germlines:</strong> IGHV3-23 (1); IGKV1-39 (1); IGHV1-46 (1); IGHV4-34 (1)</p>
-  <p class="note">Human-likeness is not equivalent to clinical immunogenicity prediction. Imported humanness metrics are screening signals only.</p>
+  <p class="empty">No external humanness/germline assessment file was provided. Humanness analysis was not performed in this run.</p>
   
 
   <h2>Structural Risk Summary</h2>
   <div class="metric-grid">
-    <div class="metric"><span class="label">Structure available</span><strong>2</strong></div>
-    <div class="metric"><span class="label">Structure not available</span><strong>3</strong></div>
-    <div class="metric"><span class="label">Low structural risk</span><strong>1</strong></div>
-    <div class="metric"><span class="label">Medium structural risk</span><strong>1</strong></div>
+    <div class="metric"><span class="label">Structure available</span><strong>3</strong></div>
+    <div class="metric"><span class="label">Structure not available</span><strong>2</strong></div>
+    <div class="metric"><span class="label">Low structural risk</span><strong>3</strong></div>
+    <div class="metric"><span class="label">Medium structural risk</span><strong>0</strong></div>
     <div class="metric"><span class="label">High structural risk</span><strong>0</strong></div>
-    <div class="metric"><span class="label">Not available</span><strong>3</strong></div>
+    <div class="metric"><span class="label">Not available</span><strong>2</strong></div>
   </div>
   <table>
     <tr>
@@ -169,14 +160,14 @@
     <tr>
       <td>Ab001</td>
       <td>True</td>
-      <td>IgFold</td>
-      <td>Ab001_VHVL.pdb</td>
-      <td>PASS (1)</td>
-      <td>88.5</td>
-      <td>88.5</td>
-      <td>86.0</td>
-      <td>84.5</td>
-      <td>82.0</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt; (1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
       <td>0</td>
       <td>0</td>
       <td><span class="badge low">Low</span></td>
@@ -188,19 +179,38 @@
     <tr>
       <td>BsAb001</td>
       <td>True</td>
-      <td>Manual</td>
-      <td>BsAb001_ArmA_model.pdb</td>
-      <td>WARNING (1)</td>
-      <td>76.0</td>
-      <td>76.0</td>
-      <td>74.0</td>
-      <td>72.0</td>
-      <td>71.0</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt; (1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
       <td>0</td>
-      <td>3</td>
-      <td><span class="badge medium">Medium</span></td>
+      <td>0</td>
+      <td><span class="badge low">Low</span></td>
       <td>No major structural risk flag detected from imported metrics</td>
-      <td>Review imported structure confidence and patch annotations before progression</td>
+      <td>Imported structure metrics do not indicate a major structural review flag in this MVP assessment</td>
+    </tr>
+    
+    
+    <tr>
+      <td>VHH001</td>
+      <td>True</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt; (1)</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>0</td>
+      <td>0</td>
+      <td><span class="badge low">Low</span></td>
+      <td>No major structural risk flag detected from imported metrics</td>
+      <td>Imported structure metrics do not indicate a major structural review flag in this MVP assessment</td>
     </tr>
     
     
@@ -241,27 +251,750 @@
       <td>Import external structure prediction summary metrics if structural triage is needed</td>
     </tr>
     
+  </table>
+  <p class="disclaimer">Structural risk interpretation is based on imported computational structure prediction metrics or user-provided annotations. This version does not generate or validate 3D structures, does not perform antigen-binding prediction, and does not replace experimental structural characterization.</p>
+
+  <h2>External Tool Integration</h2>
+  <div class="metric-grid">
+    <div class="metric"><span class="label">Registered tools</span><strong>6</strong></div>
+    <div class="metric"><span class="label">Run plan rows</span><strong>36</strong></div>
+    <div class="metric"><span class="label">Imported result rows</span><strong>0</strong></div>
+    <div class="metric"><span class="label">Tools with results</span><strong>0</strong></div>
+    <div class="metric"><span class="label">External high flags</span><strong>0</strong></div>
+    <div class="metric"><span class="label">External medium flags</span><strong>0</strong></div>
+  </div>
+  <h3>Tool Registry Summary</h3>
+  <table>
+    <tr>
+      <th>tool_id</th><th>tool_name</th><th>tool_category</th><th>default_mode</th><th>automation_allowed</th>
+      <th>supports_batch</th><th>supports_api</th><th>supports_cli</th><th>requires_web_upload</th><th>recommended_use</th><th>notes</th>
+    </tr>
+    
+    <tr>
+      <td>BioPhi_OASis</td>
+      <td>BioPhi / OASis</td>
+      <td>humanness</td>
+      <td>manual_export_import</td>
+      <td>False</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>Human-likeness and OASis-style humanness review.</td>
+      <td>Prepare FASTA locally, run manually according to tool terms, then import the result.</td>
+    </tr>
+    
+    <tr>
+      <td>IgBLAST</td>
+      <td>IgBLAST</td>
+      <td>germline</td>
+      <td>local_cli</td>
+      <td>False</td>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
+      <td>False</td>
+      <td>Germline assignment and V(D)J annotation support.</td>
+      <td>Local CLI use is preferred when available; no browser automation is enabled by default.</td>
+    </tr>
+    
+    <tr>
+      <td>TAP</td>
+      <td>TAP</td>
+      <td>developability</td>
+      <td>manual_export_import</td>
+      <td>False</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>External developability flag review.</td>
+      <td>User-managed export/import workflow only in v0.9.</td>
+    </tr>
+    
+    <tr>
+      <td>IgFold</td>
+      <td>IgFold</td>
+      <td>structure</td>
+      <td>local_cli</td>
+      <td>False</td>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
+      <td>False</td>
+      <td>Optional structure prediction evidence generated outside AbDev-Lite.</td>
+      <td>Import only summary-level user-provided structure evidence in this framework.</td>
+    </tr>
+    
+    <tr>
+      <td>ImmuneBuilder</td>
+      <td>ImmuneBuilder</td>
+      <td>structure</td>
+      <td>local_cli</td>
+      <td>False</td>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
+      <td>False</td>
+      <td>Optional antibody structure model evidence generated outside AbDev-Lite.</td>
+      <td>Browser automation and credential handling are not implemented.</td>
+    </tr>
+    
+    <tr>
+      <td>Custom_Manual_Tool</td>
+      <td>Custom Manual Tool</td>
+      <td>custom</td>
+      <td>manual_export_import</td>
+      <td>False</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>User-defined external computational evidence.</td>
+      <td>Generic manual export/import path for internal or user-defined tools.</td>
+    </tr>
+    
+  </table>
+  <h3>External Tool Run Plan Summary</h3>
+  <table>
+    <tr>
+      <th>run_id</th><th>tool_id</th><th>tool_name</th><th>antibody_id</th><th>chain_id</th><th>sequence_scope</th>
+      <th>input_file</th><th>input_format</th><th>run_mode</th><th>run_status</th><th>user_action_required</th><th>warning</th>
+    </tr>
+    
+    <tr>
+      <td>BioPhi_OASis_Ab001_VH_FASTA</td>
+      <td>BioPhi_OASis</td>
+      <td>BioPhi / OASis</td>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>external_inputs\BioPhi_OASis\BioPhi_OASis_input.fasta</td>
+      <td>FASTA</td>
+      <td>manual_export_import</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>BioPhi_OASis_Ab001_VH_CSV</td>
+      <td>BioPhi_OASis</td>
+      <td>BioPhi / OASis</td>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>external_inputs\BioPhi_OASis\BioPhi_OASis_input.csv</td>
+      <td>CSV</td>
+      <td>manual_export_import</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>BioPhi_OASis_Ab001_VL_FASTA</td>
+      <td>BioPhi_OASis</td>
+      <td>BioPhi / OASis</td>
+      <td>Ab001</td>
+      <td>VL</td>
+      <td>VL</td>
+      <td>external_inputs\BioPhi_OASis\BioPhi_OASis_input.fasta</td>
+      <td>FASTA</td>
+      <td>manual_export_import</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>BioPhi_OASis_Ab001_VL_CSV</td>
+      <td>BioPhi_OASis</td>
+      <td>BioPhi / OASis</td>
+      <td>Ab001</td>
+      <td>VL</td>
+      <td>VL</td>
+      <td>external_inputs\BioPhi_OASis\BioPhi_OASis_input.csv</td>
+      <td>CSV</td>
+      <td>manual_export_import</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>BioPhi_OASis_BsAb001_VH_arm1_FASTA</td>
+      <td>BioPhi_OASis</td>
+      <td>BioPhi / OASis</td>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>external_inputs\BioPhi_OASis\BioPhi_OASis_input.fasta</td>
+      <td>FASTA</td>
+      <td>manual_export_import</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>BioPhi_OASis_BsAb001_VH_arm1_CSV</td>
+      <td>BioPhi_OASis</td>
+      <td>BioPhi / OASis</td>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>external_inputs\BioPhi_OASis\BioPhi_OASis_input.csv</td>
+      <td>CSV</td>
+      <td>manual_export_import</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>BioPhi_OASis_BsAb001_VL_arm1_FASTA</td>
+      <td>BioPhi_OASis</td>
+      <td>BioPhi / OASis</td>
+      <td>BsAb001</td>
+      <td>VL_arm1</td>
+      <td>VL_arm1</td>
+      <td>external_inputs\BioPhi_OASis\BioPhi_OASis_input.fasta</td>
+      <td>FASTA</td>
+      <td>manual_export_import</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>BioPhi_OASis_BsAb001_VL_arm1_CSV</td>
+      <td>BioPhi_OASis</td>
+      <td>BioPhi / OASis</td>
+      <td>BsAb001</td>
+      <td>VL_arm1</td>
+      <td>VL_arm1</td>
+      <td>external_inputs\BioPhi_OASis\BioPhi_OASis_input.csv</td>
+      <td>CSV</td>
+      <td>manual_export_import</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>BioPhi_OASis_BsAb001_VH_arm2_FASTA</td>
+      <td>BioPhi_OASis</td>
+      <td>BioPhi / OASis</td>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>external_inputs\BioPhi_OASis\BioPhi_OASis_input.fasta</td>
+      <td>FASTA</td>
+      <td>manual_export_import</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>BioPhi_OASis_BsAb001_VH_arm2_CSV</td>
+      <td>BioPhi_OASis</td>
+      <td>BioPhi / OASis</td>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>external_inputs\BioPhi_OASis\BioPhi_OASis_input.csv</td>
+      <td>CSV</td>
+      <td>manual_export_import</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>BioPhi_OASis_BsAb001_VL_arm2_FASTA</td>
+      <td>BioPhi_OASis</td>
+      <td>BioPhi / OASis</td>
+      <td>BsAb001</td>
+      <td>VL_arm2</td>
+      <td>VL_arm2</td>
+      <td>external_inputs\BioPhi_OASis\BioPhi_OASis_input.fasta</td>
+      <td>FASTA</td>
+      <td>manual_export_import</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>BioPhi_OASis_BsAb001_VL_arm2_CSV</td>
+      <td>BioPhi_OASis</td>
+      <td>BioPhi / OASis</td>
+      <td>BsAb001</td>
+      <td>VL_arm2</td>
+      <td>VL_arm2</td>
+      <td>external_inputs\BioPhi_OASis\BioPhi_OASis_input.csv</td>
+      <td>CSV</td>
+      <td>manual_export_import</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>BioPhi_OASis_VHH001_VHH_FASTA</td>
+      <td>BioPhi_OASis</td>
+      <td>BioPhi / OASis</td>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>external_inputs\BioPhi_OASis\BioPhi_OASis_input.fasta</td>
+      <td>FASTA</td>
+      <td>manual_export_import</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>BioPhi_OASis_VHH001_VHH_CSV</td>
+      <td>BioPhi_OASis</td>
+      <td>BioPhi / OASis</td>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>external_inputs\BioPhi_OASis\BioPhi_OASis_input.csv</td>
+      <td>CSV</td>
+      <td>manual_export_import</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>BioPhi_OASis_BadSeq001_VH_bad_FASTA</td>
+      <td>BioPhi_OASis</td>
+      <td>BioPhi / OASis</td>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>external_inputs\BioPhi_OASis\BioPhi_OASis_input.fasta</td>
+      <td>FASTA</td>
+      <td>manual_export_import</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>BioPhi_OASis_BadSeq001_VH_bad_CSV</td>
+      <td>BioPhi_OASis</td>
+      <td>BioPhi / OASis</td>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>external_inputs\BioPhi_OASis\BioPhi_OASis_input.csv</td>
+      <td>CSV</td>
+      <td>manual_export_import</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>BioPhi_OASis_Full001_full_heavy_FASTA</td>
+      <td>BioPhi_OASis</td>
+      <td>BioPhi / OASis</td>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>external_inputs\BioPhi_OASis\BioPhi_OASis_input.fasta</td>
+      <td>FASTA</td>
+      <td>manual_export_import</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>BioPhi_OASis_Full001_full_heavy_CSV</td>
+      <td>BioPhi_OASis</td>
+      <td>BioPhi / OASis</td>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>external_inputs\BioPhi_OASis\BioPhi_OASis_input.csv</td>
+      <td>CSV</td>
+      <td>manual_export_import</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>IgFold_Ab001_VH_FASTA</td>
+      <td>IgFold</td>
+      <td>IgFold</td>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>external_inputs\IgFold\IgFold_input.fasta</td>
+      <td>FASTA</td>
+      <td>local_cli</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>IgFold_Ab001_VH_CSV</td>
+      <td>IgFold</td>
+      <td>IgFold</td>
+      <td>Ab001</td>
+      <td>VH</td>
+      <td>VH</td>
+      <td>external_inputs\IgFold\IgFold_input.csv</td>
+      <td>CSV</td>
+      <td>local_cli</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>IgFold_Ab001_VL_FASTA</td>
+      <td>IgFold</td>
+      <td>IgFold</td>
+      <td>Ab001</td>
+      <td>VL</td>
+      <td>VL</td>
+      <td>external_inputs\IgFold\IgFold_input.fasta</td>
+      <td>FASTA</td>
+      <td>local_cli</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>IgFold_Ab001_VL_CSV</td>
+      <td>IgFold</td>
+      <td>IgFold</td>
+      <td>Ab001</td>
+      <td>VL</td>
+      <td>VL</td>
+      <td>external_inputs\IgFold\IgFold_input.csv</td>
+      <td>CSV</td>
+      <td>local_cli</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>IgFold_BsAb001_VH_arm1_FASTA</td>
+      <td>IgFold</td>
+      <td>IgFold</td>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>external_inputs\IgFold\IgFold_input.fasta</td>
+      <td>FASTA</td>
+      <td>local_cli</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>IgFold_BsAb001_VH_arm1_CSV</td>
+      <td>IgFold</td>
+      <td>IgFold</td>
+      <td>BsAb001</td>
+      <td>VH_arm1</td>
+      <td>VH_arm1</td>
+      <td>external_inputs\IgFold\IgFold_input.csv</td>
+      <td>CSV</td>
+      <td>local_cli</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>IgFold_BsAb001_VL_arm1_FASTA</td>
+      <td>IgFold</td>
+      <td>IgFold</td>
+      <td>BsAb001</td>
+      <td>VL_arm1</td>
+      <td>VL_arm1</td>
+      <td>external_inputs\IgFold\IgFold_input.fasta</td>
+      <td>FASTA</td>
+      <td>local_cli</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>IgFold_BsAb001_VL_arm1_CSV</td>
+      <td>IgFold</td>
+      <td>IgFold</td>
+      <td>BsAb001</td>
+      <td>VL_arm1</td>
+      <td>VL_arm1</td>
+      <td>external_inputs\IgFold\IgFold_input.csv</td>
+      <td>CSV</td>
+      <td>local_cli</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>IgFold_BsAb001_VH_arm2_FASTA</td>
+      <td>IgFold</td>
+      <td>IgFold</td>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>external_inputs\IgFold\IgFold_input.fasta</td>
+      <td>FASTA</td>
+      <td>local_cli</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>IgFold_BsAb001_VH_arm2_CSV</td>
+      <td>IgFold</td>
+      <td>IgFold</td>
+      <td>BsAb001</td>
+      <td>VH_arm2</td>
+      <td>VH_arm2</td>
+      <td>external_inputs\IgFold\IgFold_input.csv</td>
+      <td>CSV</td>
+      <td>local_cli</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>IgFold_BsAb001_VL_arm2_FASTA</td>
+      <td>IgFold</td>
+      <td>IgFold</td>
+      <td>BsAb001</td>
+      <td>VL_arm2</td>
+      <td>VL_arm2</td>
+      <td>external_inputs\IgFold\IgFold_input.fasta</td>
+      <td>FASTA</td>
+      <td>local_cli</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>IgFold_BsAb001_VL_arm2_CSV</td>
+      <td>IgFold</td>
+      <td>IgFold</td>
+      <td>BsAb001</td>
+      <td>VL_arm2</td>
+      <td>VL_arm2</td>
+      <td>external_inputs\IgFold\IgFold_input.csv</td>
+      <td>CSV</td>
+      <td>local_cli</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>IgFold_VHH001_VHH_FASTA</td>
+      <td>IgFold</td>
+      <td>IgFold</td>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>external_inputs\IgFold\IgFold_input.fasta</td>
+      <td>FASTA</td>
+      <td>local_cli</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>IgFold_VHH001_VHH_CSV</td>
+      <td>IgFold</td>
+      <td>IgFold</td>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>VHH</td>
+      <td>external_inputs\IgFold\IgFold_input.csv</td>
+      <td>CSV</td>
+      <td>local_cli</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>IgFold_BadSeq001_VH_bad_FASTA</td>
+      <td>IgFold</td>
+      <td>IgFold</td>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>external_inputs\IgFold\IgFold_input.fasta</td>
+      <td>FASTA</td>
+      <td>local_cli</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>IgFold_BadSeq001_VH_bad_CSV</td>
+      <td>IgFold</td>
+      <td>IgFold</td>
+      <td>BadSeq001</td>
+      <td>VH_bad</td>
+      <td>VH</td>
+      <td>external_inputs\IgFold\IgFold_input.csv</td>
+      <td>CSV</td>
+      <td>local_cli</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>IgFold_Full001_full_heavy_FASTA</td>
+      <td>IgFold</td>
+      <td>IgFold</td>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>external_inputs\IgFold\IgFold_input.fasta</td>
+      <td>FASTA</td>
+      <td>local_cli</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+    <tr>
+      <td>IgFold_Full001_full_heavy_CSV</td>
+      <td>IgFold</td>
+      <td>IgFold</td>
+      <td>Full001</td>
+      <td>full_heavy</td>
+      <td>full_heavy</td>
+      <td>external_inputs\IgFold\IgFold_input.csv</td>
+      <td>CSV</td>
+      <td>local_cli</td>
+      <td>PENDING_MANUAL_RUN</td>
+      <td>True</td>
+      <td>-</td>
+    </tr>
+    
+  </table>
+  <h3>External Tool Results Summary</h3>
+  <table>
+    <tr>
+      <th>tool_id</th><th>tool_name</th><th>tool_category</th><th>antibody_id</th><th>chain_id</th><th>sequence_scope</th>
+      <th>result_status</th><th>result_metric_name</th><th>result_metric_value</th><th>result_risk_class</th>
+      <th>result_interpretation</th><th>merge_status</th><th>merge_warning</th>
+    </tr>
+    
+    <tr><td colspan="13" class="empty">No external tool result was imported.</td></tr>
+    
+  </table>
+  <h3>External_Tool_Summary</h3>
+  <table>
+    <tr>
+      <th>antibody_id</th><th>external_tool_results_available</th><th>tools_with_results</th>
+      <th>humanness_tool_result_available</th><th>developability_tool_result_available</th><th>structure_tool_result_available</th>
+      <th>external_high_risk_flags</th><th>external_medium_risk_flags</th><th>external_low_risk_flags</th>
+      <th>external_tool_summary_text</th><th>external_tool_review_recommendation</th>
+    </tr>
+    
+    <tr>
+      <td>Ab001</td>
+      <td>False</td>
+      <td>-</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>No external tool result was imported.</td>
+      <td>No external tool result was imported.</td>
+    </tr>
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td>False</td>
+      <td>-</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>No external tool result was imported.</td>
+      <td>No external tool result was imported.</td>
+    </tr>
+    
+    <tr>
+      <td>BsAb001</td>
+      <td>False</td>
+      <td>-</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>No external tool result was imported.</td>
+      <td>No external tool result was imported.</td>
+    </tr>
+    
+    <tr>
+      <td>Full001</td>
+      <td>False</td>
+      <td>-</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>No external tool result was imported.</td>
+      <td>No external tool result was imported.</td>
+    </tr>
     
     <tr>
       <td>VHH001</td>
       <td>False</td>
       <td>-</td>
-      <td>-</td>
-      <td>Not Available</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td><span class="badge not-available">Not Available</span></td>
-      <td>No external structure prediction result was provided</td>
-      <td>Import external structure prediction summary metrics if structural triage is needed</td>
+      <td>0</td>
+      <td>No external tool result was imported.</td>
+      <td>No external tool result was imported.</td>
     </tr>
     
   </table>
-  <p class="disclaimer">Structural risk interpretation is based on imported computational structure prediction metrics or user-provided annotations. AbDev-Lite v0.8 does not generate or validate 3D structures, does not perform antigen-binding prediction, and does not replace experimental structural characterization.</p>
+  <p class="disclaimer">External tool integration in AbDev-Lite v0.9 is designed for traceable input export and result import. Browser automation is disabled by default. Users are responsible for complying with third-party tool terms of use and for protecting confidential antibody sequences. Imported external results should be reviewed before decision-making.</p>
 
   <h2>Risk Distribution</h2>
   <table>
@@ -293,7 +1026,23 @@
   <table>
     <tr>
       <th>antibody_id</th><th>molecule_format</th><th>final_priority_score</th><th>final_priority_class</th>
+      <th>external_high_risk_flags</th><th>external_medium_risk_flags</th><th>external_tool_results_available</th>
       <th>structural_risk_class</th><th>decision_label</th><th>review_reason</th><th>next_step_recommendation</th>
+    </tr>
+    
+    
+    <tr>
+      <td>VHH001</td>
+      <td>VHH</td>
+      <td>9.5</td>
+      <td><span class="badge d">D</span></td>
+      <td>0</td>
+      <td>0</td>
+      <td>False</td>
+      <td>Low</td>
+      <td>Deprioritize or redesign before progression</td>
+      <td>High CDR-adjusted developability burden; No external tool result imported; Sequence-level hydrophobic patch proxy detected</td>
+      <td>Consider redesign, deprioritization, or additional humanization/developability review</td>
     </tr>
     
     
@@ -302,9 +1051,12 @@
       <td>mAb</td>
       <td>0.0</td>
       <td><span class="badge d">D</span></td>
+      <td>0</td>
+      <td>0</td>
+      <td>False</td>
       <td>Low</td>
       <td>Deprioritize or redesign before progression</td>
-      <td>High CDR-adjusted developability burden; Sequence-level hydrophobic patch proxy detected</td>
+      <td>High CDR-adjusted developability burden; No external tool result imported; Sequence-level hydrophobic patch proxy detected</td>
       <td>Consider redesign, deprioritization, or additional humanization/developability review</td>
     </tr>
     
@@ -314,9 +1066,12 @@
       <td>mAb</td>
       <td>0.0</td>
       <td><span class="badge d">D</span></td>
+      <td>0</td>
+      <td>0</td>
+      <td>False</td>
       <td>Not Available</td>
       <td>Deprioritize or redesign before progression</td>
-      <td>High CDR-adjusted developability burden; No structure result imported; Sequence-level hydrophobic patch proxy detected</td>
+      <td>High CDR-adjusted developability burden; No structure result imported; No external tool result imported; Sequence-level hydrophobic patch proxy detected</td>
       <td>Consider redesign, deprioritization, or additional humanization/developability review</td>
     </tr>
     
@@ -326,9 +1081,12 @@
       <td>BsAb</td>
       <td>0.0</td>
       <td><span class="badge d">D</span></td>
-      <td>Medium</td>
+      <td>0</td>
+      <td>0</td>
+      <td>False</td>
+      <td>Low</td>
       <td>Deprioritize or redesign before progression</td>
-      <td>High humanness risk based on imported assessment; High CDR-adjusted developability burden; Sequence-level hydrophobic patch proxy detected</td>
+      <td>High CDR-adjusted developability burden; No external tool result imported; Sequence-level hydrophobic patch proxy detected</td>
       <td>Consider redesign, deprioritization, or additional humanization/developability review</td>
     </tr>
     
@@ -338,21 +1096,12 @@
       <td>mAb</td>
       <td>0.0</td>
       <td><span class="badge d">D</span></td>
+      <td>0</td>
+      <td>0</td>
+      <td>False</td>
       <td>Not Available</td>
       <td>Deprioritize or redesign before progression</td>
-      <td>High CDR-adjusted developability burden; No structure result imported</td>
-      <td>Consider redesign, deprioritization, or additional humanization/developability review</td>
-    </tr>
-    
-    
-    <tr>
-      <td>VHH001</td>
-      <td>VHH</td>
-      <td>0.0</td>
-      <td><span class="badge d">D</span></td>
-      <td>Not Available</td>
-      <td>Deprioritize or redesign before progression</td>
-      <td>High humanness risk based on imported assessment; High CDR-adjusted developability burden; No structure result imported; Sequence-level hydrophobic patch proxy detected</td>
+      <td>High CDR-adjusted developability burden; No structure result imported; No external tool result imported</td>
       <td>Consider redesign, deprioritization, or additional humanization/developability review</td>
     </tr>
     
@@ -459,11 +1208,11 @@
       <div><span class="label">FR liabilities</span><span class="value">0</span></div>
       <div><span class="label">CDR-adjusted risk score</span><span class="value">17.5</span></div>
       <div><span class="label">CDR-adjusted max class</span><span class="value">High</span></div>
-      <div><span class="label">Humanness available</span><span class="value">True</span></div>
-      <div><span class="label">Max humanness risk</span><span class="value">Low</span></div>
-      <div><span class="label">Closest human germlines</span><span class="value">IGHV3-23; IGKV1-39</span></div>
-      <div><span class="label">Non-human-like chains</span><span class="value">0.0</span></div>
-      <div><span class="label">High humanness risk chains</span><span class="value">0.0</span></div>
+      <div><span class="label">Humanness available</span><span class="value">False</span></div>
+      <div><span class="label">Max humanness risk</span><span class="value">Unknown</span></div>
+      <div><span class="label">Closest human germlines</span><span class="value">-</span></div>
+      <div><span class="label">Non-human-like chains</span><span class="value">0</span></div>
+      <div><span class="label">High humanness risk chains</span><span class="value">0</span></div>
       <div><span class="label">Combined flag</span><span class="value">Developability review recommended</span></div>
       <div><span class="label">Final priority class</span><span class="value">D</span></div>
       <div><span class="label">Final priority score</span><span class="value">0.0</span></div>
@@ -474,11 +1223,16 @@
       <div><span class="label">Structure available</span><span class="value">True</span></div>
       <div><span class="label">Structural risk class</span><span class="value">Low</span></div>
       <div><span class="label">Structural review reason</span><span class="value">No major structural risk flag detected from imported metrics</span></div>
+      <div><span class="label">External results available</span><span class="value">False</span></div>
+      <div><span class="label">External tools with results</span><span class="value">-</span></div>
+      <div><span class="label">External high flags</span><span class="value">0</span></div>
+      <div><span class="label">External medium flags</span><span class="value">0</span></div>
+      <div><span class="label">External review recommendation</span><span class="value">No external tool result was imported.</span></div>
     </div>
     <p class="field"><strong>Major liabilities:</strong> oxidation (9); deamidation (4); hydrophobic_patch_proxy (3); isomerization (2)</p>
     <p><strong>Major CDR liabilities:</strong> None detected</p>
     <p><strong>Major FR liabilities:</strong> None detected</p>
-    <p><strong>Strengths:</strong> Input sequences passed basic QC; No obvious N-glycosylation motif detected in variable region; No obvious unpaired cysteine proxy detected; No obvious liability motif mapped to CDR regions by IMGT-based computational assignment; Human-likeness metrics suggest low humanness risk based on imported assessment; Imported structure metrics suggest low structural risk in this MVP assessment</p>
+    <p><strong>Strengths:</strong> Input sequences passed basic QC; No obvious N-glycosylation motif detected in variable region; No obvious unpaired cysteine proxy detected; No obvious liability motif mapped to CDR regions by IMGT-based computational assignment; Imported structure metrics suggest low structural risk in this MVP assessment</p>
     <p><strong>Weaknesses:</strong> Deamidation motif detected; Isomerization motif detected; Oxidation-prone residue detected; Long hydrophobic segment detected by sequence-level proxy</p>
     <p><strong>Recommendation:</strong> High sequence-level developability risk; recommend engineering review before progression</p>
   </div>
@@ -500,8 +1254,8 @@
       <div><span class="label">Humanness available</span><span class="value">False</span></div>
       <div><span class="label">Max humanness risk</span><span class="value">Unknown</span></div>
       <div><span class="label">Closest human germlines</span><span class="value">-</span></div>
-      <div><span class="label">Non-human-like chains</span><span class="value">0.0</span></div>
-      <div><span class="label">High humanness risk chains</span><span class="value">0.0</span></div>
+      <div><span class="label">Non-human-like chains</span><span class="value">0</span></div>
+      <div><span class="label">High humanness risk chains</span><span class="value">0</span></div>
       <div><span class="label">Combined flag</span><span class="value">Developability review recommended</span></div>
       <div><span class="label">Final priority class</span><span class="value">D</span></div>
       <div><span class="label">Final priority score</span><span class="value">0.0</span></div>
@@ -512,6 +1266,11 @@
       <div><span class="label">Structure available</span><span class="value">False</span></div>
       <div><span class="label">Structural risk class</span><span class="value">Not Available</span></div>
       <div><span class="label">Structural review reason</span><span class="value">No external structure prediction result was provided</span></div>
+      <div><span class="label">External results available</span><span class="value">False</span></div>
+      <div><span class="label">External tools with results</span><span class="value">-</span></div>
+      <div><span class="label">External high flags</span><span class="value">0</span></div>
+      <div><span class="label">External medium flags</span><span class="value">0</span></div>
+      <div><span class="label">External review recommendation</span><span class="value">No external tool result was imported.</span></div>
     </div>
     <p class="field"><strong>Major liabilities:</strong> oxidation (10); low_complexity (3); hydrophobic_patch_proxy (2); deamidation (1); isomerization (1)</p>
     <p><strong>Major CDR liabilities:</strong> None detected</p>
@@ -535,12 +1294,12 @@
       <div><span class="label">FR liabilities</span><span class="value">0</span></div>
       <div><span class="label">CDR-adjusted risk score</span><span class="value">43.5</span></div>
       <div><span class="label">CDR-adjusted max class</span><span class="value">High</span></div>
-      <div><span class="label">Humanness available</span><span class="value">True</span></div>
-      <div><span class="label">Max humanness risk</span><span class="value">High</span></div>
-      <div><span class="label">Closest human germlines</span><span class="value">IGHV1-46; IGHV4-34</span></div>
-      <div><span class="label">Non-human-like chains</span><span class="value">2.0</span></div>
-      <div><span class="label">High humanness risk chains</span><span class="value">1.0</span></div>
-      <div><span class="label">Combined flag</span><span class="value">High priority engineering review</span></div>
+      <div><span class="label">Humanness available</span><span class="value">False</span></div>
+      <div><span class="label">Max humanness risk</span><span class="value">Unknown</span></div>
+      <div><span class="label">Closest human germlines</span><span class="value">-</span></div>
+      <div><span class="label">Non-human-like chains</span><span class="value">0</span></div>
+      <div><span class="label">High humanness risk chains</span><span class="value">0</span></div>
+      <div><span class="label">Combined flag</span><span class="value">Developability review recommended</span></div>
       <div><span class="label">Final priority class</span><span class="value">D</span></div>
       <div><span class="label">Final priority score</span><span class="value">0.0</span></div>
       <div><span class="label">Decision label</span><span class="value">Deprioritize or redesign before progression</span></div>
@@ -548,14 +1307,19 @@
       <div><span class="label">Recommended excipient classes</span><span class="value">antioxidant; surfactant; buffer / pH modifier</span></div>
       <div><span class="label">Formulation next step</span><span class="value">Prioritize preformulation risk review before scale-up or advanced developability studies</span></div>
       <div><span class="label">Structure available</span><span class="value">True</span></div>
-      <div><span class="label">Structural risk class</span><span class="value">Medium</span></div>
+      <div><span class="label">Structural risk class</span><span class="value">Low</span></div>
       <div><span class="label">Structural review reason</span><span class="value">No major structural risk flag detected from imported metrics</span></div>
+      <div><span class="label">External results available</span><span class="value">False</span></div>
+      <div><span class="label">External tools with results</span><span class="value">-</span></div>
+      <div><span class="label">External high flags</span><span class="value">0</span></div>
+      <div><span class="label">External medium flags</span><span class="value">0</span></div>
+      <div><span class="label">External review recommendation</span><span class="value">No external tool result was imported.</span></div>
     </div>
     <p class="field"><strong>Major liabilities:</strong> oxidation (19); hydrophobic_patch_proxy (8); deamidation (7); isomerization (6); N_glycosylation (1)</p>
     <p><strong>Major CDR liabilities:</strong> None detected</p>
     <p><strong>Major FR liabilities:</strong> None detected</p>
-    <p><strong>Strengths:</strong> Input sequences passed basic QC; No obvious unpaired cysteine proxy detected; No obvious liability motif mapped to CDR regions by IMGT-based computational assignment</p>
-    <p><strong>Weaknesses:</strong> N-glycosylation motif detected; Deamidation motif detected; Isomerization motif detected; Oxidation-prone residue detected; Long hydrophobic segment detected by sequence-level proxy; BsAb format detected. This MVP evaluates sequence-level liabilities of each variable region chain independently. It does not yet evaluate chain pairing, heterodimerization, Fc engineering, linker geometry, or full molecule architecture.; Imported humanness metrics suggest high human-likeness risk; humanization review may be needed</p>
+    <p><strong>Strengths:</strong> Input sequences passed basic QC; No obvious unpaired cysteine proxy detected; No obvious liability motif mapped to CDR regions by IMGT-based computational assignment; Imported structure metrics suggest low structural risk in this MVP assessment</p>
+    <p><strong>Weaknesses:</strong> N-glycosylation motif detected; Deamidation motif detected; Isomerization motif detected; Oxidation-prone residue detected; Long hydrophobic segment detected by sequence-level proxy; BsAb format detected. This MVP evaluates sequence-level liabilities of each variable region chain independently. It does not yet evaluate chain pairing, heterodimerization, Fc engineering, linker geometry, or full molecule architecture.</p>
     <p><strong>Recommendation:</strong> High sequence-level developability risk; recommend engineering review before progression</p>
   </div>
   
@@ -576,8 +1340,8 @@
       <div><span class="label">Humanness available</span><span class="value">False</span></div>
       <div><span class="label">Max humanness risk</span><span class="value">Unknown</span></div>
       <div><span class="label">Closest human germlines</span><span class="value">-</span></div>
-      <div><span class="label">Non-human-like chains</span><span class="value">0.0</span></div>
-      <div><span class="label">High humanness risk chains</span><span class="value">0.0</span></div>
+      <div><span class="label">Non-human-like chains</span><span class="value">0</span></div>
+      <div><span class="label">High humanness risk chains</span><span class="value">0</span></div>
       <div><span class="label">Combined flag</span><span class="value">Developability review recommended</span></div>
       <div><span class="label">Final priority class</span><span class="value">D</span></div>
       <div><span class="label">Final priority score</span><span class="value">0.0</span></div>
@@ -588,6 +1352,11 @@
       <div><span class="label">Structure available</span><span class="value">False</span></div>
       <div><span class="label">Structural risk class</span><span class="value">Not Available</span></div>
       <div><span class="label">Structural review reason</span><span class="value">No external structure prediction result was provided</span></div>
+      <div><span class="label">External results available</span><span class="value">False</span></div>
+      <div><span class="label">External tools with results</span><span class="value">-</span></div>
+      <div><span class="label">External high flags</span><span class="value">0</span></div>
+      <div><span class="label">External medium flags</span><span class="value">0</span></div>
+      <div><span class="label">External review recommendation</span><span class="value">No external tool result was imported.</span></div>
     </div>
     <p class="field"><strong>Major liabilities:</strong> deamidation (7); oxidation (7); isomerization (2); clipping_risk (1); hydrophobic_patch_proxy (1)</p>
     <p><strong>Major CDR liabilities:</strong> None detected</p>
@@ -611,27 +1380,32 @@
       <div><span class="label">FR liabilities</span><span class="value">0</span></div>
       <div><span class="label">CDR-adjusted risk score</span><span class="value">13.5</span></div>
       <div><span class="label">CDR-adjusted max class</span><span class="value">High</span></div>
-      <div><span class="label">Humanness available</span><span class="value">True</span></div>
-      <div><span class="label">Max humanness risk</span><span class="value">High</span></div>
+      <div><span class="label">Humanness available</span><span class="value">False</span></div>
+      <div><span class="label">Max humanness risk</span><span class="value">Unknown</span></div>
       <div><span class="label">Closest human germlines</span><span class="value">-</span></div>
-      <div><span class="label">Non-human-like chains</span><span class="value">1.0</span></div>
-      <div><span class="label">High humanness risk chains</span><span class="value">1.0</span></div>
-      <div><span class="label">Combined flag</span><span class="value">High priority engineering review</span></div>
+      <div><span class="label">Non-human-like chains</span><span class="value">0</span></div>
+      <div><span class="label">High humanness risk chains</span><span class="value">0</span></div>
+      <div><span class="label">Combined flag</span><span class="value">Developability review recommended</span></div>
       <div><span class="label">Final priority class</span><span class="value">D</span></div>
-      <div><span class="label">Final priority score</span><span class="value">0.0</span></div>
+      <div><span class="label">Final priority score</span><span class="value">9.5</span></div>
       <div><span class="label">Decision label</span><span class="value">Deprioritize or redesign before progression</span></div>
       <div><span class="label">Formulation risk class</span><span class="value">High</span></div>
       <div><span class="label">Recommended excipient classes</span><span class="value">antioxidant; surfactant; buffer / pH modifier</span></div>
       <div><span class="label">Formulation next step</span><span class="value">Prioritize preformulation risk review before scale-up or advanced developability studies</span></div>
-      <div><span class="label">Structure available</span><span class="value">False</span></div>
-      <div><span class="label">Structural risk class</span><span class="value">Not Available</span></div>
-      <div><span class="label">Structural review reason</span><span class="value">No external structure prediction result was provided</span></div>
+      <div><span class="label">Structure available</span><span class="value">True</span></div>
+      <div><span class="label">Structural risk class</span><span class="value">Low</span></div>
+      <div><span class="label">Structural review reason</span><span class="value">No major structural risk flag detected from imported metrics</span></div>
+      <div><span class="label">External results available</span><span class="value">False</span></div>
+      <div><span class="label">External tools with results</span><span class="value">-</span></div>
+      <div><span class="label">External high flags</span><span class="value">0</span></div>
+      <div><span class="label">External medium flags</span><span class="value">0</span></div>
+      <div><span class="label">External review recommendation</span><span class="value">No external tool result was imported.</span></div>
     </div>
     <p class="field"><strong>Major liabilities:</strong> oxidation (6); deamidation (2); isomerization (2); hydrophobic_patch_proxy (2); N_glycosylation (1)</p>
     <p><strong>Major CDR liabilities:</strong> None detected</p>
     <p><strong>Major FR liabilities:</strong> None detected</p>
-    <p><strong>Strengths:</strong> Input sequences passed basic QC; No obvious unpaired cysteine proxy detected; No obvious liability motif mapped to CDR regions by IMGT-based computational assignment</p>
-    <p><strong>Weaknesses:</strong> N-glycosylation motif detected; Deamidation motif detected; Isomerization motif detected; Oxidation-prone residue detected; Long hydrophobic segment detected by sequence-level proxy; Imported humanness metrics suggest high human-likeness risk; humanization review may be needed</p>
+    <p><strong>Strengths:</strong> Input sequences passed basic QC; No obvious unpaired cysteine proxy detected; No obvious liability motif mapped to CDR regions by IMGT-based computational assignment; Imported structure metrics suggest low structural risk in this MVP assessment</p>
+    <p><strong>Weaknesses:</strong> N-glycosylation motif detected; Deamidation motif detected; Isomerization motif detected; Oxidation-prone residue detected; Long hydrophobic segment detected by sequence-level proxy</p>
     <p><strong>Recommendation:</strong> High sequence-level developability risk; recommend engineering review before progression</p>
   </div>
   
@@ -3607,80 +4381,7 @@
       <th>closest_species</th><th>framework_identity</th><th>humanness_risk_class</th><th>humanness_interpretation</th>
     </tr>
     
-    
-    <tr>
-      <td>Ab001</td>
-      <td>VH</td>
-      <td>VH</td>
-      <td>Manual</td>
-      <td>0.91</td>
-      <td>82.0</td>
-      <td>IGHV3-23</td>
-      <td>human</td>
-      <td>92.0</td>
-      <td><span class="badge low">Low</span></td>
-      <td>Imported humanness/germline metrics indicate low human-likeness risk based on conservative review of: humanness_percentile=82.0; framework_identity=92.0; identity_to_human_germline=91.5; closest_species=human. Human-likeness is not equivalent to clinical immunogenicity prediction.</td>
-    </tr>
-    
-    
-    <tr>
-      <td>Ab001</td>
-      <td>VL</td>
-      <td>VL</td>
-      <td>Manual</td>
-      <td>0.88</td>
-      <td>76.0</td>
-      <td>IGKV1-39</td>
-      <td>human</td>
-      <td>90.1</td>
-      <td><span class="badge low">Low</span></td>
-      <td>Imported humanness/germline metrics indicate low human-likeness risk based on conservative review of: humanness_percentile=76.0; framework_identity=90.1; identity_to_human_germline=89.2; closest_species=human. Human-likeness is not equivalent to clinical immunogenicity prediction.</td>
-    </tr>
-    
-    
-    <tr>
-      <td>BsAb001</td>
-      <td>VH_arm1</td>
-      <td>VH_arm1</td>
-      <td>Manual</td>
-      <td>0.61</td>
-      <td>55.0</td>
-      <td>IGHV1-46</td>
-      <td>human</td>
-      <td>81.7</td>
-      <td><span class="badge medium">Medium</span></td>
-      <td>Imported humanness/germline metrics indicate medium human-likeness risk based on conservative review of: humanness_percentile=55.0; framework_identity=81.7; identity_to_human_germline=82.3; closest_species=human. Human-likeness is not equivalent to clinical immunogenicity prediction.</td>
-    </tr>
-    
-    
-    <tr>
-      <td>BsAb001</td>
-      <td>VH_arm2</td>
-      <td>VH_arm2</td>
-      <td>Manual</td>
-      <td>0.34</td>
-      <td>22.0</td>
-      <td>IGHV4-34</td>
-      <td>mouse</td>
-      <td>68.5</td>
-      <td><span class="badge high">High</span></td>
-      <td>Imported humanness/germline metrics indicate high human-likeness risk based on conservative review of: humanness_percentile=22.0; framework_identity=68.5; identity_to_human_germline=66.8; closest_species=mouse. Human-likeness is not equivalent to clinical immunogenicity prediction.</td>
-    </tr>
-    
-    
-    <tr>
-      <td>VHH001</td>
-      <td>VHH</td>
-      <td>VHH</td>
-      <td>Manual</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>camelid</td>
-      <td>72.0</td>
-      <td><span class="badge high">High</span></td>
-      <td>Imported humanness/germline metrics indicate high human-likeness risk based on conservative review of: framework_identity=72.0; identity_to_human_germline=69.0; closest_species=camelid. Human-likeness is not equivalent to clinical immunogenicity prediction.</td>
-    </tr>
+    <tr><td colspan="11" class="empty">No external humanness/germline assessment file was provided. Humanness analysis was not performed in this run.</td></tr>
     
   </table>
 
@@ -3844,6 +4545,8 @@
     <li>Optional local Expreso-lite model adapter with rule-based fallback</li>
     <li>Excipient class recommendation and formulation risk triage</li>
     <li>Optional external structure prediction summary import and structural risk aggregation</li>
+    <li>External tool registry, traceable input export, manual result import, and antibody-level external evidence summary</li>
+    <li>Reserved browser automation adapter interface with automation disabled by default</li>
     <li>Antibody-level aggregation</li>
   </ul>
 
@@ -3860,7 +4563,8 @@
   </div>
   <div class="disclaimer">Candidate prioritization is based on rule-based computational scoring from sequence-level developability, CDR/FR mapping, and optional imported humanness metrics. It should be used for triage and reporting support only, not as a definitive experimental or clinical developability conclusion.</div>
   <div class="disclaimer">Formulation recommendations are computational triage outputs based on sequence-level features and optional Expreso-lite model predictions. They are intended to support early preformulation planning only and do not replace experimental formulation screening, stability studies, or CMC evaluation.</div>
-  <div class="disclaimer">Structural risk interpretation is based on imported computational structure prediction metrics or user-provided annotations. AbDev-Lite v0.8 does not generate or validate 3D structures, does not perform antigen-binding prediction, and does not replace experimental structural characterization.</div>
+  <div class="disclaimer">Structural risk interpretation is based on imported computational structure prediction metrics or user-provided annotations. This version does not generate or validate 3D structures, does not perform antigen-binding prediction, and does not replace experimental structural characterization.</div>
+  <div class="disclaimer">External tool integration in AbDev-Lite v0.9 is designed for traceable input export and result import. Browser automation is disabled by default. Users are responsible for complying with third-party tool terms of use and for protecting confidential antibody sequences. Imported external results should be reviewed before decision-making.</div>
   <div class="disclaimer">This MVP performs sequence-level antibody variable-region developability screening with optional IMGT-based computational numbering, CDR/FR region assignment, optional imported humanness/germline assessment, and early-stage formulation recommendation integration, optional imported structural risk metrics, and rule-based candidate prioritization for triage support. It does not perform 3D structure prediction, humanization design, antigen-binding prediction, structural paratope prediction, docking, molecular dynamics, or experimental validation. Human-likeness assessment is not equivalent to clinical immunogenicity prediction. Results should be interpreted as computational screening signals, not definitive developability conclusions.</div>
 </main>
 </body>
