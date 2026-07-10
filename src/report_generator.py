@@ -12,18 +12,24 @@ from .utils import ensure_output_dir
 
 
 REPORT_TITLE = "AbDev-Lite: Antibody Variable-Region Developability Screening Report"
-REPORT_VERSION = "MVP v0.6"
+REPORT_VERSION = "MVP v0.7"
 ANALYSIS_SCOPE = (
     "This MVP focuses on sequence-level developability screening of antibody variable regions including VH, VL, "
     "VHH, and scFv-derived variable domains."
 )
 REPORT_DISCLAIMER = (
     "This MVP performs sequence-level antibody variable-region developability screening with optional IMGT-based "
-    "computational numbering, CDR/FR region assignment, and optional imported humanness/germline assessment. "
-    "It also provides rule-based candidate prioritization for triage support. It does not perform 3D structure "
+    "computational numbering, CDR/FR region assignment, optional imported humanness/germline assessment, and "
+    "early-stage formulation recommendation integration. It also provides rule-based candidate prioritization "
+    "for triage support. It does not perform 3D structure "
     "prediction, humanization design, antigen-binding prediction, structural paratope prediction, or experimental "
     "validation. Human-likeness assessment is not equivalent to clinical immunogenicity prediction. Results should "
     "be interpreted as computational screening signals, not definitive developability conclusions."
+)
+FORMULATION_DISCLAIMER = (
+    "Formulation recommendations are computational triage outputs based on sequence-level features and optional "
+    "Expreso-lite model predictions. They are intended to support early preformulation planning only and do not "
+    "replace experimental formulation screening, stability studies, or CMC evaluation."
 )
 PRIORITIZATION_DISCLAIMER = (
     "Candidate prioritization is based on rule-based computational scoring from sequence-level developability, "
@@ -66,6 +72,9 @@ SHEET_ORDER = [
     "Humanness_Results",
     "Antibody_Summary",
     "Candidate_Ranking",
+    "Formulation_Features",
+    "Expreso_Predictions",
+    "Formulation_Recommendations",
 ]
 
 
@@ -129,6 +138,24 @@ def _summary_with_ranking(antibody_summary_df: pd.DataFrame, candidate_ranking_d
     return summary.merge(ranking[ranking_columns], on="antibody_id", how="left")
 
 
+def _summary_with_formulation(summary_df: pd.DataFrame, formulation_recommendations_df: pd.DataFrame) -> pd.DataFrame:
+    summary = _df(summary_df).copy()
+    formulation = _df(formulation_recommendations_df)
+    if summary.empty or formulation.empty or "antibody_id" not in summary.columns or "antibody_id" not in formulation.columns:
+        return summary
+    formulation_columns = [
+        "antibody_id",
+        "formulation_risk_class",
+        "recommended_excipient_classes",
+        "formulation_next_step_recommendation",
+    ]
+    for column in formulation_columns:
+        if column not in formulation.columns:
+            formulation[column] = ""
+    summary = summary.drop(columns=[column for column in formulation_columns[1:] if column in summary.columns])
+    return summary.merge(formulation[formulation_columns], on="antibody_id", how="left")
+
+
 def _contains_bsab(*frames: pd.DataFrame) -> bool:
     for frame in frames:
         if not frame.empty and "molecule_format" in frame.columns:
@@ -149,6 +176,9 @@ def _build_results(
     humanness_df: pd.DataFrame | None = None,
     antibody_summary_df: pd.DataFrame | None = None,
     candidate_ranking_df: pd.DataFrame | None = None,
+    formulation_features_df: pd.DataFrame | None = None,
+    expreso_predictions_df: pd.DataFrame | None = None,
+    formulation_recommendations_df: pd.DataFrame | None = None,
 ) -> dict[str, pd.DataFrame]:
     return {
         "Input_Cleaned": _df(input_cleaned_df),
@@ -162,6 +192,9 @@ def _build_results(
         "Humanness_Results": _df(humanness_df),
         "Antibody_Summary": _df(antibody_summary_df),
         "Candidate_Ranking": _df(candidate_ranking_df),
+        "Formulation_Features": _df(formulation_features_df),
+        "Expreso_Predictions": _df(expreso_predictions_df),
+        "Formulation_Recommendations": _df(formulation_recommendations_df),
     }
 
 
@@ -178,6 +211,9 @@ def generate_excel_report(
     output_path: str | Path = "outputs/abdev_lite_results.xlsx",
     humanness_df: pd.DataFrame | None = None,
     candidate_ranking_df: pd.DataFrame | None = None,
+    formulation_features_df: pd.DataFrame | None = None,
+    expreso_predictions_df: pd.DataFrame | None = None,
+    formulation_recommendations_df: pd.DataFrame | None = None,
 ) -> Path:
     """Write all result tables to a multi-sheet Excel workbook."""
     output_path = Path(output_path)
@@ -194,6 +230,9 @@ def generate_excel_report(
         humanness_df,
         antibody_summary_df,
         candidate_ranking_df,
+        formulation_features_df,
+        expreso_predictions_df,
+        formulation_recommendations_df,
     )
     with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
         for sheet in SHEET_ORDER:
@@ -217,6 +256,9 @@ def write_excel(results: dict[str, pd.DataFrame], output_dir: str | Path = "outp
         output_path,
         humanness_df=results.get("Humanness_Results"),
         candidate_ranking_df=results.get("Candidate_Ranking"),
+        formulation_features_df=results.get("Formulation_Features"),
+        expreso_predictions_df=results.get("Expreso_Predictions"),
+        formulation_recommendations_df=results.get("Formulation_Recommendations"),
     )
 
 
@@ -236,6 +278,9 @@ def generate_html_report(
     template_dir: str | Path = "templates",
     humanness_df: pd.DataFrame | None = None,
     candidate_ranking_df: pd.DataFrame | None = None,
+    formulation_features_df: pd.DataFrame | None = None,
+    expreso_predictions_df: pd.DataFrame | None = None,
+    formulation_recommendations_df: pd.DataFrame | None = None,
 ) -> Path:
     """Render the HTML report with Jinja2."""
     output_path = Path(output_path)
@@ -252,7 +297,11 @@ def generate_html_report(
     humanness_df = _df(humanness_df)
     antibody_summary_df = _df(antibody_summary_df)
     candidate_ranking_df = _df(candidate_ranking_df)
+    formulation_features_df = _df(formulation_features_df)
+    expreso_predictions_df = _df(expreso_predictions_df)
+    formulation_recommendations_df = _df(formulation_recommendations_df)
     summary_display_df = _summary_with_ranking(antibody_summary_df, candidate_ranking_df)
+    summary_display_df = _summary_with_formulation(summary_display_df, formulation_recommendations_df)
 
     risk_counts = _series_value_counts(antibody_summary_df, "max_chain_risk_class", ["Low", "Medium", "High"])
     total_antibodies = (
@@ -330,6 +379,21 @@ def generate_html_report(
         ["Low", "Medium", "High", "Unknown"],
     )
     priority_counts = _priority_counts(candidate_ranking_df)
+    formulation_counts = _series_value_counts(
+        formulation_recommendations_df,
+        "formulation_risk_class",
+        ["Low", "Medium", "High"],
+    )
+    expreso_model_available = (
+        bool(expreso_predictions_df["model_available"].fillna(False).astype(bool).any())
+        if not expreso_predictions_df.empty and "model_available" in expreso_predictions_df.columns
+        else False
+    )
+    prediction_modes = (
+        ", ".join(sorted(expreso_predictions_df["prediction_mode"].dropna().astype(str).unique().tolist()))
+        if not expreso_predictions_df.empty and "prediction_mode" in expreso_predictions_df.columns
+        else "rule_based_fallback"
+    )
     common_germlines = (
         "; ".join(
             f"{germline} ({count})"
@@ -393,6 +457,28 @@ def generate_html_report(
                 "decision_label",
                 "review_reason",
                 "next_step_recommendation",
+            ],
+        ),
+        "formulation_summary": {
+            "total_antibodies_with_formulation_recommendation": int(len(formulation_recommendations_df)),
+            "low_formulation_risk_count": formulation_counts["Low"],
+            "medium_formulation_risk_count": formulation_counts["Medium"],
+            "high_formulation_risk_count": formulation_counts["High"],
+            "expreso_model_available": expreso_model_available,
+            "prediction_mode": prediction_modes,
+        },
+        "formulation_recommendation_rows": _safe_records(
+            formulation_recommendations_df,
+            [
+                "antibody_id",
+                "formulation_risk_class",
+                "formulation_risk_score",
+                "recommended_excipient_classes",
+                "buffer_ph_direction",
+                "surfactant_consideration",
+                "sugar_polyol_consideration",
+                "oxidation_control_consideration",
+                "formulation_next_step_recommendation",
             ],
         ),
         "summary_rows": _safe_records(summary_display_df),
@@ -468,6 +554,7 @@ def generate_html_report(
         "has_bsab": _contains_bsab(input_cleaned_df, qc_df, antibody_summary_df),
         "disclaimer": REPORT_DISCLAIMER,
         "prioritization_disclaimer": PRIORITIZATION_DISCLAIMER,
+        "formulation_disclaimer": FORMULATION_DISCLAIMER,
         "numbering_notice": NUMBERING_NOTICE,
         "full_length_notice": FULL_LENGTH_NOTICE,
         "hydrophobic_patch_notice": HYDROPHOBIC_PATCH_NOTICE,
@@ -504,6 +591,9 @@ def write_html_report(
         template_dir=template_dir,
         humanness_df=results.get("Humanness_Results"),
         candidate_ranking_df=results.get("Candidate_Ranking"),
+        formulation_features_df=results.get("Formulation_Features"),
+        expreso_predictions_df=results.get("Expreso_Predictions"),
+        formulation_recommendations_df=results.get("Formulation_Recommendations"),
     )
 
 

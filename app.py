@@ -8,6 +8,9 @@ import pandas as pd
 import streamlit as st
 
 from src.antibody_summary import summarize_antibodies
+from src.expreso_adapter import MODEL_NOT_FOUND_WARNING, predict_with_expreso
+from src.formulation_features import build_formulation_features
+from src.formulation_recommendation import build_formulation_recommendations
 from src.humanness import load_humanness_file, merge_humanness_results
 from src.input_parser import parse_input
 from src.liability_scanner import scan_liabilities
@@ -87,6 +90,22 @@ def run_pipeline(uploaded_file, humanness_file=None) -> tuple[dict[str, pd.DataF
         liability_region_map_df,
         humanness_results_df,
     )
+    formulation_features_df = build_formulation_features(
+        summary_df,
+        properties_df,
+        scores_df,
+        liability_region_map_df,
+        humanness_results_df,
+        candidate_ranking_df,
+    )
+    expreso_predictions_df = predict_with_expreso(
+        formulation_features_df,
+        Path("models") / "expreso_lite",
+    )
+    formulation_recommendations_df = build_formulation_recommendations(
+        formulation_features_df,
+        expreso_predictions_df,
+    )
 
     results = {
         "Input_Cleaned": classified_df,
@@ -100,6 +119,9 @@ def run_pipeline(uploaded_file, humanness_file=None) -> tuple[dict[str, pd.DataF
         "Humanness_Results": humanness_results_df,
         "Antibody_Summary": summary_df,
         "Candidate_Ranking": candidate_ranking_df,
+        "Formulation_Features": formulation_features_df,
+        "Expreso_Predictions": expreso_predictions_df,
+        "Formulation_Recommendations": formulation_recommendations_df,
     }
     excel_path, html_path = generate_reports(results, uploaded_file.name)
     return results, excel_path, html_path
@@ -153,6 +175,9 @@ def main() -> None:
             liability_region_map = results["Liability_Region_Map"]
             humanness_results = results["Humanness_Results"]
             candidate_ranking = results.get("Candidate_Ranking", pd.DataFrame())
+            formulation_features = results.get("Formulation_Features", pd.DataFrame())
+            expreso_predictions = results.get("Expreso_Predictions", pd.DataFrame())
+            formulation_recommendations = results.get("Formulation_Recommendations", pd.DataFrame())
             if summary.empty or "max_chain_risk_class" not in summary.columns:
                 risk_counts = pd.Series({"Low": 0, "Medium": 0, "High": 0})
             else:
@@ -248,6 +273,50 @@ def main() -> None:
                 st.caption("Showing the first 200 candidate ranking rows in the app preview. The Excel workbook contains all rows.")
             st.caption(
                 "Candidate prioritization is rule-based computational triage only. It does not predict experimental success."
+            )
+
+            st.subheader("Formulation Recommendation")
+            expreso_available = (
+                bool(expreso_predictions["model_available"].fillna(False).astype(bool).any())
+                if not expreso_predictions.empty and "model_available" in expreso_predictions.columns
+                else False
+            )
+            prediction_mode = (
+                ", ".join(sorted(expreso_predictions["prediction_mode"].dropna().astype(str).unique().tolist()))
+                if not expreso_predictions.empty and "prediction_mode" in expreso_predictions.columns
+                else "rule_based_fallback"
+            )
+            st.write(f"Expreso-lite model available: {expreso_available}")
+            st.write(f"Prediction mode: {prediction_mode}")
+            if not expreso_available:
+                st.info(MODEL_NOT_FOUND_WARNING)
+            formulation_counts = (
+                formulation_recommendations["formulation_risk_class"]
+                .astype(str)
+                .value_counts()
+                .reindex(["Low", "Medium", "High"], fill_value=0)
+                if not formulation_recommendations.empty and "formulation_risk_class" in formulation_recommendations.columns
+                else pd.Series({"Low": 0, "Medium": 0, "High": 0})
+            )
+            formulation_metric_cols = st.columns(3)
+            formulation_metric_cols[0].metric("Low formulation risk", int(formulation_counts["Low"]))
+            formulation_metric_cols[1].metric("Medium formulation risk", int(formulation_counts["Medium"]))
+            formulation_metric_cols[2].metric("High formulation risk", int(formulation_counts["High"]))
+
+            st.write("Formulation_Features")
+            st.dataframe(formulation_features.head(200), use_container_width=True)
+            if len(formulation_features) > 200:
+                st.caption("Showing the first 200 formulation feature rows in the app preview. The Excel workbook contains all rows.")
+            st.write("Expreso_Predictions")
+            st.dataframe(expreso_predictions.head(200), use_container_width=True)
+            if len(expreso_predictions) > 200:
+                st.caption("Showing the first 200 Expreso prediction rows in the app preview. The Excel workbook contains all rows.")
+            st.write("Formulation_Recommendations")
+            st.dataframe(formulation_recommendations.head(200), use_container_width=True)
+            if len(formulation_recommendations) > 200:
+                st.caption("Showing the first 200 formulation recommendation rows in the app preview. The Excel workbook contains all rows.")
+            st.caption(
+                "Formulation recommendations are early-stage computational screening signals and do not replace experimental formulation screening."
             )
 
             st.info(f"Reports saved to: {excel_path} and {html_path}")

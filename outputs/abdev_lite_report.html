@@ -97,8 +97,8 @@
     <div class="meta-grid">
       <div class="meta-item"><span class="label">Project</span><span class="value">AbDev-Lite</span></div>
       <div class="meta-item"><span class="label">Uploaded file</span><span class="value">example_input.xlsx</span></div>
-      <div class="meta-item"><span class="label">Analysis time</span><span class="value">2026-07-10 09:05:54</span></div>
-      <div class="meta-item"><span class="label">Report version</span><span class="value">MVP v0.6</span></div>
+      <div class="meta-item"><span class="label">Analysis time</span><span class="value">2026-07-10 09:22:18</span></div>
+      <div class="meta-item"><span class="label">Report version</span><span class="value">MVP v0.7</span></div>
     </div>
   </section>
 
@@ -238,6 +238,90 @@
   </table>
   <p class="disclaimer">Candidate prioritization is based on rule-based computational scoring from sequence-level developability, CDR/FR mapping, and optional imported humanness metrics. It should be used for triage and reporting support only, not as a definitive experimental or clinical developability conclusion.</p>
 
+  <h2>Formulation Recommendation</h2>
+  <div class="metric-grid">
+    <div class="metric"><span class="label">Recommendations</span><strong>5</strong></div>
+    <div class="metric"><span class="label">Low formulation risk</span><strong>0</strong></div>
+    <div class="metric"><span class="label">Medium formulation risk</span><strong>0</strong></div>
+    <div class="metric"><span class="label">High formulation risk</span><strong>5</strong></div>
+    <div class="metric"><span class="label">Expreso model available</span><strong>False</strong></div>
+    <div class="metric"><span class="label">Prediction mode</span><strong>rule_based_fallback</strong></div>
+  </div>
+  <table>
+    <tr>
+      <th>antibody_id</th><th>formulation_risk_class</th><th>formulation_risk_score</th>
+      <th>recommended_excipient_classes</th><th>buffer_ph_direction</th><th>surfactant_consideration</th>
+      <th>sugar_polyol_consideration</th><th>oxidation_control_consideration</th><th>formulation_next_step_recommendation</th>
+    </tr>
+    
+    
+    <tr>
+      <td>Ab001</td>
+      <td><span class="badge high">High</span></td>
+      <td>11</td>
+      <td>sugar stabilizer; antioxidant; surfactant</td>
+      <td>Include broad buffer and pH screening; review pH-sensitive motifs</td>
+      <td>Prioritize surfactant screening due to hydrophobicity signal</td>
+      <td>Prioritize sugar/polyol stabilizer screening due to instability signal</td>
+      <td>Consider antioxidant and oxidation-control review</td>
+      <td>Prioritize preformulation risk review before scale-up or advanced developability studies</td>
+    </tr>
+    
+    
+    <tr>
+      <td>BadSeq001</td>
+      <td><span class="badge high">High</span></td>
+      <td>13</td>
+      <td>surfactant; buffer / pH modifier; antioxidant</td>
+      <td>Prioritize pH screening above the low theoretical pI range; review pH-sensitive motifs</td>
+      <td>Prioritize surfactant screening due to hydrophobicity signal</td>
+      <td>Consider sugar stabilizer as a default early screen</td>
+      <td>Consider antioxidant and oxidation-control review</td>
+      <td>Prioritize preformulation risk review before scale-up or advanced developability studies</td>
+    </tr>
+    
+    
+    <tr>
+      <td>BsAb001</td>
+      <td><span class="badge high">High</span></td>
+      <td>10</td>
+      <td>antioxidant; surfactant; buffer / pH modifier</td>
+      <td>Include broad buffer and pH screening; review pH-sensitive motifs</td>
+      <td>Prioritize surfactant screening due to hydrophobicity signal</td>
+      <td>Consider sugar stabilizer as a default early screen</td>
+      <td>Consider antioxidant and oxidation-control review</td>
+      <td>Prioritize preformulation risk review before scale-up or advanced developability studies</td>
+    </tr>
+    
+    
+    <tr>
+      <td>Full001</td>
+      <td><span class="badge high">High</span></td>
+      <td>11</td>
+      <td>sugar stabilizer; antioxidant; surfactant</td>
+      <td>Include broad buffer and pH screening; review pH-sensitive motifs</td>
+      <td>Prioritize surfactant screening due to hydrophobicity signal</td>
+      <td>Prioritize sugar/polyol stabilizer screening due to instability signal</td>
+      <td>Consider antioxidant and oxidation-control review</td>
+      <td>Prioritize preformulation risk review before scale-up or advanced developability studies</td>
+    </tr>
+    
+    
+    <tr>
+      <td>VHH001</td>
+      <td><span class="badge high">High</span></td>
+      <td>10</td>
+      <td>antioxidant; surfactant; buffer / pH modifier</td>
+      <td>Include broad buffer and pH screening; review pH-sensitive motifs</td>
+      <td>Prioritize surfactant screening due to hydrophobicity signal</td>
+      <td>Consider sugar stabilizer as a default early screen</td>
+      <td>Consider antioxidant and oxidation-control review</td>
+      <td>Prioritize preformulation risk review before scale-up or advanced developability studies</td>
+    </tr>
+    
+  </table>
+  <p class="disclaimer">Formulation recommendations are computational triage outputs based on sequence-level features and optional Expreso-lite model predictions. They are intended to support early preformulation planning only and do not replace experimental formulation screening, stability studies, or CMC evaluation.</p>
+
   <h2>Antibody Summary Cards</h2>
   
   <div class="card">
@@ -263,6 +347,9 @@
       <div><span class="label">Final priority class</span><span class="value">D</span></div>
       <div><span class="label">Final priority score</span><span class="value">0.0</span></div>
       <div><span class="label">Decision label</span><span class="value">Deprioritize or redesign before progression</span></div>
+      <div><span class="label">Formulation risk class</span><span class="value">High</span></div>
+      <div><span class="label">Recommended excipient classes</span><span class="value">sugar stabilizer; antioxidant; surfactant</span></div>
+      <div><span class="label">Formulation next step</span><span class="value">Prioritize preformulation risk review before scale-up or advanced developability studies</span></div>
     </div>
     <p class="field"><strong>Major liabilities:</strong> oxidation (9); deamidation (4); hydrophobic_patch_proxy (3); isomerization (2)</p>
     <p><strong>Major CDR liabilities:</strong> None detected</p>
@@ -295,6 +382,9 @@
       <div><span class="label">Final priority class</span><span class="value">D</span></div>
       <div><span class="label">Final priority score</span><span class="value">0.0</span></div>
       <div><span class="label">Decision label</span><span class="value">Deprioritize or redesign before progression</span></div>
+      <div><span class="label">Formulation risk class</span><span class="value">High</span></div>
+      <div><span class="label">Recommended excipient classes</span><span class="value">surfactant; buffer / pH modifier; antioxidant</span></div>
+      <div><span class="label">Formulation next step</span><span class="value">Prioritize preformulation risk review before scale-up or advanced developability studies</span></div>
     </div>
     <p class="field"><strong>Major liabilities:</strong> oxidation (10); low_complexity (3); hydrophobic_patch_proxy (2); deamidation (1); isomerization (1)</p>
     <p><strong>Major CDR liabilities:</strong> None detected</p>
@@ -327,6 +417,9 @@
       <div><span class="label">Final priority class</span><span class="value">D</span></div>
       <div><span class="label">Final priority score</span><span class="value">0.0</span></div>
       <div><span class="label">Decision label</span><span class="value">Deprioritize or redesign before progression</span></div>
+      <div><span class="label">Formulation risk class</span><span class="value">High</span></div>
+      <div><span class="label">Recommended excipient classes</span><span class="value">antioxidant; surfactant; buffer / pH modifier</span></div>
+      <div><span class="label">Formulation next step</span><span class="value">Prioritize preformulation risk review before scale-up or advanced developability studies</span></div>
     </div>
     <p class="field"><strong>Major liabilities:</strong> oxidation (19); hydrophobic_patch_proxy (8); deamidation (7); isomerization (6); N_glycosylation (1)</p>
     <p><strong>Major CDR liabilities:</strong> None detected</p>
@@ -359,6 +452,9 @@
       <div><span class="label">Final priority class</span><span class="value">D</span></div>
       <div><span class="label">Final priority score</span><span class="value">0.0</span></div>
       <div><span class="label">Decision label</span><span class="value">Deprioritize or redesign before progression</span></div>
+      <div><span class="label">Formulation risk class</span><span class="value">High</span></div>
+      <div><span class="label">Recommended excipient classes</span><span class="value">sugar stabilizer; antioxidant; surfactant</span></div>
+      <div><span class="label">Formulation next step</span><span class="value">Prioritize preformulation risk review before scale-up or advanced developability studies</span></div>
     </div>
     <p class="field"><strong>Major liabilities:</strong> deamidation (7); oxidation (7); isomerization (2); clipping_risk (1); hydrophobic_patch_proxy (1)</p>
     <p><strong>Major CDR liabilities:</strong> None detected</p>
@@ -391,6 +487,9 @@
       <div><span class="label">Final priority class</span><span class="value">D</span></div>
       <div><span class="label">Final priority score</span><span class="value">0.0</span></div>
       <div><span class="label">Decision label</span><span class="value">Deprioritize or redesign before progression</span></div>
+      <div><span class="label">Formulation risk class</span><span class="value">High</span></div>
+      <div><span class="label">Recommended excipient classes</span><span class="value">antioxidant; surfactant; buffer / pH modifier</span></div>
+      <div><span class="label">Formulation next step</span><span class="value">Prioritize preformulation risk review before scale-up or advanced developability studies</span></div>
     </div>
     <p class="field"><strong>Major liabilities:</strong> oxidation (6); deamidation (2); isomerization (2); hydrophobic_patch_proxy (2); N_glycosylation (1)</p>
     <p><strong>Major CDR liabilities:</strong> None detected</p>
@@ -3605,6 +3704,9 @@
     <li>Optional imported humanness/germline result aggregation without automatic third-party upload</li>
     <li>Rule-based sequence-level risk scoring</li>
     <li>Rule-based candidate prioritization and decision matrix</li>
+    <li>Formulation-related feature extraction</li>
+    <li>Optional local Expreso-lite model adapter with rule-based fallback</li>
+    <li>Excipient class recommendation and formulation risk triage</li>
     <li>Antibody-level aggregation</li>
   </ul>
 
@@ -3620,7 +3722,8 @@
     
   </div>
   <div class="disclaimer">Candidate prioritization is based on rule-based computational scoring from sequence-level developability, CDR/FR mapping, and optional imported humanness metrics. It should be used for triage and reporting support only, not as a definitive experimental or clinical developability conclusion.</div>
-  <div class="disclaimer">This MVP performs sequence-level antibody variable-region developability screening with optional IMGT-based computational numbering, CDR/FR region assignment, and optional imported humanness/germline assessment. It also provides rule-based candidate prioritization for triage support. It does not perform 3D structure prediction, humanization design, antigen-binding prediction, structural paratope prediction, or experimental validation. Human-likeness assessment is not equivalent to clinical immunogenicity prediction. Results should be interpreted as computational screening signals, not definitive developability conclusions.</div>
+  <div class="disclaimer">Formulation recommendations are computational triage outputs based on sequence-level features and optional Expreso-lite model predictions. They are intended to support early preformulation planning only and do not replace experimental formulation screening, stability studies, or CMC evaluation.</div>
+  <div class="disclaimer">This MVP performs sequence-level antibody variable-region developability screening with optional IMGT-based computational numbering, CDR/FR region assignment, optional imported humanness/germline assessment, and early-stage formulation recommendation integration. It also provides rule-based candidate prioritization for triage support. It does not perform 3D structure prediction, humanization design, antigen-binding prediction, structural paratope prediction, or experimental validation. Human-likeness assessment is not equivalent to clinical immunogenicity prediction. Results should be interpreted as computational screening signals, not definitive developability conclusions.</div>
 </main>
 </body>
 </html>

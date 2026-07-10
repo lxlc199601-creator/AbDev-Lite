@@ -3,3 +3,12 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .streamlit/secrets.toml
+models/expreso_lite/*.joblib
+models/expreso_lite/*.pkl
+models/expreso_lite/*.pickle
+outputs/*.xlsx
+outputs/*.html
+outputs/*.csv
+!models/
+!models/expreso_lite/
+!models/expreso_lite/.gitkeep

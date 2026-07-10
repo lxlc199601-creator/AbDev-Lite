@@ -198,6 +198,40 @@
   </table>
   <p class="disclaimer">{{ prioritization_disclaimer }}</p>
 
+  <h2>Formulation Recommendation</h2>
+  <div class="metric-grid">
+    <div class="metric"><span class="label">Recommendations</span><strong>{{ formulation_summary.total_antibodies_with_formulation_recommendation }}</strong></div>
+    <div class="metric"><span class="label">Low formulation risk</span><strong>{{ formulation_summary.low_formulation_risk_count }}</strong></div>
+    <div class="metric"><span class="label">Medium formulation risk</span><strong>{{ formulation_summary.medium_formulation_risk_count }}</strong></div>
+    <div class="metric"><span class="label">High formulation risk</span><strong>{{ formulation_summary.high_formulation_risk_count }}</strong></div>
+    <div class="metric"><span class="label">Expreso model available</span><strong>{{ formulation_summary.expreso_model_available }}</strong></div>
+    <div class="metric"><span class="label">Prediction mode</span><strong>{{ formulation_summary.prediction_mode }}</strong></div>
+  </div>
+  <table>
+    <tr>
+      <th>antibody_id</th><th>formulation_risk_class</th><th>formulation_risk_score</th>
+      <th>recommended_excipient_classes</th><th>buffer_ph_direction</th><th>surfactant_consideration</th>
+      <th>sugar_polyol_consideration</th><th>oxidation_control_consideration</th><th>formulation_next_step_recommendation</th>
+    </tr>
+    {% for row in formulation_recommendation_rows %}
+    {% set formulation_risk = row.formulation_risk_class|dash %}
+    <tr>
+      <td>{{ row.antibody_id|dash }}</td>
+      <td><span class="badge {{ formulation_risk|lower }}">{{ formulation_risk }}</span></td>
+      <td>{{ row.formulation_risk_score|dash }}</td>
+      <td>{{ row.recommended_excipient_classes|dash }}</td>
+      <td>{{ row.buffer_ph_direction|dash }}</td>
+      <td>{{ row.surfactant_consideration|dash }}</td>
+      <td>{{ row.sugar_polyol_consideration|dash }}</td>
+      <td>{{ row.oxidation_control_consideration|dash }}</td>
+      <td>{{ row.formulation_next_step_recommendation|dash }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="9" class="empty">No formulation recommendation rows were generated.</td></tr>
+    {% endfor %}
+  </table>
+  <p class="disclaimer">{{ formulation_disclaimer }}</p>
+
   <h2>Antibody Summary Cards</h2>
   {% for row in summary_rows %}
   <div class="card">
@@ -223,6 +257,9 @@
       <div><span class="label">Final priority class</span><span class="value">{{ row.final_priority_class|dash }}</span></div>
       <div><span class="label">Final priority score</span><span class="value">{{ row.final_priority_score|dash }}</span></div>
       <div><span class="label">Decision label</span><span class="value">{{ row.decision_label|dash }}</span></div>
+      <div><span class="label">Formulation risk class</span><span class="value">{{ row.formulation_risk_class|dash }}</span></div>
+      <div><span class="label">Recommended excipient classes</span><span class="value">{{ row.recommended_excipient_classes|dash }}</span></div>
+      <div><span class="label">Formulation next step</span><span class="value">{{ row.formulation_next_step_recommendation|dash }}</span></div>
     </div>
     <p class="field"><strong>Major liabilities:</strong> {{ row.major_liabilities|dash }}</p>
     <p><strong>Major CDR liabilities:</strong> {{ row.major_cdr_liabilities|dash }}</p>
@@ -355,6 +392,9 @@
     <li>Optional imported humanness/germline result aggregation without automatic third-party upload</li>
     <li>Rule-based sequence-level risk scoring</li>
     <li>Rule-based candidate prioritization and decision matrix</li>
+    <li>Formulation-related feature extraction</li>
+    <li>Optional local Expreso-lite model adapter with rule-based fallback</li>
+    <li>Excipient class recommendation and formulation risk triage</li>
     <li>Antibody-level aggregation</li>
   </ul>
 
@@ -370,6 +410,7 @@
     {% endif %}
   </div>
   <div class="disclaimer">{{ prioritization_disclaimer }}</div>
+  <div class="disclaimer">{{ formulation_disclaimer }}</div>
   <div class="disclaimer">{{ disclaimer }}</div>
 </main>
 </body>
